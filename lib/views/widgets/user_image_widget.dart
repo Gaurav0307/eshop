@@ -37,7 +37,7 @@ class UserImageWidget extends StatelessWidget {
               child: Text(
                 UtilityMethods.getNameInitials(name: title ?? ""),
                 style: TextStyle(
-                  color: ColorConstants.theWhite,
+                  color: ColorConstants.white,
                   fontSize: size / 3,
                   fontWeight: FontWeight.bold,
                 ),
@@ -59,7 +59,7 @@ class UserImageWidget extends StatelessWidget {
               child: Text(
                 UtilityMethods.getNameInitials(name: title ?? ""),
                 style: TextStyle(
-                  color: ColorConstants.theWhite,
+                  color: ColorConstants.white,
                   fontSize: size / 3,
                   fontWeight: FontWeight.bold,
                 ),

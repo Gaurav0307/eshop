@@ -22,6 +22,10 @@ class StringConstants {
   static const String noDataAvailable = "No Data Available";
   static const String thereIsNoDataToBeShown =
       "There is no data available to be shown here.";
+  static const String addBusinessService = "Add Business/Service";
+  static const String search_ = "Search...";
+  static const String category = "Category";
+  static const String viewMore = "View More";
 
   /// Validation
   static const String fullNameIsRequired = "Full Name is required.";

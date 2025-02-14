@@ -4,48 +4,47 @@ SharedPreferences? sharedPreferences;
 late String token;
 late String userId;
 
-final documents = [
+final demoData = [
   {
-    'name': 'Android Programming Cookbook',
-    'link':
-        'https://enos.itcollege.ee/~jpoial/allalaadimised/reading/Android-Programming-Cookbook.pdf'
-  },
-];
-
-final images = [
-  {
-    'name': 'Arches National Park',
-    'link':
-        'https://upload.wikimedia.org/wikipedia/commons/6/60/The_Organ_at_Arches_National_Park_Utah_Corrected.jpg'
+    'category': 'Grocery',
+    'imageUrl':
+        'https://plus.unsplash.com/premium_photo-1661381007965-b21e0fb0681b?q=80&w=2071'
   },
   {
-    'name': 'Canyonlands National Park',
-    'link':
-        'https://upload.wikimedia.org/wikipedia/commons/7/78/Canyonlands_National_Park%E2%80%A6Needles_area_%286294480744%29.jpg'
+    'category': 'Electronics',
+    'imageUrl':
+        'https://images.unsplash.com/photo-1604335399105-a0c585fd81a1?q=80&w=2070'
   },
   {
-    'name': 'Death Valley National Park',
-    'link':
-        'https://upload.wikimedia.org/wikipedia/commons/b/b2/Sand_Dunes_in_Death_Valley_National_Park.jpg'
+    'category': 'Barber',
+    'imageUrl':
+        'https://images.unsplash.com/photo-1605497788044-5a32c7078486?q=80&w=1974'
   },
   {
-    'name': 'Gates of the Arctic National Park and Preserve',
-    'link':
-        'https://upload.wikimedia.org/wikipedia/commons/e/e4/GatesofArctic.jpg'
-  }
-];
-
-final videos = [
-  {
-    'name': 'Big Buck Bunny',
-    'link':
-        'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'
+    'category': 'Laundry',
+    'imageUrl':
+        'https://images.unsplash.com/photo-1567113463300-102a7eb3cb26?q=80&w=2070'
   },
   {
-    'name': 'Elephant Dream',
-    'link':
-        'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4'
-  }
+    'category': 'Beautician',
+    'imageUrl':
+        'https://plus.unsplash.com/premium_photo-1683121233219-a1192c107a9d?q=80&w=2070'
+  },
+  {
+    'category': 'Doctor',
+    'imageUrl':
+        'https://plus.unsplash.com/premium_photo-1661580574627-9211124e5c3f?q=80&w=1974'
+  },
+  {
+    'category': 'Hardware',
+    'imageUrl':
+        'https://plus.unsplash.com/premium_photo-1664301142625-e1742b2906e9?q=80&w=2070'
+  },
+  {
+    'category': 'Bakery',
+    'imageUrl':
+        'https://images.unsplash.com/photo-1583338917451-face2751d8d5?q=80&w=1974'
+  },
 ];
 
 const String apiBaseUrl = "https://rest-apis-chat-app.onrender.com";

@@ -1,5 +1,6 @@
 import 'package:device_preview/device_preview.dart';
-import 'package:eshop/views/screens/login_screen.dart';
+import 'package:eshop/common/constants/asset_constants.dart';
+import 'package:eshop/views/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -31,16 +32,13 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         title: 'eShop',
         theme: ThemeData(
-          // appBarTheme: AppBarTheme(
-          //   backgroundColor: ColorConstants.theIndigo,
-          //   foregroundColor: ColorConstants.theWhite,
-          // ),
+          fontFamily: AssetConstants.poppinsFont,
           colorScheme: ColorScheme.fromSeed(
-            seedColor: ColorConstants.theIndigo,
+            seedColor: ColorConstants.indigo,
           ),
           useMaterial3: true,
         ),
-        home: const LoginScreen(),
+        home: const HomeScreen(),
       ),
     );
   }

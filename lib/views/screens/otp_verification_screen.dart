@@ -64,7 +64,7 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        foregroundColor: ColorConstants.theBlack,
+        foregroundColor: ColorConstants.black,
       ),
       body: ListView(
         children: [
@@ -76,7 +76,7 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
                   : StringConstants.verifyOTP,
               style: TextStyle(
                 fontSize: 22,
-                color: ColorConstants.theBlack,
+                color: ColorConstants.black,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -89,7 +89,7 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
             child: Text(
               StringConstants.enterOTP,
               style: TextStyle(
-                color: ColorConstants.theBlack,
+                color: ColorConstants.black,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -102,7 +102,7 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
               fieldWidth: 50,
               style: TextStyle(
                 fontSize: 18,
-                color: ColorConstants.theBlack,
+                color: ColorConstants.black,
               ),
               onCompleted: (pin) {
                 verificationCode = pin;
@@ -135,7 +135,7 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
                       height: 24,
                       width: 24,
                       child: CircularProgressIndicator(
-                        color: ColorConstants.theBlack,
+                        color: ColorConstants.black,
                         strokeWidth: 2,
                       ),
                     )
@@ -143,7 +143,7 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
                       StringConstants.submit,
                       style: TextStyle(
                         fontSize: 16,
-                        color: ColorConstants.theBlack,
+                        color: ColorConstants.black,
                       ),
                     ),
             ),
@@ -160,7 +160,7 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 14,
-                        color: ColorConstants.theBlack,
+                        color: ColorConstants.black,
                       ),
                     ),
                   ),
@@ -170,7 +170,7 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
                   children: [
                     Text(
                       StringConstants.didNotGetOTP,
-                      style: TextStyle(color: ColorConstants.theBlack),
+                      style: TextStyle(color: ColorConstants.black),
                     ),
                     TextButton(
                       onPressed: () {
@@ -184,7 +184,7 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
                               height: 22,
                               width: 22,
                               child: CircularProgressIndicator(
-                                color: ColorConstants.theBlack,
+                                color: ColorConstants.black,
                                 strokeWidth: 2,
                               ),
                             )
@@ -192,9 +192,9 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
                               StringConstants.resendNow,
                               style: TextStyle(
                                 fontSize: 14,
-                                color: ColorConstants.theBlack,
+                                color: ColorConstants.black,
                                 decoration: TextDecoration.underline,
-                                decorationColor: ColorConstants.theBlack,
+                                decorationColor: ColorConstants.black,
                               ),
                             ),
                     ),

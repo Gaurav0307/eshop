@@ -41,123 +41,77 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false, //It should be false to work
-      onPopInvokedWithResult: (didPop, _) async {
-        if (didPop) {
-          return;
-        }
-        await _onBackPressed();
-      },
-      child: Scaffold(
-        body: Center(
-          child: SingleChildScrollView(
-            child: Container(
-              margin: const EdgeInsets.all(25.0),
-              padding: const EdgeInsets.all(25.0),
-              clipBehavior: Clip.hardEdge,
-              decoration: BoxDecoration(
-                color: ColorConstants.theWhite,
-                borderRadius: BorderRadius.circular(20.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.shade400,
-                    spreadRadius: 2.0,
-                    blurRadius: 8.0,
-                  )
-                ],
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    StringConstants.login,
-                    style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.w500,
-                      color: ColorConstants.theBlack,
-                    ),
-                    textAlign: TextAlign.center,
+    return Scaffold(
+      appBar: AppBar(),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Container(
+            margin: const EdgeInsets.all(25.0),
+            padding: const EdgeInsets.all(25.0),
+            clipBehavior: Clip.hardEdge,
+            decoration: BoxDecoration(
+              color: ColorConstants.white,
+              borderRadius: BorderRadius.circular(20.0),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.shade400,
+                  spreadRadius: 2.0,
+                  blurRadius: 8.0,
+                )
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  StringConstants.login,
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.w500,
+                    color: ColorConstants.black,
                   ),
-                  const SizedBox(height: 25.0),
-                  const LoginForm(),
-                  const SizedBox(height: 55.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        StringConstants.doNotHaveAnAccount,
-                        style: TextStyle(
-                          color: ColorConstants.theBlack,
-                          fontSize: 15.0,
-                          fontWeight: FontWeight.w400,
-                        ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 25.0),
+                const LoginForm(),
+                const SizedBox(height: 55.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      StringConstants.doNotHaveAnAccount,
+                      style: TextStyle(
+                        color: ColorConstants.black,
+                        fontSize: 15.0,
+                        fontWeight: FontWeight.w400,
                       ),
-                      const SizedBox(width: 10),
-                      BorderButton(
-                        width: 80,
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 5.0,
-                          horizontal: 0.0,
+                    ),
+                    const SizedBox(width: 10),
+                    BorderButton(
+                      width: 80,
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 5.0,
+                        horizontal: 0.0,
+                      ),
+                      onPressed: () async {
+                        Get.to(() => const RegisterScreen());
+                      },
+                      child: Text(
+                        StringConstants.register,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: ColorConstants.black,
                         ),
-                        onPressed: () async {
-                          Get.to(() => const RegisterScreen());
-                        },
-                        child: Text(
-                          StringConstants.register,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: ColorConstants.theBlack,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      )
-                    ],
-                  ),
-                ],
-              ),
+                        textAlign: TextAlign.center,
+                      ),
+                    )
+                  ],
+                ),
+              ],
             ),
           ),
         ),
       ),
-    );
-  }
-
-  Future<void> _onBackPressed() async {
-    await showAdaptiveDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text(
-            StringConstants.confirm,
-            style: TextStyle(
-              color: Colors.red,
-            ),
-          ),
-          content: const Text(StringConstants.doYouWantToExitTheApp),
-          actions: <Widget>[
-            TextButton(
-              child: const Text(
-                StringConstants.no,
-                style: TextStyle(color: Colors.blue),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop(); //Will not exit the App
-              },
-            ),
-            TextButton(
-              child: const Text(
-                StringConstants.yes,
-                style: TextStyle(color: Colors.red),
-              ),
-              onPressed: () {
-                SystemNavigator.pop();
-                Navigator.of(context).pop(); //Will exit the App
-              },
-            )
-          ],
-        );
-      },
     );
   }
 }
@@ -216,10 +170,10 @@ class _LoginFormState extends State<LoginForm> {
               hintText: StringConstants.mobileNumber,
               contentPadding: const EdgeInsets.all(15.0),
               enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: ColorConstants.theBlack),
+                borderSide: BorderSide(color: ColorConstants.black),
               ),
               focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: ColorConstants.theBlack),
+                borderSide: BorderSide(color: ColorConstants.black),
               ),
             ),
           ),
@@ -228,7 +182,7 @@ class _LoginFormState extends State<LoginForm> {
             visible: true,
             replacement: Center(
               child: CircularProgressIndicator(
-                color: ColorConstants.theWhite,
+                color: ColorConstants.white,
                 strokeWidth: 3.0,
               ),
             ),
@@ -244,7 +198,7 @@ class _LoginFormState extends State<LoginForm> {
                 StringConstants.login,
                 style: TextStyle(
                   fontSize: 16,
-                  color: ColorConstants.theWhite,
+                  color: ColorConstants.white,
                 ),
                 textAlign: TextAlign.center,
               ),

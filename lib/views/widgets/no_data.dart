@@ -27,7 +27,7 @@ class NoData extends StatelessWidget {
             child: Text(
               StringConstants.thereIsNoDataToBeShown,
               style: TextStyle(
-                color: ColorConstants.theBlack,
+                color: ColorConstants.black,
                 fontSize: 16.0,
               ),
               textAlign: TextAlign.center,

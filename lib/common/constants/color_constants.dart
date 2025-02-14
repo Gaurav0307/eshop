@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 
 class ColorConstants {
-  static Color theWhite = Colors.white;
-  static Color theBlack = Colors.black87;
-  static Color theIndigo = Colors.indigo;
+  static Color white = Colors.white;
+  static Color black = Colors.black87;
+  static Color black54 = Colors.black54;
+  static Color indigo = Colors.indigo;
+  static Color grey = Colors.grey;
+  static Color grey300 = Colors.grey.shade300;
+  static Color lightBlue = Colors.lightBlue;
 }
 
 Color hexToColor(String hex) {

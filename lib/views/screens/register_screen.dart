@@ -22,12 +22,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        foregroundColor: ColorConstants.theBlack,
+        foregroundColor: ColorConstants.black,
       ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(
-            horizontal: 50.0,
+            horizontal: 40.0,
             vertical: 50.0,
           ),
           child: Column(
@@ -39,7 +39,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 style: TextStyle(
                   fontSize: 25,
                   fontWeight: FontWeight.w500,
-                  color: ColorConstants.theBlack,
+                  color: ColorConstants.black,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -52,7 +52,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   Text(
                     StringConstants.alreadyHaveAnAccount,
                     style: TextStyle(
-                      color: ColorConstants.theBlack,
+                      color: ColorConstants.black,
                       fontSize: 15.0,
                       fontWeight: FontWeight.w400,
                     ),
@@ -71,7 +71,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       StringConstants.login,
                       style: TextStyle(
                         fontSize: 12,
-                        color: ColorConstants.theBlack,
+                        color: ColorConstants.black,
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -141,7 +141,7 @@ class _RegisterFormState extends State<RegisterForm> {
       child: Column(
         children: [
           TextFormField(
-            style: TextStyle(color: ColorConstants.theBlack),
+            style: TextStyle(color: ColorConstants.black),
             validator: _validateFullName,
             inputFormatters: [
               FilteringTextInputFormatter.allow(
@@ -170,16 +170,16 @@ class _RegisterFormState extends State<RegisterForm> {
             decoration: InputDecoration(
               counterText: fullName.isNotEmpty ? null : "",
               hintText: StringConstants.fullName,
-              hintStyle: TextStyle(color: ColorConstants.theBlack),
+              hintStyle: TextStyle(color: ColorConstants.black),
               prefixIcon: Icon(
                 Icons.person_outline,
-                color: ColorConstants.theBlack,
+                color: ColorConstants.black,
               ),
               enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: ColorConstants.theBlack),
+                borderSide: BorderSide(color: ColorConstants.black),
               ),
               focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: ColorConstants.theBlack),
+                borderSide: BorderSide(color: ColorConstants.black),
               ),
               contentPadding: const EdgeInsets.all(15.0),
             ),
@@ -213,10 +213,10 @@ class _RegisterFormState extends State<RegisterForm> {
               hintText: StringConstants.mobileNumber,
               contentPadding: const EdgeInsets.all(15.0),
               enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: ColorConstants.theBlack),
+                borderSide: BorderSide(color: ColorConstants.black),
               ),
               focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: ColorConstants.theBlack),
+                borderSide: BorderSide(color: ColorConstants.black),
               ),
             ),
           ),
@@ -225,7 +225,7 @@ class _RegisterFormState extends State<RegisterForm> {
             visible: true,
             replacement: Center(
               child: CircularProgressIndicator(
-                color: ColorConstants.theWhite,
+                color: ColorConstants.white,
                 strokeWidth: 3.0,
               ),
             ),
@@ -241,7 +241,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 StringConstants.register,
                 style: TextStyle(
                   fontSize: 16,
-                  color: ColorConstants.theWhite,
+                  color: ColorConstants.white,
                 ),
                 textAlign: TextAlign.center,
               ),

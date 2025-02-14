@@ -23,7 +23,7 @@ class BorderButton extends StatelessWidget {
         width: width,
         decoration: BoxDecoration(
           color: Colors.transparent,
-          border: Border.all(color: ColorConstants.theBlack),
+          border: Border.all(color: ColorConstants.black),
           borderRadius: BorderRadius.circular(30.0),
         ),
         padding: padding,

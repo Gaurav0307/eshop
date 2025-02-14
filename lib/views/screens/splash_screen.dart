@@ -75,7 +75,7 @@ class _SplashScreenState extends State<SplashScreen> {
           height: MediaQuery.of(context).size.height,
           padding: const EdgeInsets.all(0.0),
           decoration: BoxDecoration(
-            color: ColorConstants.theBlack,
+            color: ColorConstants.black,
             image: const DecorationImage(
               image: AssetImage(AssetConstants.backgroundImage1),
               fit: BoxFit.fitHeight,
@@ -88,12 +88,12 @@ class _SplashScreenState extends State<SplashScreen> {
               child: DefaultTextStyle(
                 style: TextStyle(
                   fontSize: 35,
-                  color: ColorConstants.theWhite,
+                  color: ColorConstants.white,
                   fontWeight: FontWeight.w500,
                   shadows: [
                     Shadow(
                       blurRadius: 12.0,
-                      color: ColorConstants.theWhite,
+                      color: ColorConstants.white,
                       offset: const Offset(0, 0),
                     ),
                   ],
