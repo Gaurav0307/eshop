@@ -4,7 +4,7 @@ SharedPreferences? sharedPreferences;
 late String token;
 late String userId;
 
-final demoData = [
+final demoCategories = [
   {
     'category': 'Grocery',
     'imageUrl':
@@ -45,6 +45,40 @@ final demoData = [
     'imageUrl':
         'https://images.unsplash.com/photo-1583338917451-face2751d8d5?q=80&w=1974'
   },
+];
+
+final demoServices = [
+  {
+    'imageUrl':
+        "https://images.unsplash.com/photo-1605497788044-5a32c7078486?q=80&w=1974",
+    'name': "The Barber Shop",
+    'category': "Barber",
+    'timing': "8:00 am - 9:00 pm",
+    'servicesAndProducts':
+        "Haircuts & Styling, Beard & Mustache Grooming, Shaving & Facial Treatments, Hair & Scalp Treatments, Coloring & Grooming",
+    'address': "Zero Mile",
+    'city': "Bhagalpur",
+    'state': "Bihar",
+    'rating': 4.5,
+    'peopleRated': 12345,
+  }
+];
+
+final demoBusinesses = [
+  {
+    'imageUrl':
+        "https://images.unsplash.com/photo-1583338917451-face2751d8d5?q=80&w=1974",
+    'name': "The Bakery Shop",
+    'category': "Bakery",
+    'timing': "10:00 am - 8:00 pm",
+    'servicesAndProducts':
+        "Cakes, Breads, Pastries, Cookies, Biscuits, Muffins & Doughnuts",
+    'address': "Tilkamanjhi",
+    'city': "Bhagalpur",
+    'state': "Bihar",
+    'rating': 4.6,
+    'peopleRated': 12345,
+  }
 ];
 
 const String apiBaseUrl = "https://rest-apis-chat-app.onrender.com";

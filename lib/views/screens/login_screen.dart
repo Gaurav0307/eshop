@@ -46,8 +46,11 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Center(
         child: SingleChildScrollView(
           child: Container(
-            margin: const EdgeInsets.all(25.0),
-            padding: const EdgeInsets.all(25.0),
+            margin: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 10.0,
+              vertical: 15.0,
+            ),
             clipBehavior: Clip.hardEdge,
             decoration: BoxDecoration(
               color: ColorConstants.white,

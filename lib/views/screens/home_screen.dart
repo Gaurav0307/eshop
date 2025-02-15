@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eshop/common/constants/asset_constants.dart';
 import 'package:eshop/common/global/global.dart';
 import 'package:eshop/views/screens/login_screen.dart';
+import 'package:eshop/views/widgets/service_business_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -58,6 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
         drawer: customDrawer(),
         body: ListView(
           children: [
+            ///Search
             GestureDetector(
               onTap: () {},
               child: Container(
@@ -100,6 +102,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
+            const SizedBox(height: 5.0),
+
+            ///Category
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
@@ -109,7 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        StringConstants.category,
+                        StringConstants.categories,
                         style: TextStyle(
                           color: ColorConstants.black,
                           fontSize: 18.0,
@@ -144,25 +149,201 @@ class _HomeScreenState extends State<HomeScreen> {
                       childAspectRatio: 1.0, // Adjust aspect ratio as needed
                       mainAxisExtent: 115,
                     ),
-                    itemCount: demoData.length, // 4x2 grid = 8 items
+                    itemCount: demoCategories.length, // 4x2 grid = 8 items
                     itemBuilder: (context, index) {
                       return categoryItem(
-                        imageUrl: demoData[index]['imageUrl']!,
-                        categoryName: demoData[index]['category']!,
+                        imageUrl: demoCategories[index]['imageUrl']!,
+                        categoryName: demoCategories[index]['category']!,
                       );
                     },
                   ),
                 ],
               ),
             ),
+            const SizedBox(height: 5.0),
+
+            ///Businesses
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        StringConstants.services,
+                        style: TextStyle(
+                          color: ColorConstants.black,
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {},
+                        child: Text(
+                          StringConstants.viewMore,
+                          maxLines: 2,
+                          style: TextStyle(
+                            fontFamily: AssetConstants.robotoFont,
+                            color: ColorConstants.lightBlue,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 280,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: 10,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10.0,
+                      vertical: 10.0,
+                    ),
+                    itemBuilder: (_, index) {
+                      return ServiceBusinessItem(
+                        imageUrl: demoServices[0]['imageUrl'].toString(),
+                        name: demoServices[0]['name'].toString(),
+                        category: demoServices[0]['category'].toString(),
+                        timing: demoServices[0]['timing'].toString(),
+                        servicesAndProducts:
+                            demoServices[0]['servicesAndProducts'].toString(),
+                        address: demoServices[0]['address'].toString(),
+                        city: demoServices[0]['city'].toString(),
+                        state: demoServices[0]['state'].toString(),
+                        rating: demoServices[0]['rating'].toString(),
+                        peopleRated: demoServices[0]['peopleRated'].toString(),
+                        onLocationPressed: () {},
+                        onCallPressed: () {},
+                        onMessagePressed: () {},
+                        onTap: () {},
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 15.0),
+
+            ///Services
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        StringConstants.businesses,
+                        style: TextStyle(
+                          color: ColorConstants.black,
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {},
+                        child: Text(
+                          StringConstants.viewMore,
+                          maxLines: 2,
+                          style: TextStyle(
+                            fontFamily: AssetConstants.robotoFont,
+                            color: ColorConstants.lightBlue,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 280,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: 10,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10.0,
+                      vertical: 10.0,
+                    ),
+                    itemBuilder: (_, index) {
+                      return ServiceBusinessItem(
+                        imageUrl: demoBusinesses[0]['imageUrl'].toString(),
+                        name: demoBusinesses[0]['name'].toString(),
+                        category: demoBusinesses[0]['category'].toString(),
+                        timing: demoBusinesses[0]['timing'].toString(),
+                        servicesAndProducts:
+                            demoBusinesses[0]['servicesAndProducts'].toString(),
+                        address: demoBusinesses[0]['address'].toString(),
+                        city: demoBusinesses[0]['city'].toString(),
+                        state: demoBusinesses[0]['state'].toString(),
+                        rating: demoBusinesses[0]['rating'].toString(),
+                        peopleRated:
+                            demoBusinesses[0]['peopleRated'].toString(),
+                        onLocationPressed: () {},
+                        onCallPressed: () {},
+                        onMessagePressed: () {},
+                        onTap: () {},
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 15.0),
           ],
         ),
       ),
     );
   }
 
-  Widget categoryItem(
-      {required String imageUrl, required String categoryName}) {
+  Future<void> _onBackPressed() async {
+    await showAdaptiveDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text(
+            StringConstants.confirm,
+            style: TextStyle(
+              color: Colors.red,
+            ),
+          ),
+          content: const Text(StringConstants.doYouWantToExitTheApp),
+          actions: <Widget>[
+            TextButton(
+              child: const Text(
+                StringConstants.no,
+                style: TextStyle(color: Colors.blue),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop(); //Will not exit the App
+              },
+            ),
+            TextButton(
+              child: const Text(
+                StringConstants.yes,
+                style: TextStyle(color: Colors.red),
+              ),
+              onPressed: () {
+                SystemNavigator.pop();
+                Navigator.of(context).pop(); //Will exit the App
+              },
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  Widget categoryItem({
+    required String imageUrl,
+    required String categoryName,
+  }) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -271,44 +452,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-    );
-  }
-
-  Future<void> _onBackPressed() async {
-    await showAdaptiveDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text(
-            StringConstants.confirm,
-            style: TextStyle(
-              color: Colors.red,
-            ),
-          ),
-          content: const Text(StringConstants.doYouWantToExitTheApp),
-          actions: <Widget>[
-            TextButton(
-              child: const Text(
-                StringConstants.no,
-                style: TextStyle(color: Colors.blue),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop(); //Will not exit the App
-              },
-            ),
-            TextButton(
-              child: const Text(
-                StringConstants.yes,
-                style: TextStyle(color: Colors.red),
-              ),
-              onPressed: () {
-                SystemNavigator.pop();
-                Navigator.of(context).pop(); //Will exit the App
-              },
-            )
-          ],
-        );
-      },
     );
   }
 }

@@ -24,8 +24,13 @@ class StringConstants {
       "There is no data available to be shown here.";
   static const String addBusinessService = "Add Business/Service";
   static const String search_ = "Search...";
-  static const String category = "Category";
+  static const String categories = "Categories";
   static const String viewMore = "View More";
+  static const String location = "Location";
+  static const String call = "Call";
+  static const String message = "Message";
+  static const String businesses = "Businesses";
+  static const String services = "Services";
 
   /// Validation
   static const String fullNameIsRequired = "Full Name is required.";
