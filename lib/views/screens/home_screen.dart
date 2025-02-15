@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eshop/common/constants/asset_constants.dart';
 import 'package:eshop/common/global/global.dart';
+import 'package:eshop/common/utils/utility_methods.dart';
 import 'package:eshop/views/screens/login_screen.dart';
 import 'package:eshop/views/widgets/service_business_item.dart';
 import 'package:flutter/material.dart';
@@ -216,7 +217,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         city: demoServices[0]['city'].toString(),
                         state: demoServices[0]['state'].toString(),
                         rating: demoServices[0]['rating'].toString(),
-                        peopleRated: demoServices[0]['peopleRated'].toString(),
+                        peopleRated: UtilityMethods.formatNumberToKMB(
+                            double.tryParse(demoServices[0]['peopleRated']
+                                    .toString()) ??
+                                0.0),
                         onLocationPressed: () {},
                         onCallPressed: () {},
                         onMessagePressed: () {},
@@ -283,8 +287,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         city: demoBusinesses[0]['city'].toString(),
                         state: demoBusinesses[0]['state'].toString(),
                         rating: demoBusinesses[0]['rating'].toString(),
-                        peopleRated:
-                            demoBusinesses[0]['peopleRated'].toString(),
+                        peopleRated: UtilityMethods.formatNumberToKMB(
+                            double.tryParse(demoBusinesses[0]['peopleRated']
+                                    .toString()) ??
+                                0.0),
                         onLocationPressed: () {},
                         onCallPressed: () {},
                         onMessagePressed: () {},

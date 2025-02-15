@@ -328,4 +328,16 @@ class UtilityMethods {
         : "$apiBaseUrl/$fileUrl";
     return updatedFileUrl;
   }
+
+  static String formatNumberToKMB(double number) {
+    if (number >= 1e9) {
+      return '${(number / 1e9).toStringAsFixed(1)}B'; // Billion
+    } else if (number >= 1e6) {
+      return '${(number / 1e6).toStringAsFixed(1)}M'; // Million
+    } else if (number >= 1e3) {
+      return '${(number / 1e3).toStringAsFixed(1)}K'; // Thousand
+    } else {
+      return number.toStringAsFixed(0); // No formatting needed
+    }
+  }
 }
