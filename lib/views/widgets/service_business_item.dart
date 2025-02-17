@@ -15,6 +15,7 @@ class ServiceBusinessItem extends StatelessWidget {
   final String city;
   final String state;
   final String rating;
+  final String maxRating;
   final String peopleRated;
   final void Function() onLocationPressed;
   final void Function() onCallPressed;
@@ -32,6 +33,7 @@ class ServiceBusinessItem extends StatelessWidget {
     required this.city,
     required this.state,
     required this.rating,
+    required this.maxRating,
     required this.peopleRated,
     required this.onLocationPressed,
     required this.onCallPressed,
@@ -46,7 +48,6 @@ class ServiceBusinessItem extends StatelessWidget {
       child: Container(
         width: MediaQuery.of(context).size.width - 20,
         height: 260,
-        margin: const EdgeInsets.only(right: 20.0),
         decoration: BoxDecoration(
           color: ColorConstants.white,
           borderRadius: BorderRadius.circular(6.0),
@@ -72,7 +73,7 @@ class ServiceBusinessItem extends StatelessWidget {
                           bottomRight: Radius.circular(20.0),
                         ),
                         child: CachedNetworkImage(
-                          width: 160.0,
+                          width: (MediaQuery.of(context).size.width - 20) * 0.4,
                           height: 200.0,
                           fit: BoxFit.cover,
                           imageUrl: imageUrl,
@@ -227,7 +228,7 @@ class ServiceBusinessItem extends StatelessWidget {
                                           margin:
                                               const EdgeInsets.only(left: 5.0),
                                           child: Text(
-                                            "$rating ($peopleRated)",
+                                            "$rating/$maxRating ($peopleRated)",
                                             style: const TextStyle(
                                               fontFamily:
                                                   AssetConstants.robotoFont,

@@ -2,7 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eshop/common/constants/asset_constants.dart';
 import 'package:eshop/common/global/global.dart';
 import 'package:eshop/common/utils/utility_methods.dart';
+import 'package:eshop/views/screens/businesses_screen.dart';
+import 'package:eshop/views/screens/categories_screen.dart';
 import 'package:eshop/views/screens/login_screen.dart';
+import 'package:eshop/views/screens/services_screen.dart';
 import 'package:eshop/views/widgets/service_business_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,6 +13,8 @@ import 'package:get/get.dart';
 
 import '../../common/constants/color_constants.dart';
 import '../../common/constants/string_constants.dart';
+import '../widgets/SearchTextField.dart';
+import '../widgets/border_button.dart';
 import '../widgets/user_image_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -32,7 +37,6 @@ class _HomeScreenState extends State<HomeScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.blue.shade100,
           title: const Text(
             StringConstants.appName,
             style: TextStyle(
@@ -60,48 +64,50 @@ class _HomeScreenState extends State<HomeScreen> {
         drawer: customDrawer(),
         body: ListView(
           children: [
-            ///Search
-            GestureDetector(
-              onTap: () {},
-              child: Container(
-                margin: const EdgeInsets.symmetric(
-                  horizontal: 16.0,
-                  vertical: 16.0,
-                ),
-                decoration: BoxDecoration(
-                  color: ColorConstants.white,
-                  borderRadius: BorderRadius.circular(30.0),
-                  border: Border.all(
-                    color: ColorConstants.grey300,
-                    width: 1.5,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: ColorConstants.grey.withOpacity(0.1),
-                      blurRadius: 5,
-                      spreadRadius: 1,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: TextField(
-                  readOnly: true,
-                  decoration: InputDecoration(
-                    hintText: StringConstants.search_,
-                    hintStyle: TextStyle(
-                      color: ColorConstants.black54,
-                    ),
-                    prefixIcon: Icon(
-                      Icons.search,
-                      color: ColorConstants.black54,
-                    ),
-                    border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(
-                      vertical: 14.0,
-                    ),
-                  ),
-                ),
+            ///Location
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 16.0,
+                right: 16.0,
+                top: 16.0,
+                bottom: 10.0,
               ),
+              child: Row(
+                children: [
+                  const Icon(Icons.location_on_outlined),
+                  Text(
+                    "Bhagalpur (Bihar)",
+                    style: TextStyle(
+                      color: ColorConstants.black,
+                      fontSize: 15.0,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  BorderButton(
+                    width: 70,
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 2.0,
+                      horizontal: 0.0,
+                    ),
+                    onPressed: () {},
+                    child: Text(
+                      StringConstants.change,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: ColorConstants.black,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  )
+                ],
+              ),
+            ),
+
+            ///Search
+            SearchTextField(
+              hintText: StringConstants.search_,
+              onTap: () {},
             ),
             const SizedBox(height: 5.0),
 
@@ -123,7 +129,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Get.to(() => const CategoriesScreen());
+                        },
                         child: Text(
                           StringConstants.viewMore,
                           maxLines: 2,
@@ -150,7 +158,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       childAspectRatio: 1.0, // Adjust aspect ratio as needed
                       mainAxisExtent: 115,
                     ),
-                    itemCount: demoCategories.length, // 4x2 grid = 8 items
+                    itemCount: demoCategories.length > 8
+                        ? 8
+                        : demoCategories.length, // 4x2 grid = 8 items
                     itemBuilder: (context, index) {
                       return categoryItem(
                         imageUrl: demoCategories[index]['imageUrl']!,
@@ -163,7 +173,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 5.0),
 
-            ///Businesses
+            ///Services
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -181,7 +191,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Get.to(() => const ServicesScreen());
+                        },
                         child: Text(
                           StringConstants.viewMore,
                           maxLines: 2,
@@ -206,25 +218,34 @@ class _HomeScreenState extends State<HomeScreen> {
                       vertical: 10.0,
                     ),
                     itemBuilder: (_, index) {
-                      return ServiceBusinessItem(
-                        imageUrl: demoServices[0]['imageUrl'].toString(),
-                        name: demoServices[0]['name'].toString(),
-                        category: demoServices[0]['category'].toString(),
-                        timing: demoServices[0]['timing'].toString(),
-                        servicesAndProducts:
-                            demoServices[0]['servicesAndProducts'].toString(),
-                        address: demoServices[0]['address'].toString(),
-                        city: demoServices[0]['city'].toString(),
-                        state: demoServices[0]['state'].toString(),
-                        rating: demoServices[0]['rating'].toString(),
-                        peopleRated: UtilityMethods.formatNumberToKMB(
-                            double.tryParse(demoServices[0]['peopleRated']
-                                    .toString()) ??
-                                0.0),
-                        onLocationPressed: () {},
-                        onCallPressed: () {},
-                        onMessagePressed: () {},
-                        onTap: () {},
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 20.0),
+                        child: ServiceBusinessItem(
+                          imageUrl:
+                              demoServices[index % 2]['imageUrl'].toString(),
+                          name: demoServices[index % 2]['name'].toString(),
+                          category:
+                              demoServices[index % 2]['category'].toString(),
+                          timing: demoServices[index % 2]['timing'].toString(),
+                          servicesAndProducts: demoServices[index % 2]
+                                  ['servicesAndProducts']
+                              .toString(),
+                          address:
+                              demoServices[index % 2]['address'].toString(),
+                          city: demoServices[index % 2]['city'].toString(),
+                          state: demoServices[index % 2]['state'].toString(),
+                          rating: demoServices[index % 2]['rating'].toString(),
+                          maxRating: "5.0",
+                          peopleRated: UtilityMethods.formatNumberToKMB(
+                              double.tryParse(demoServices[index % 2]
+                                          ['peopleRated']
+                                      .toString()) ??
+                                  0.0),
+                          onLocationPressed: () {},
+                          onCallPressed: () {},
+                          onMessagePressed: () {},
+                          onTap: () {},
+                        ),
                       );
                     },
                   ),
@@ -233,7 +254,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 15.0),
 
-            ///Services
+            ///Businesses
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -251,7 +272,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Get.to(() => const BusinessesScreen());
+                        },
                         child: Text(
                           StringConstants.viewMore,
                           maxLines: 2,
@@ -276,25 +299,36 @@ class _HomeScreenState extends State<HomeScreen> {
                       vertical: 10.0,
                     ),
                     itemBuilder: (_, index) {
-                      return ServiceBusinessItem(
-                        imageUrl: demoBusinesses[0]['imageUrl'].toString(),
-                        name: demoBusinesses[0]['name'].toString(),
-                        category: demoBusinesses[0]['category'].toString(),
-                        timing: demoBusinesses[0]['timing'].toString(),
-                        servicesAndProducts:
-                            demoBusinesses[0]['servicesAndProducts'].toString(),
-                        address: demoBusinesses[0]['address'].toString(),
-                        city: demoBusinesses[0]['city'].toString(),
-                        state: demoBusinesses[0]['state'].toString(),
-                        rating: demoBusinesses[0]['rating'].toString(),
-                        peopleRated: UtilityMethods.formatNumberToKMB(
-                            double.tryParse(demoBusinesses[0]['peopleRated']
-                                    .toString()) ??
-                                0.0),
-                        onLocationPressed: () {},
-                        onCallPressed: () {},
-                        onMessagePressed: () {},
-                        onTap: () {},
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 20.0),
+                        child: ServiceBusinessItem(
+                          imageUrl:
+                              demoBusinesses[index % 2]['imageUrl'].toString(),
+                          name: demoBusinesses[index % 2]['name'].toString(),
+                          category:
+                              demoBusinesses[index % 2]['category'].toString(),
+                          timing:
+                              demoBusinesses[index % 2]['timing'].toString(),
+                          servicesAndProducts: demoBusinesses[index % 2]
+                                  ['servicesAndProducts']
+                              .toString(),
+                          address:
+                              demoBusinesses[index % 2]['address'].toString(),
+                          city: demoBusinesses[index % 2]['city'].toString(),
+                          state: demoBusinesses[index % 2]['state'].toString(),
+                          rating:
+                              demoBusinesses[index % 2]['rating'].toString(),
+                          maxRating: "5.0",
+                          peopleRated: UtilityMethods.formatNumberToKMB(
+                              double.tryParse(demoBusinesses[index % 2]
+                                          ['peopleRated']
+                                      .toString()) ??
+                                  0.0),
+                          onLocationPressed: () {},
+                          onCallPressed: () {},
+                          onMessagePressed: () {},
+                          onTap: () {},
+                        ),
                       );
                     },
                   ),

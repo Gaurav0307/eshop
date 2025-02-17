@@ -45,6 +45,16 @@ final demoCategories = [
     'imageUrl':
         'https://images.unsplash.com/photo-1583338917451-face2751d8d5?q=80&w=1974'
   },
+  {
+    'category': 'Restaurant',
+    'imageUrl':
+        'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=2070'
+  },
+  {
+    'category': 'Car Wash',
+    'imageUrl':
+        'https://images.unsplash.com/photo-1632685062337-095b722134ca?q=80&w=2070'
+  },
 ];
 
 final demoServices = [
@@ -61,6 +71,19 @@ final demoServices = [
     'state': "Bihar",
     'rating': 4.5,
     'peopleRated': 12345,
+  },
+  {
+    'imageUrl':
+        "https://images.unsplash.com/photo-1632685062337-095b722134ca?q=80&w=2070",
+    'name': "The Car Wash",
+    'category': "Car Wash",
+    'timing': "9:00 am - 6:00 pm",
+    'servicesAndProducts': "Car Wash, Bike Wash & Bus Wash",
+    'address': "Tilkamanjhi",
+    'city': "Bhagalpur",
+    'state': "Bihar",
+    'rating': 4.6,
+    'peopleRated': 123456,
   }
 ];
 
@@ -78,7 +101,20 @@ final demoBusinesses = [
     'state': "Bihar",
     'rating': 4.6,
     'peopleRated': 12345,
-  }
+  },
+  {
+    'imageUrl':
+        "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=2070",
+    'name': "The Pop Restaurant",
+    'category': "Restaurant",
+    'timing': "11:00 am - 10:00 pm",
+    'servicesAndProducts': "Indian, Chinese, Thai & Italian Dishes",
+    'address': "Kathalbari",
+    'city': "Bhagalpur",
+    'state': "Bihar",
+    'rating': 4.7,
+    'peopleRated': 1234567,
+  },
 ];
 
 const String apiBaseUrl = "https://rest-apis-chat-app.onrender.com";

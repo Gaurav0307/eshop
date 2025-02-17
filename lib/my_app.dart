@@ -33,6 +33,9 @@ class _MyAppState extends State<MyApp> {
         title: 'eShop',
         theme: ThemeData(
           fontFamily: AssetConstants.poppinsFont,
+          appBarTheme: AppBarTheme(
+            backgroundColor: Colors.blue.shade100,
+          ),
           colorScheme: ColorScheme.fromSeed(
             seedColor: ColorConstants.indigo,
           ),

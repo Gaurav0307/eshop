@@ -22,63 +22,63 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        foregroundColor: ColorConstants.black,
+        backgroundColor: ColorConstants.white,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 25.0,
-            vertical: 50.0,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                StringConstants.register,
-                style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.w500,
-                  color: ColorConstants.black,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 25.0),
-              const RegisterForm(),
-              const SizedBox(height: 60.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    StringConstants.alreadyHaveAnAccount,
-                    style: TextStyle(
-                      color: ColorConstants.black,
-                      fontSize: 15.0,
-                      fontWeight: FontWeight.w400,
-                    ),
+      backgroundColor: ColorConstants.white,
+      body: Center(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 25.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  StringConstants.register,
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.w500,
+                    color: ColorConstants.black,
                   ),
-                  const SizedBox(width: 10),
-                  BorderButton(
-                    width: 80,
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 5.0,
-                      horizontal: 0.0,
-                    ),
-                    onPressed: () {
-                      Get.back();
-                    },
-                    child: Text(
-                      StringConstants.login,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 25.0),
+                const RegisterForm(),
+                const SizedBox(height: 60.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      StringConstants.alreadyHaveAnAccount,
                       style: TextStyle(
-                        fontSize: 12,
                         color: ColorConstants.black,
+                        fontSize: 15.0,
+                        fontWeight: FontWeight.w400,
                       ),
-                      textAlign: TextAlign.center,
                     ),
-                  )
-                ],
-              ),
-            ],
+                    const SizedBox(width: 10),
+                    BorderButton(
+                      width: 80,
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 5.0,
+                        horizontal: 0.0,
+                      ),
+                      onPressed: () {
+                        Get.back();
+                      },
+                      child: Text(
+                        StringConstants.login,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: ColorConstants.black,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    )
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

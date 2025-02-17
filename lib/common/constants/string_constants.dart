@@ -31,6 +31,10 @@ class StringConstants {
   static const String message = "Message";
   static const String businesses = "Businesses";
   static const String services = "Services";
+  static const String change = "Change";
+  static const String searchCategory = "Search category";
+  static const String searchService = "Search service";
+  static const String searchBusiness = "Search business";
 
   /// Validation
   static const String fullNameIsRequired = "Full Name is required.";

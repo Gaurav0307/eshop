@@ -64,7 +64,7 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        foregroundColor: ColorConstants.black,
+        backgroundColor: ColorConstants.appBarWhiteBG,
       ),
       body: ListView(
         children: [

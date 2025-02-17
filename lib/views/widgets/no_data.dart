@@ -1,3 +1,4 @@
+import 'package:eshop/common/constants/asset_constants.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/constants/color_constants.dart';
@@ -12,7 +13,7 @@ class NoData extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
+          const Text(
             StringConstants.noDataAvailable,
             style: TextStyle(
               color: Colors.redAccent,
@@ -28,6 +29,7 @@ class NoData extends StatelessWidget {
               StringConstants.thereIsNoDataToBeShown,
               style: TextStyle(
                 color: ColorConstants.black,
+                fontFamily: AssetConstants.robotoFont,
                 fontSize: 16.0,
               ),
               textAlign: TextAlign.center,
