@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:eshop/views/screens/selected_category_business_service_screen.dart';
 import 'package:eshop/views/widgets/no_data.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../common/constants/asset_constants.dart';
 import '../../common/constants/color_constants.dart';
@@ -57,7 +59,14 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 15.0),
                               child: ListTile(
-                                onTap: () {},
+                                onTap: () {
+                                  Get.to(
+                                    () => SelectedCategoryBusinessServiceScreen(
+                                      categoryName: demoCategories[index]
+                                          ['category']!,
+                                    ),
+                                  );
+                                },
                                 contentPadding: const EdgeInsets.symmetric(
                                   vertical: 10.0,
                                   horizontal: 5.0,

@@ -35,6 +35,10 @@ class StringConstants {
   static const String searchCategory = "Search category";
   static const String searchService = "Search service";
   static const String searchBusiness = "Search business";
+  static const String search = "Search";
+  static const String noSearchResultTitle = "Sorry, no results found";
+  static const String noSearchResultSubtitle =
+      "What you searched is unfortunately not found or doesn't exist";
 
   /// Validation
   static const String fullNameIsRequired = "Full Name is required.";

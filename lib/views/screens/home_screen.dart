@@ -5,6 +5,8 @@ import 'package:eshop/common/utils/utility_methods.dart';
 import 'package:eshop/views/screens/businesses_screen.dart';
 import 'package:eshop/views/screens/categories_screen.dart';
 import 'package:eshop/views/screens/login_screen.dart';
+import 'package:eshop/views/screens/search_screen.dart';
+import 'package:eshop/views/screens/selected_category_business_service_screen.dart';
 import 'package:eshop/views/screens/services_screen.dart';
 import 'package:eshop/views/widgets/service_business_item.dart';
 import 'package:flutter/material.dart';
@@ -107,7 +109,14 @@ class _HomeScreenState extends State<HomeScreen> {
             ///Search
             SearchTextField(
               hintText: StringConstants.search_,
-              onTap: () {},
+              onTap: () {
+                showSearch(
+                  context: context,
+                  delegate: SearchScreen(
+                    List.generate(10, (index) => "Text $index"),
+                  ),
+                );
+              },
             ),
             const SizedBox(height: 5.0),
 
@@ -165,6 +174,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       return categoryItem(
                         imageUrl: demoCategories[index]['imageUrl']!,
                         categoryName: demoCategories[index]['category']!,
+                        onTap: () {
+                          Get.to(
+                            () => SelectedCategoryBusinessServiceScreen(
+                              categoryName: demoCategories[index]['category']!,
+                            ),
+                          );
+                        },
                       );
                     },
                   ),
@@ -383,35 +399,39 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget categoryItem({
     required String imageUrl,
     required String categoryName,
+    required void Function() onTap,
   }) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        ClipOval(
-          child: CachedNetworkImage(
-            imageUrl: imageUrl,
-            width: 70, // Adjust size
-            height: 70, // Adjust size
-            fit: BoxFit.cover,
-          ),
-        ),
-        const SizedBox(height: 5.0),
-        SizedBox(
-          width: 75.0,
-          child: Text(
-            categoryName,
-            maxLines: 2,
-            style: TextStyle(
-              color: ColorConstants.black,
-              fontFamily: AssetConstants.robotoFont,
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ClipOval(
+            child: CachedNetworkImage(
+              imageUrl: imageUrl,
+              width: 70, // Adjust size
+              height: 70, // Adjust size
+              fit: BoxFit.cover,
             ),
-            textAlign: TextAlign.center,
-            overflow: TextOverflow.ellipsis,
           ),
-        ),
-      ],
+          const SizedBox(height: 5.0),
+          SizedBox(
+            width: 75.0,
+            child: Text(
+              categoryName,
+              maxLines: 2,
+              style: TextStyle(
+                color: ColorConstants.black,
+                fontFamily: AssetConstants.robotoFont,
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
