@@ -10,6 +10,7 @@ class ColorConstants {
   static Color lightBlue = Colors.lightBlue;
 
   static Color appBarWhiteBG = hexToColor("#fcf8ff");
+  static Color appBarBlueBG = Colors.blue.shade100;
 }
 
 Color hexToColor(String hex) {

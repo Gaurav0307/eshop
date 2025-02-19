@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../common/constants/string_constants.dart';
 import '../../common/global/global.dart';
@@ -6,6 +7,7 @@ import '../../common/utils/utility_methods.dart';
 import '../widgets/SearchTextField.dart';
 import '../widgets/no_data.dart';
 import '../widgets/service_business_item.dart';
+import 'business_service_details_screen.dart';
 
 class SelectedCategoryBusinessServiceScreen extends StatefulWidget {
   final String categoryName;
@@ -77,6 +79,7 @@ class _SelectedCategoryBusinessServiceScreenState
                               padding:
                                   const EdgeInsets.symmetric(vertical: 10.0),
                               child: ServiceBusinessItem(
+                                heroTag: index,
                                 imageUrl: allData[index]['imageUrl'].toString(),
                                 name: allData[index]['name'].toString(),
                                 category: allData[index]['category'].toString(),
@@ -97,7 +100,14 @@ class _SelectedCategoryBusinessServiceScreenState
                                 onLocationPressed: () {},
                                 onCallPressed: () {},
                                 onMessagePressed: () {},
-                                onTap: () {},
+                                onTap: () {
+                                  Get.to(
+                                    () => BusinessServiceDetailsScreen(
+                                      heroTag: index,
+                                      data: allData[index],
+                                    ),
+                                  );
+                                },
                               ),
                             )
                           : const SizedBox.shrink();

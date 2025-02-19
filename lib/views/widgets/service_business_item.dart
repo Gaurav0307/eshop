@@ -6,6 +6,7 @@ import '../../common/constants/color_constants.dart';
 import '../../common/constants/string_constants.dart';
 
 class ServiceBusinessItem extends StatelessWidget {
+  final Object heroTag;
   final String imageUrl;
   final String name;
   final String category;
@@ -24,6 +25,7 @@ class ServiceBusinessItem extends StatelessWidget {
 
   const ServiceBusinessItem({
     super.key,
+    required this.heroTag,
     required this.imageUrl,
     required this.name,
     required this.category,
@@ -72,11 +74,15 @@ class ServiceBusinessItem extends StatelessWidget {
                           topLeft: Radius.circular(6.0),
                           bottomRight: Radius.circular(20.0),
                         ),
-                        child: CachedNetworkImage(
+                        // child: CachedNetworkImage(
+                        //   width: (MediaQuery.of(context).size.width - 20) * 0.4,
+                        //   height: 200.0,
+                        //   fit: BoxFit.cover,
+                        //   imageUrl: imageUrl,
+                        // ),
+                        child: SizedBox(
                           width: (MediaQuery.of(context).size.width - 20) * 0.4,
                           height: 200.0,
-                          fit: BoxFit.cover,
-                          imageUrl: imageUrl,
                         ),
                       ),
                       Expanded(
@@ -342,16 +348,19 @@ class ServiceBusinessItem extends StatelessWidget {
               ],
             ),
             Positioned(
-              child: ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(6.0),
-                  bottomRight: Radius.circular(20.0),
-                ),
-                child: CachedNetworkImage(
-                  width: (MediaQuery.of(context).size.width - 20) * 0.4,
-                  height: 200.0,
-                  fit: BoxFit.cover,
-                  imageUrl: imageUrl,
+              child: Hero(
+                tag: heroTag,
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(6.0),
+                    bottomRight: Radius.circular(20.0),
+                  ),
+                  child: CachedNetworkImage(
+                    width: (MediaQuery.of(context).size.width - 20) * 0.4,
+                    height: 200.0,
+                    fit: BoxFit.cover,
+                    imageUrl: imageUrl,
+                  ),
                 ),
               ),
             ),

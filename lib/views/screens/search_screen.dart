@@ -1,10 +1,12 @@
 import 'package:eshop/common/global/global.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../common/constants/asset_constants.dart';
 import '../../common/constants/string_constants.dart';
 import '../../common/utils/utility_methods.dart';
 import '../widgets/service_business_item.dart';
+import 'business_service_details_screen.dart';
 
 class SearchScreen extends SearchDelegate {
   final List<String> listExample;
@@ -119,6 +121,7 @@ class SearchScreen extends SearchDelegate {
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
                 child: ServiceBusinessItem(
+                  heroTag: index,
                   imageUrl: searchResult[index]['imageUrl'].toString(),
                   name: searchResult[index]['name'].toString(),
                   category: searchResult[index]['category'].toString(),
@@ -136,7 +139,14 @@ class SearchScreen extends SearchDelegate {
                   onLocationPressed: () {},
                   onCallPressed: () {},
                   onMessagePressed: () {},
-                  onTap: () {},
+                  onTap: () {
+                    Get.to(
+                      () => BusinessServiceDetailsScreen(
+                        heroTag: index,
+                        data: searchResult[index],
+                      ),
+                    );
+                  },
                 ),
               );
             },
@@ -156,6 +166,7 @@ class SearchScreen extends SearchDelegate {
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
                 child: ServiceBusinessItem(
+                  heroTag: index,
                   imageUrl: searchResult[index]['imageUrl'].toString(),
                   name: searchResult[index]['name'].toString(),
                   category: searchResult[index]['category'].toString(),
@@ -173,7 +184,14 @@ class SearchScreen extends SearchDelegate {
                   onLocationPressed: () {},
                   onCallPressed: () {},
                   onMessagePressed: () {},
-                  onTap: () {},
+                  onTap: () {
+                    Get.to(
+                      () => BusinessServiceDetailsScreen(
+                        heroTag: index,
+                        data: searchResult[index],
+                      ),
+                    );
+                  },
                 ),
               );
             },

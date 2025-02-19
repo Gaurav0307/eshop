@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eshop/common/constants/asset_constants.dart';
 import 'package:eshop/common/global/global.dart';
 import 'package:eshop/common/utils/utility_methods.dart';
+import 'package:eshop/views/screens/business_service_details_screen.dart';
 import 'package:eshop/views/screens/businesses_screen.dart';
 import 'package:eshop/views/screens/categories_screen.dart';
 import 'package:eshop/views/screens/login_screen.dart';
@@ -237,6 +238,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       return Padding(
                         padding: const EdgeInsets.only(right: 20.0),
                         child: ServiceBusinessItem(
+                          heroTag: "Services-$index",
                           imageUrl:
                               demoServices[index % 2]['imageUrl'].toString(),
                           name: demoServices[index % 2]['name'].toString(),
@@ -260,7 +262,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           onLocationPressed: () {},
                           onCallPressed: () {},
                           onMessagePressed: () {},
-                          onTap: () {},
+                          onTap: () {
+                            Get.to(
+                              () => BusinessServiceDetailsScreen(
+                                heroTag: "Services-$index",
+                                data: demoServices[index % 2],
+                              ),
+                            );
+                          },
                         ),
                       );
                     },
@@ -318,6 +327,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       return Padding(
                         padding: const EdgeInsets.only(right: 20.0),
                         child: ServiceBusinessItem(
+                          heroTag: "Business-$index",
                           imageUrl:
                               demoBusinesses[index % 2]['imageUrl'].toString(),
                           name: demoBusinesses[index % 2]['name'].toString(),
@@ -343,7 +353,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           onLocationPressed: () {},
                           onCallPressed: () {},
                           onMessagePressed: () {},
-                          onTap: () {},
+                          onTap: () {
+                            Get.to(
+                              () => BusinessServiceDetailsScreen(
+                                heroTag: "Business-$index",
+                                data: demoBusinesses[index % 2],
+                              ),
+                            );
+                          },
                         ),
                       );
                     },

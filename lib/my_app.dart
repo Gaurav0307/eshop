@@ -34,7 +34,7 @@ class _MyAppState extends State<MyApp> {
         theme: ThemeData(
           fontFamily: AssetConstants.poppinsFont,
           appBarTheme: AppBarTheme(
-            backgroundColor: Colors.blue.shade100,
+            backgroundColor: ColorConstants.appBarBlueBG,
           ),
           colorScheme: ColorScheme.fromSeed(
             seedColor: ColorConstants.indigo,
