@@ -16,6 +16,7 @@ import 'package:get/get.dart';
 
 import '../../common/constants/color_constants.dart';
 import '../../common/constants/string_constants.dart';
+import '../../common/services/location.dart';
 import '../widgets/SearchTextField.dart';
 import '../widgets/border_button.dart';
 import '../widgets/user_image_widget.dart';
@@ -28,6 +29,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  var locationService = Get.put(LocationService());
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -68,44 +71,57 @@ class _HomeScreenState extends State<HomeScreen> {
         body: ListView(
           children: [
             ///Location
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 16.0,
-                right: 16.0,
-                top: 16.0,
-                bottom: 10.0,
-              ),
-              child: Row(
-                children: [
-                  const Icon(Icons.location_on_outlined),
-                  Text(
-                    "Bhagalpur (Bihar)",
-                    style: TextStyle(
-                      color: ColorConstants.black,
-                      fontSize: 15.0,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  BorderButton(
-                    width: 70,
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 2.0,
-                      horizontal: 0.0,
-                    ),
-                    onPressed: () {},
-                    child: Text(
-                      StringConstants.change,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: ColorConstants.black,
+            Obx(() {
+              return Padding(
+                padding: const EdgeInsets.only(
+                  left: 16.0,
+                  right: 16.0,
+                  top: 16.0,
+                  bottom: 10.0,
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.location_on_outlined),
+                    if (locationService.city.value.isNotEmpty) ...{
+                      Text(
+                        "${locationService.city} (${locationService.state})",
+                        style: TextStyle(
+                          color: ColorConstants.black,
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                  )
-                ],
-              ),
-            ),
+                      const SizedBox(width: 10),
+                      BorderButton(
+                        width: 70,
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 2.0,
+                          horizontal: 0.0,
+                        ),
+                        onPressed: () {},
+                        child: Text(
+                          StringConstants.change,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: ColorConstants.black,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      )
+                    } else ...{
+                      Text(
+                        "Loading...",
+                        style: TextStyle(
+                          color: ColorConstants.black,
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    },
+                  ],
+                ),
+              );
+            }),
 
             ///Search
             SearchTextField(
