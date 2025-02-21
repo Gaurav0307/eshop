@@ -91,9 +91,9 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                 distance:
                                     "${(locationService.getDistanceBetween(
                                           startLatitude:
-                                              locationService.lat.value,
+                                              locationService.latitude.value,
                                           startLongitude:
-                                              locationService.lon.value,
+                                              locationService.longitude.value,
                                           endLatitude: demoServices[index % 2]
                                               ['location']['lat'],
                                           endLongitude: demoServices[index % 2]

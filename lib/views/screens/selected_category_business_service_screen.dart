@@ -101,9 +101,9 @@ class _SelectedCategoryBusinessServiceScreenState
                                 distance:
                                     "${(locationService.getDistanceBetween(
                                           startLatitude:
-                                              locationService.lat.value,
+                                              locationService.latitude.value,
                                           startLongitude:
-                                              locationService.lon.value,
+                                              locationService.longitude.value,
                                           endLatitude: allData[index]
                                               ['location']['lat'],
                                           endLongitude: allData[index]

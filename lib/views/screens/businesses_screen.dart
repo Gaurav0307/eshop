@@ -91,9 +91,9 @@ class _BusinessesScreenState extends State<BusinessesScreen> {
                                 distance:
                                     "${(locationService.getDistanceBetween(
                                           startLatitude:
-                                              locationService.lat.value,
+                                              locationService.latitude.value,
                                           startLongitude:
-                                              locationService.lon.value,
+                                              locationService.longitude.value,
                                           endLatitude: demoBusinesses[index % 2]
                                               ['location']['lat'],
                                           endLongitude:

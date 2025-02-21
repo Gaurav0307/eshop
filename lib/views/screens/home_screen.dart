@@ -277,8 +277,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                         .toString()) ??
                                     0.0),
                             distance: "${(locationService.getDistanceBetween(
-                                  startLatitude: locationService.lat.value,
-                                  startLongitude: locationService.lon.value,
+                                  startLatitude: locationService.latitude.value,
+                                  startLongitude:
+                                      locationService.longitude.value,
                                   endLatitude: demoServices[index % 2]
                                       ['location']['lat'],
                                   endLongitude: demoServices[index % 2]
@@ -390,8 +391,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                         .toString()) ??
                                     0.0),
                             distance: "${(locationService.getDistanceBetween(
-                                  startLatitude: locationService.lat.value,
-                                  startLongitude: locationService.lon.value,
+                                  startLatitude: locationService.latitude.value,
+                                  startLongitude:
+                                      locationService.longitude.value,
                                   endLatitude: demoBusinesses[index % 2]
                                       ['location']['lat'],
                                   endLongitude: demoBusinesses[index % 2]

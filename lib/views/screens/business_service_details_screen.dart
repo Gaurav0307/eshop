@@ -232,8 +232,10 @@ class _BusinessServiceDetailsScreenState
                             () {
                               return Text(
                                 "${(locationService.getDistanceBetween(
-                                      startLatitude: locationService.lat.value,
-                                      startLongitude: locationService.lon.value,
+                                      startLatitude:
+                                          locationService.latitude.value,
+                                      startLongitude:
+                                          locationService.longitude.value,
                                       endLatitude: widget.data['location']
                                           ['lat'],
                                       endLongitude: widget.data['location']

@@ -22,14 +22,14 @@ class SearchScreen extends SearchDelegate {
     allData.sort((a, b) {
       return locationService
           .getDistanceBetween(
-            startLatitude: locationService.lat.value,
-            startLongitude: locationService.lon.value,
+            startLatitude: locationService.latitude.value,
+            startLongitude: locationService.longitude.value,
             endLatitude: a['location']['lat'],
             endLongitude: a['location']['lon'],
           )
           .compareTo(locationService.getDistanceBetween(
-            startLatitude: locationService.lat.value,
-            startLongitude: locationService.lon.value,
+            startLatitude: locationService.latitude.value,
+            startLongitude: locationService.longitude.value,
             endLatitude: b['location']['lat'],
             endLongitude: b['location']['lon'],
           ));
@@ -154,8 +154,8 @@ class SearchScreen extends SearchDelegate {
                           searchResult[index]['peopleRated'].toString()) ??
                       0.0),
                   distance: "${(locationService.getDistanceBetween(
-                        startLatitude: locationService.lat.value,
-                        startLongitude: locationService.lon.value,
+                        startLatitude: locationService.latitude.value,
+                        startLongitude: locationService.longitude.value,
                         endLatitude: searchResult[index]['location']['lat'],
                         endLongitude: searchResult[index]['location']['lon'],
                       ) / 1000.0).toPrecision(1)} KM",
@@ -213,8 +213,8 @@ class SearchScreen extends SearchDelegate {
                           searchResult[index]['peopleRated'].toString()) ??
                       0.0),
                   distance: "${(locationService.getDistanceBetween(
-                        startLatitude: locationService.lat.value,
-                        startLongitude: locationService.lon.value,
+                        startLatitude: locationService.latitude.value,
+                        startLongitude: locationService.longitude.value,
                         endLatitude: searchResult[index]['location']['lat'],
                         endLongitude: searchResult[index]['location']['lon'],
                       ) / 1000.0).toPrecision(1)} KM",
