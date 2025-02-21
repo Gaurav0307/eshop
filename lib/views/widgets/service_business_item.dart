@@ -18,6 +18,7 @@ class ServiceBusinessItem extends StatelessWidget {
   final String rating;
   final String maxRating;
   final String peopleRated;
+  final String distance;
   final void Function() onLocationPressed;
   final void Function() onCallPressed;
   final void Function() onMessagePressed;
@@ -41,6 +42,7 @@ class ServiceBusinessItem extends StatelessWidget {
     required this.onCallPressed,
     required this.onMessagePressed,
     required this.onTap,
+    required this.distance,
   });
 
   @override
@@ -350,17 +352,48 @@ class ServiceBusinessItem extends StatelessWidget {
             Positioned(
               child: Hero(
                 tag: heroTag,
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(6.0),
-                    bottomRight: Radius.circular(20.0),
-                  ),
-                  child: CachedNetworkImage(
-                    width: (MediaQuery.of(context).size.width - 20) * 0.4,
-                    height: 200.0,
-                    fit: BoxFit.cover,
-                    imageUrl: imageUrl,
-                  ),
+                child: Stack(
+                  children: [
+                    ClipRRect(
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(6.0),
+                        bottomRight: Radius.circular(20.0),
+                      ),
+                      child: CachedNetworkImage(
+                        width: (MediaQuery.of(context).size.width - 20) * 0.4,
+                        height: 200.0,
+                        fit: BoxFit.cover,
+                        imageUrl: imageUrl,
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      right: 1,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 5.0,
+                          vertical: 0.0,
+                        ),
+                        decoration: const BoxDecoration(
+                          color: Colors.black26,
+                          borderRadius: BorderRadius.only(
+                            bottomRight: Radius.circular(20.0),
+                          ),
+                        ),
+                        child: Text(
+                          distance,
+                          style: TextStyle(
+                            fontFamily: AssetConstants.robotoFont,
+                            fontSize: 12.0,
+                            color: ColorConstants.white,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),

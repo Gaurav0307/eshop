@@ -39,6 +39,9 @@ class StringConstants {
   static const String noSearchResultTitle = "Sorry, no results found";
   static const String noSearchResultSubtitle =
       "What you searched is unfortunately not found or doesn't exist";
+  static const String fromYourCurrentLocation = "from your current location";
+  static const String rateIt = "Rate it";
+  static const String howWasYourExperience = "How was your experience?";
 
   /// Validation
   static const String fullNameIsRequired = "Full Name is required.";

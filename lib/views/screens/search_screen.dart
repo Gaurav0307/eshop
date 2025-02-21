@@ -7,16 +7,33 @@ import '../../common/constants/string_constants.dart';
 import '../../common/utils/utility_methods.dart';
 import '../widgets/service_business_item.dart';
 import 'business_service_details_screen.dart';
+import 'map_screen.dart';
 
 class SearchScreen extends SearchDelegate {
   final List<String> listExample;
 
-  final allData = [...demoServices, ...demoBusinesses];
+  List<Map<String, dynamic>> allData = [...demoServices, ...demoBusinesses];
 
   SearchScreen(this.listExample);
 
   List<Map<String, dynamic>> searchResults(String query) {
     List<Map<String, dynamic>> results = [];
+
+    allData.sort((a, b) {
+      return locationService
+          .getDistanceBetween(
+            startLatitude: locationService.lat.value,
+            startLongitude: locationService.lon.value,
+            endLatitude: a['location']['lat'],
+            endLongitude: a['location']['lon'],
+          )
+          .compareTo(locationService.getDistanceBetween(
+            startLatitude: locationService.lat.value,
+            startLongitude: locationService.lon.value,
+            endLatitude: b['location']['lat'],
+            endLongitude: b['location']['lon'],
+          ));
+    });
 
     for (var data in allData) {
       if (data['name'].toString().toLowerCase().contains(query.toLowerCase()) ||
@@ -136,7 +153,21 @@ class SearchScreen extends SearchDelegate {
                   peopleRated: UtilityMethods.formatNumberToKMB(double.tryParse(
                           searchResult[index]['peopleRated'].toString()) ??
                       0.0),
-                  onLocationPressed: () {},
+                  distance: "${(locationService.getDistanceBetween(
+                        startLatitude: locationService.lat.value,
+                        startLongitude: locationService.lon.value,
+                        endLatitude: searchResult[index]['location']['lat'],
+                        endLongitude: searchResult[index]['location']['lon'],
+                      ) / 1000.0).toPrecision(1)} KM",
+                  onLocationPressed: () {
+                    Get.to(
+                      () => MapScreen(
+                        lat: searchResult[index]['location']['lat'],
+                        lon: searchResult[index]['location']['lon'],
+                        title: searchResult[index]['name'].toString(),
+                      ),
+                    );
+                  },
                   onCallPressed: () {},
                   onMessagePressed: () {},
                   onTap: () {
@@ -181,7 +212,21 @@ class SearchScreen extends SearchDelegate {
                   peopleRated: UtilityMethods.formatNumberToKMB(double.tryParse(
                           searchResult[index]['peopleRated'].toString()) ??
                       0.0),
-                  onLocationPressed: () {},
+                  distance: "${(locationService.getDistanceBetween(
+                        startLatitude: locationService.lat.value,
+                        startLongitude: locationService.lon.value,
+                        endLatitude: searchResult[index]['location']['lat'],
+                        endLongitude: searchResult[index]['location']['lon'],
+                      ) / 1000.0).toPrecision(1)} KM",
+                  onLocationPressed: () {
+                    Get.to(
+                      () => MapScreen(
+                        lat: searchResult[index]['location']['lat'],
+                        lon: searchResult[index]['location']['lon'],
+                        title: searchResult[index]['name'].toString(),
+                      ),
+                    );
+                  },
                   onCallPressed: () {},
                   onMessagePressed: () {},
                   onTap: () {

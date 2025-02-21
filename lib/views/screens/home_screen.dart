@@ -6,6 +6,7 @@ import 'package:eshop/views/screens/business_service_details_screen.dart';
 import 'package:eshop/views/screens/businesses_screen.dart';
 import 'package:eshop/views/screens/categories_screen.dart';
 import 'package:eshop/views/screens/login_screen.dart';
+import 'package:eshop/views/screens/map_screen.dart';
 import 'package:eshop/views/screens/search_screen.dart';
 import 'package:eshop/views/screens/selected_category_business_service_screen.dart';
 import 'package:eshop/views/screens/services_screen.dart';
@@ -16,7 +17,6 @@ import 'package:get/get.dart';
 
 import '../../common/constants/color_constants.dart';
 import '../../common/constants/string_constants.dart';
-import '../../common/services/location.dart';
 import '../widgets/SearchTextField.dart';
 import '../widgets/border_button.dart';
 import '../widgets/user_image_widget.dart';
@@ -29,8 +29,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  var locationService = Get.put(LocationService());
-
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -71,8 +69,8 @@ class _HomeScreenState extends State<HomeScreen> {
         body: ListView(
           children: [
             ///Location
-            Obx(() {
-              return Padding(
+            Obx(
+              () => Padding(
                 padding: const EdgeInsets.only(
                   left: 16.0,
                   right: 16.0,
@@ -120,8 +118,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                   ],
                 ),
-              );
-            }),
+              ),
+            ),
 
             ///Search
             SearchTextField(
@@ -251,41 +249,64 @@ class _HomeScreenState extends State<HomeScreen> {
                       vertical: 10.0,
                     ),
                     itemBuilder: (_, index) {
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 20.0),
-                        child: ServiceBusinessItem(
-                          heroTag: "Services-$index",
-                          imageUrl:
-                              demoServices[index % 2]['imageUrl'].toString(),
-                          name: demoServices[index % 2]['name'].toString(),
-                          category:
-                              demoServices[index % 2]['category'].toString(),
-                          timing: demoServices[index % 2]['timing'].toString(),
-                          servicesAndProducts: demoServices[index % 2]
-                                  ['servicesAndProducts']
-                              .toString(),
-                          address:
-                              demoServices[index % 2]['address'].toString(),
-                          city: demoServices[index % 2]['city'].toString(),
-                          state: demoServices[index % 2]['state'].toString(),
-                          rating: demoServices[index % 2]['rating'].toString(),
-                          maxRating: "5.0",
-                          peopleRated: UtilityMethods.formatNumberToKMB(
-                              double.tryParse(demoServices[index % 2]
-                                          ['peopleRated']
-                                      .toString()) ??
-                                  0.0),
-                          onLocationPressed: () {},
-                          onCallPressed: () {},
-                          onMessagePressed: () {},
-                          onTap: () {
-                            Get.to(
-                              () => BusinessServiceDetailsScreen(
-                                heroTag: "Services-$index",
-                                data: demoServices[index % 2],
-                              ),
-                            );
-                          },
+                      return Obx(
+                        () => Padding(
+                          padding: const EdgeInsets.only(right: 20.0),
+                          child: ServiceBusinessItem(
+                            heroTag: "Services-$index",
+                            imageUrl:
+                                demoServices[index % 2]['imageUrl'].toString(),
+                            name: demoServices[index % 2]['name'].toString(),
+                            category:
+                                demoServices[index % 2]['category'].toString(),
+                            timing:
+                                demoServices[index % 2]['timing'].toString(),
+                            servicesAndProducts: demoServices[index % 2]
+                                    ['servicesAndProducts']
+                                .toString(),
+                            address:
+                                demoServices[index % 2]['address'].toString(),
+                            city: demoServices[index % 2]['city'].toString(),
+                            state: demoServices[index % 2]['state'].toString(),
+                            rating:
+                                demoServices[index % 2]['rating'].toString(),
+                            maxRating: "5.0",
+                            peopleRated: UtilityMethods.formatNumberToKMB(
+                                double.tryParse(demoServices[index % 2]
+                                            ['peopleRated']
+                                        .toString()) ??
+                                    0.0),
+                            distance: "${(locationService.getDistanceBetween(
+                                  startLatitude: locationService.lat.value,
+                                  startLongitude: locationService.lon.value,
+                                  endLatitude: demoServices[index % 2]
+                                      ['location']['lat'],
+                                  endLongitude: demoServices[index % 2]
+                                      ['location']['lon'],
+                                ) / 1000.0).toPrecision(1)} KM",
+                            onLocationPressed: () {
+                              Get.to(
+                                () => MapScreen(
+                                  lat: demoServices[index % 2]['location']
+                                      ['lat'],
+                                  lon: demoServices[index % 2]['location']
+                                      ['lon'],
+                                  title: demoServices[index % 2]['name']
+                                      .toString(),
+                                ),
+                              );
+                            },
+                            onCallPressed: () {},
+                            onMessagePressed: () {},
+                            onTap: () {
+                              Get.to(
+                                () => BusinessServiceDetailsScreen(
+                                  heroTag: "Services-$index",
+                                  data: demoServices[index % 2],
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       );
                     },
@@ -340,43 +361,65 @@ class _HomeScreenState extends State<HomeScreen> {
                       vertical: 10.0,
                     ),
                     itemBuilder: (_, index) {
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 20.0),
-                        child: ServiceBusinessItem(
-                          heroTag: "Business-$index",
-                          imageUrl:
-                              demoBusinesses[index % 2]['imageUrl'].toString(),
-                          name: demoBusinesses[index % 2]['name'].toString(),
-                          category:
-                              demoBusinesses[index % 2]['category'].toString(),
-                          timing:
-                              demoBusinesses[index % 2]['timing'].toString(),
-                          servicesAndProducts: demoBusinesses[index % 2]
-                                  ['servicesAndProducts']
-                              .toString(),
-                          address:
-                              demoBusinesses[index % 2]['address'].toString(),
-                          city: demoBusinesses[index % 2]['city'].toString(),
-                          state: demoBusinesses[index % 2]['state'].toString(),
-                          rating:
-                              demoBusinesses[index % 2]['rating'].toString(),
-                          maxRating: "5.0",
-                          peopleRated: UtilityMethods.formatNumberToKMB(
-                              double.tryParse(demoBusinesses[index % 2]
-                                          ['peopleRated']
-                                      .toString()) ??
-                                  0.0),
-                          onLocationPressed: () {},
-                          onCallPressed: () {},
-                          onMessagePressed: () {},
-                          onTap: () {
-                            Get.to(
-                              () => BusinessServiceDetailsScreen(
-                                heroTag: "Business-$index",
-                                data: demoBusinesses[index % 2],
-                              ),
-                            );
-                          },
+                      return Obx(
+                        () => Padding(
+                          padding: const EdgeInsets.only(right: 20.0),
+                          child: ServiceBusinessItem(
+                            heroTag: "Business-$index",
+                            imageUrl: demoBusinesses[index % 2]['imageUrl']
+                                .toString(),
+                            name: demoBusinesses[index % 2]['name'].toString(),
+                            category: demoBusinesses[index % 2]['category']
+                                .toString(),
+                            timing:
+                                demoBusinesses[index % 2]['timing'].toString(),
+                            servicesAndProducts: demoBusinesses[index % 2]
+                                    ['servicesAndProducts']
+                                .toString(),
+                            address:
+                                demoBusinesses[index % 2]['address'].toString(),
+                            city: demoBusinesses[index % 2]['city'].toString(),
+                            state:
+                                demoBusinesses[index % 2]['state'].toString(),
+                            rating:
+                                demoBusinesses[index % 2]['rating'].toString(),
+                            maxRating: "5.0",
+                            peopleRated: UtilityMethods.formatNumberToKMB(
+                                double.tryParse(demoBusinesses[index % 2]
+                                            ['peopleRated']
+                                        .toString()) ??
+                                    0.0),
+                            distance: "${(locationService.getDistanceBetween(
+                                  startLatitude: locationService.lat.value,
+                                  startLongitude: locationService.lon.value,
+                                  endLatitude: demoBusinesses[index % 2]
+                                      ['location']['lat'],
+                                  endLongitude: demoBusinesses[index % 2]
+                                      ['location']['lon'],
+                                ) / 1000.0).toPrecision(1)} KM",
+                            onLocationPressed: () {
+                              Get.to(
+                                () => MapScreen(
+                                  lat: demoBusinesses[index % 2]['location']
+                                      ['lat'],
+                                  lon: demoBusinesses[index % 2]['location']
+                                      ['lon'],
+                                  title: demoBusinesses[index % 2]['name']
+                                      .toString(),
+                                ),
+                              );
+                            },
+                            onCallPressed: () {},
+                            onMessagePressed: () {},
+                            onTap: () {
+                              Get.to(
+                                () => BusinessServiceDetailsScreen(
+                                  heroTag: "Business-$index",
+                                  data: demoBusinesses[index % 2],
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       );
                     },

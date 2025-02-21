@@ -8,6 +8,7 @@ import '../widgets/SearchTextField.dart';
 import '../widgets/no_data.dart';
 import '../widgets/service_business_item.dart';
 import 'business_service_details_screen.dart';
+import 'map_screen.dart';
 
 class SelectedCategoryBusinessServiceScreen extends StatefulWidget {
   final String categoryName;
@@ -97,7 +98,26 @@ class _SelectedCategoryBusinessServiceScreenState
                                                 ['peopleRated']
                                             .toString()) ??
                                         0.0),
-                                onLocationPressed: () {},
+                                distance:
+                                    "${(locationService.getDistanceBetween(
+                                          startLatitude:
+                                              locationService.lat.value,
+                                          startLongitude:
+                                              locationService.lon.value,
+                                          endLatitude: allData[index]
+                                              ['location']['lat'],
+                                          endLongitude: allData[index]
+                                              ['location']['lon'],
+                                        ) / 1000.0).toPrecision(1)} KM",
+                                onLocationPressed: () {
+                                  Get.to(
+                                    () => MapScreen(
+                                      lat: allData[index]['location']['lat'],
+                                      lon: allData[index]['location']['lon'],
+                                      title: allData[index]['name'].toString(),
+                                    ),
+                                  );
+                                },
                                 onCallPressed: () {},
                                 onMessagePressed: () {},
                                 onTap: () {

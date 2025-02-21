@@ -1,8 +1,12 @@
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../services/location.dart';
 
 SharedPreferences? sharedPreferences;
 late String token;
 late String userId;
+var locationService = Get.put(LocationService());
 
 final demoCategories = [
   {
@@ -57,7 +61,7 @@ final demoCategories = [
   },
 ];
 
-final demoServices = [
+final List<Map<String, dynamic>> demoServices = [
   {
     'imageUrl':
         "https://images.unsplash.com/photo-1605497788044-5a32c7078486?q=80&w=1974",
@@ -69,6 +73,10 @@ final demoServices = [
     'address': "Zero Mile",
     'city': "Bhagalpur",
     'state': "Bihar",
+    'location': {
+      'lat': 25.253463,
+      'lon': 87.021955,
+    },
     'rating': 4.5,
     'peopleRated': 12345,
   },
@@ -79,15 +87,19 @@ final demoServices = [
     'category': "Car Wash",
     'timing': "9:00 am - 6:00 pm",
     'servicesAndProducts': "Car Wash, Bike Wash & Bus Wash",
-    'address': "Tilkamanjhi",
+    'address': "Sabour",
     'city': "Bhagalpur",
     'state': "Bihar",
+    'location': {
+      'lat': 25.243428,
+      'lon': 87.047683,
+    },
     'rating': 4.6,
     'peopleRated': 123456,
   }
 ];
 
-final demoBusinesses = [
+final List<Map<String, dynamic>> demoBusinesses = [
   {
     'imageUrl':
         "https://images.unsplash.com/photo-1583338917451-face2751d8d5?q=80&w=1974",
@@ -99,6 +111,10 @@ final demoBusinesses = [
     'address': "Tilkamanjhi",
     'city': "Bhagalpur",
     'state': "Bihar",
+    'location': {
+      'lat': 25.253991,
+      'lon': 87.000926,
+    },
     'rating': 4.6,
     'peopleRated': 12345,
   },
@@ -109,9 +125,13 @@ final demoBusinesses = [
     'category': "Restaurant",
     'timing': "11:00 am - 10:00 pm",
     'servicesAndProducts': "Indian, Chinese, Thai & Italian Dishes",
-    'address': "Kathalbari",
+    'address': "Khalifagagh",
     'city': "Bhagalpur",
     'state': "Bihar",
+    'location': {
+      'lat': 25.246883,
+      'lon': 86.976625,
+    },
     'rating': 4.7,
     'peopleRated': 1234567,
   },

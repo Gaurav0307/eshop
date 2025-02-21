@@ -6,14 +6,18 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 
 class LocationService extends GetxController {
+  var locality = ''.obs;
   var city = ''.obs;
   var state = ''.obs;
   var country = ''.obs;
+  var lat = 0.0.obs;
+  var lon = 0.0.obs;
 
   @override
   void onInit() {
     super.onInit();
     setInitialData();
+    setPositionListener();
   }
 
   Future<void> setInitialData() async {
@@ -31,9 +35,38 @@ class LocationService extends GetxController {
   Future<void> setData({required double lat, required double lon}) async {
     var locationData = await getLocationData(lat: lat, lon: lon);
 
+    locality.value = locationData.locality;
     city.value = locationData.city;
     state.value = locationData.state;
     country.value = locationData.country;
+  }
+
+  Future<void> setPositionListener() async {
+    try {
+      var locationStream = await currentLocationStream();
+
+      locationStream.onData(
+        (position) async {
+          debugPrint("Accuracy : ${position.accuracy}");
+          debugPrint('Lat: ${position.latitude}, Lon: ${position.longitude}');
+
+          lat.value = position.latitude;
+          lon.value = position.longitude;
+        },
+      );
+    } catch (e) {
+      debugPrint("Error fetching location: $e");
+    }
+  }
+
+  double getDistanceBetween({
+    required double startLatitude,
+    required double startLongitude,
+    required double endLatitude,
+    required double endLongitude,
+  }) {
+    return Geolocator.distanceBetween(
+        startLatitude, startLongitude, endLatitude, endLongitude);
   }
 
   Future<void> _checkLocationPermission() async {
@@ -152,9 +185,9 @@ class LocationData {
   final String country;
 
   const LocationData({
+    required this.locality,
     required this.city,
     required this.state,
-    required this.locality,
     required this.postalCode,
     required this.country,
   });

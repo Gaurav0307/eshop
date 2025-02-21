@@ -8,6 +8,7 @@ import '../widgets/SearchTextField.dart';
 import '../widgets/no_data.dart';
 import '../widgets/service_business_item.dart';
 import 'business_service_details_screen.dart';
+import 'map_screen.dart';
 
 class BusinessesScreen extends StatefulWidget {
   const BusinessesScreen({super.key});
@@ -87,7 +88,30 @@ class _BusinessesScreenState extends State<BusinessesScreen> {
                                                 ['peopleRated']
                                             .toString()) ??
                                         0.0),
-                                onLocationPressed: () {},
+                                distance:
+                                    "${(locationService.getDistanceBetween(
+                                          startLatitude:
+                                              locationService.lat.value,
+                                          startLongitude:
+                                              locationService.lon.value,
+                                          endLatitude: demoBusinesses[index % 2]
+                                              ['location']['lat'],
+                                          endLongitude:
+                                              demoBusinesses[index % 2]
+                                                  ['location']['lon'],
+                                        ) / 1000.0).toPrecision(1)} KM",
+                                onLocationPressed: () {
+                                  Get.to(
+                                    () => MapScreen(
+                                      lat: demoBusinesses[index % 2]['location']
+                                          ['lat'],
+                                      lon: demoBusinesses[index % 2]['location']
+                                          ['lon'],
+                                      title: demoBusinesses[index % 2]['name']
+                                          .toString(),
+                                    ),
+                                  );
+                                },
                                 onCallPressed: () {},
                                 onMessagePressed: () {},
                                 onTap: () {
