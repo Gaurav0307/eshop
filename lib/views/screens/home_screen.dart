@@ -7,6 +7,7 @@ import 'package:eshop/views/screens/businesses_screen.dart';
 import 'package:eshop/views/screens/categories_screen.dart';
 import 'package:eshop/views/screens/login_screen.dart';
 import 'package:eshop/views/screens/map_screen.dart';
+import 'package:eshop/views/screens/my_business_service/my_business_service.dart';
 import 'package:eshop/views/screens/search_screen.dart';
 import 'package:eshop/views/screens/selected_category_business_service_screen.dart';
 import 'package:eshop/views/screens/services_screen.dart';
@@ -240,7 +241,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 SizedBox(
-                  height: 280,
+                  height: 300,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: 10,
@@ -353,7 +354,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 SizedBox(
-                  height: 280,
+                  height: 300,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: 10,
@@ -562,7 +563,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ListTile(
               leading: const Icon(Icons.add_business),
               title: const Text(
-                StringConstants.addBusinessService,
+                StringConstants.myBusinessAndService,
                 style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.w500,
@@ -572,7 +573,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 Icons.arrow_forward_ios,
                 size: 16.0,
               ),
-              onTap: () {},
+              onTap: () {
+                Get.to(() => const MyBusinessService());
+              },
             ),
             const Spacer(),
             ListTile(

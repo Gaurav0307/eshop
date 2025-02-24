@@ -22,7 +22,7 @@ class StringConstants {
   static const String noDataAvailable = "No Data Available";
   static const String thereIsNoDataToBeShown =
       "There is no data available to be shown here.";
-  static const String addBusinessService = "Add Business/Service";
+  static const String myBusinessAndService = "My Business & Service";
   static const String search_ = "Search...";
   static const String categories = "Categories";
   static const String viewMore = "View More";
@@ -42,6 +42,9 @@ class StringConstants {
   static const String fromYourCurrentLocation = "from your current location";
   static const String rateIt = "Rate it";
   static const String howWasYourExperience = "How was your experience?";
+  static const String add = "Add";
+  static const String edit = "Edit";
+  static const String delete = "Delete";
 
   /// Validation
   static const String fullNameIsRequired = "Full Name is required.";

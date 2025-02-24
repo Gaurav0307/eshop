@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import '../../common/constants/color_constants.dart';
 import '../../common/constants/string_constants.dart';
 
-class ServiceBusinessItem extends StatelessWidget {
+class MyBusinessServiceItem extends StatelessWidget {
   final Object heroTag;
   final String imageUrl;
   final String name;
@@ -19,12 +19,12 @@ class ServiceBusinessItem extends StatelessWidget {
   final String maxRating;
   final String peopleRated;
   final String distance;
-  final void Function() onLocationPressed;
-  final void Function() onCallPressed;
+  final void Function() onEditPressed;
+  final void Function() onDeletePressed;
   final void Function() onMessagePressed;
   final void Function() onTap;
 
-  const ServiceBusinessItem({
+  const MyBusinessServiceItem({
     super.key,
     required this.heroTag,
     required this.imageUrl,
@@ -38,8 +38,8 @@ class ServiceBusinessItem extends StatelessWidget {
     required this.rating,
     required this.maxRating,
     required this.peopleRated,
-    required this.onLocationPressed,
-    required this.onCallPressed,
+    required this.onEditPressed,
+    required this.onDeletePressed,
     required this.onMessagePressed,
     required this.onTap,
     required this.distance,
@@ -280,16 +280,16 @@ class ServiceBusinessItem extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       IconButton(
-                        onPressed: onLocationPressed,
+                        onPressed: onEditPressed,
                         icon: SizedBox(
                           width: 80.0,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Icon(Icons.location_on),
+                              const Icon(Icons.edit),
                               const SizedBox(height: 5.0),
                               Text(
-                                StringConstants.location,
+                                StringConstants.edit,
                                 style: TextStyle(
                                   fontSize: 10.0,
                                   fontWeight: FontWeight.w600,
@@ -302,16 +302,16 @@ class ServiceBusinessItem extends StatelessWidget {
                         ),
                       ),
                       IconButton(
-                        onPressed: onCallPressed,
+                        onPressed: onDeletePressed,
                         icon: SizedBox(
                           width: 80.0,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Icon(Icons.phone),
+                              const Icon(Icons.delete),
                               const SizedBox(height: 5.0),
                               Text(
-                                StringConstants.call,
+                                StringConstants.delete,
                                 style: TextStyle(
                                   fontSize: 10.0,
                                   fontWeight: FontWeight.w600,
