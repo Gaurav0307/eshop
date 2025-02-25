@@ -8,6 +8,7 @@ class ColorConstants {
   static Color grey = Colors.grey;
   static Color grey300 = Colors.grey.shade300;
   static Color lightBlue = Colors.lightBlue;
+  static Color red = Colors.red;
 
   static Color whiteBG = hexToColor("#FCF8FF");
   static Color pastelBlueBG = hexToColor('#B3E5FC');

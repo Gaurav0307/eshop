@@ -8,6 +8,10 @@ late String token;
 late String userId;
 var locationService = Get.put(LocationService());
 
+var selectedLat = 0.0.obs;
+var selectedLon = 0.0.obs;
+var locationTitle = ''.obs;
+
 final demoCategories = [
   {
     'category': 'Grocery',

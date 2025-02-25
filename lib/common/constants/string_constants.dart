@@ -45,6 +45,22 @@ class StringConstants {
   static const String add = "Add";
   static const String edit = "Edit";
   static const String delete = "Delete";
+  static const String addBusinessService = "Add Business/Service";
+  static const String selectImageSource = "Select Image Source";
+  static const String gallery = "Gallery";
+  static const String camera = "Camera";
+  static const String fileSizeMustBeSmallerThan =
+      "File size must be smaller than";
+  static const String name = "Name";
+  static const String address = "Address";
+  static const String save = "Save";
+  static const String type = "Type";
+  static const String category = "Category";
+  static const String country = "Country";
+  static const String state = "State";
+  static const String city = "City";
+  static const String currentLocation = "Current Location";
+  static const String selectedLocation = "Selected Location";
 
   /// Validation
   static const String fullNameIsRequired = "Full Name is required.";
@@ -60,4 +76,12 @@ class StringConstants {
   static const String thePasswordMustContainAtLeast =
       "The password must contain at least one uppercase \nletter, one lowercase letter and one number.";
   static const String passwordsDoNotMatch = "Passwords do not match.";
+  static const String imageIsRequired = "Image is required.";
+  static const String nameIsRequired = "Name is required.";
+  static const String addressIsRequired = "Address is required.";
+  static const String typeIsRequired = "Type is required.";
+  static const String categoryIsRequired = "Category is required.";
+  static const String countryIsRequired = "Country is required.";
+  static const String stateIsRequired = "State Type is required.";
+  static const String cityIsRequired = "City Type is required.";
 }

@@ -1,6 +1,7 @@
 import 'package:eshop/common/constants/color_constants.dart';
 import 'package:eshop/common/constants/string_constants.dart';
 import 'package:eshop/common/global/global.dart';
+import 'package:eshop/views/screens/my_business_service/add_business_service_screen.dart';
 import 'package:eshop/views/widgets/my_business_service_item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -75,7 +76,9 @@ class _MyBusinessServiceState extends State<MyBusinessService> {
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: ColorConstants.mintGreenBG,
         foregroundColor: ColorConstants.black,
-        onPressed: () {},
+        onPressed: () {
+          Get.to(() => const AddBusinessServiceScreen());
+        },
         icon: const Icon(Icons.add_business),
         label: const Text(StringConstants.add),
       ),
