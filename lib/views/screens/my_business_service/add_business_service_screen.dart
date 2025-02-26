@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:eshop/views/screens/my_business_service/select_location_screen.dart';
+import 'package:eshop/views/widgets/border_button.dart';
 import 'package:eshop/views/widgets/gradient_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -62,9 +64,10 @@ class _AddBusinessServiceFormState extends State<AddBusinessServiceForm> {
   List<String> types = ["Select", "Business", "Service"];
   String category = '';
   List<String> categories = [
-    "Select",
     ...demoCategories.map((category) => category['category']!)
   ];
+  String openCloseTime = '';
+  TextEditingController openCloseTimeTEC = TextEditingController();
   String address = '';
   TextEditingController addressTEC = TextEditingController();
   TextEditingController countryTEC = TextEditingController();
@@ -72,9 +75,89 @@ class _AddBusinessServiceFormState extends State<AddBusinessServiceForm> {
   TextEditingController cityTEC = TextEditingController();
   String mobile = '';
 
+  // Product and Services
+  final TextEditingController productsServicesTEC = TextEditingController();
+  final List<String> productsServicesList = [];
+
+  void _addItem() {
+    String newItem = productsServicesTEC.text.trim();
+    if (newItem.isNotEmpty && !productsServicesList.contains(newItem)) {
+      setState(() {
+        productsServicesList.add(newItem);
+      });
+      productsServicesTEC.clear();
+    }
+  }
+
+  void _confirmRemoveItem(String item) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(
+          StringConstants.removeItem,
+          style: TextStyle(
+            fontWeight: FontWeight.w500,
+            color: ColorConstants.black,
+          ),
+        ),
+        content:
+            Text(StringConstants.doYouReallyWantToRemove.replaceAll('#', item)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(
+              StringConstants.cancel,
+              style: TextStyle(
+                fontFamily: AssetConstants.robotoFont,
+                color: ColorConstants.black,
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              setState(() {
+                productsServicesList.remove(item);
+              });
+              Navigator.pop(context);
+            },
+            child: Text(
+              StringConstants.remove,
+              style: TextStyle(
+                fontFamily: AssetConstants.robotoFont,
+                color: ColorConstants.red,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String? _validateProductsServices(String? value) {
+    if (productsServicesList.isEmpty) {
+      return StringConstants.pleaseAddAtLeastOneProductService;
+    }
+    return null;
+  }
+  //
+
   String? _validateName(String? value) {
     if (value == null || value.isEmpty || UtilityMethods.isBlank(value)) {
       return StringConstants.nameIsRequired;
+    }
+    return null;
+  }
+
+  String? _validateTime(String? value) {
+    if (value == null || value.isEmpty) {
+      return StringConstants.openAndCloseTimeIsRequired;
+    }
+
+    final RegExp timeRegex = RegExp(
+        r'^(0[1-9]|1[0-2]):[0-5][0-9] (am|pm) - (0[1-9]|1[0-2]):[0-5][0-9] (am|pm)$');
+
+    if (!timeRegex.hasMatch(value)) {
+      return StringConstants.enterTimeInGivenFormat;
     }
     return null;
   }
@@ -109,7 +192,7 @@ class _AddBusinessServiceFormState extends State<AddBusinessServiceForm> {
   }
 
   String? _validateCategory(String? value) {
-    if (value == types.first) {
+    if (value == null || value.isEmpty || UtilityMethods.isBlank(value)) {
       return StringConstants.categoryIsRequired;
     }
 
@@ -236,7 +319,6 @@ class _AddBusinessServiceFormState extends State<AddBusinessServiceForm> {
   @override
   void initState() {
     type = types.first;
-    category = categories.first;
     countryTEC.text = locationService.country.value;
     stateTEC.text = locationService.state.value;
     cityTEC.text = locationService.city.value;
@@ -249,6 +331,8 @@ class _AddBusinessServiceFormState extends State<AddBusinessServiceForm> {
     selectedLon.value = locationService.longitude.value;
     locationTitle.value = StringConstants.currentLocation;
   }
+
+  GoogleMapController? googleMapController;
 
   @override
   void dispose() {
@@ -425,24 +509,80 @@ class _AddBusinessServiceFormState extends State<AddBusinessServiceForm> {
             ),
           ),
           const SizedBox(height: 16.0),
-          DropdownButtonFormField<String>(
-            validator: _validateCategory,
-            menuMaxHeight: 200,
-            value: category.isNotEmpty ? category : categories.first,
-            hint: Text(categories.first),
-            onChanged: (String? newValue) {
-              setState(() {
-                category = newValue!;
+          Autocomplete<String>(
+            optionsBuilder: (TextEditingValue textEditingValue) {
+              if (textEditingValue.text.isEmpty) {
+                // return const Iterable<String>.empty(); // Show no categories when input is empty
+                return categories; // Show all categories when input is empty
+              }
+
+              return categories.where((String category_) {
+                return category_
+                    .toLowerCase()
+                    .contains(textEditingValue.text.toLowerCase());
               });
             },
-            items: categories.map((String category_) {
-              return DropdownMenuItem<String>(
-                value: category_,
-                child: Text(category_),
+            onSelected: (String newValue) {
+              setState(() {
+                category = newValue;
+              });
+            },
+            fieldViewBuilder: (
+              BuildContext context,
+              TextEditingController textEditingController,
+              FocusNode focusNode,
+              VoidCallback onFieldSubmitted,
+            ) {
+              textEditingController.text = category; // Set initial value
+
+              return TextFormField(
+                controller: textEditingController,
+                focusNode: focusNode,
+                validator: _validateCategory,
+                decoration: InputDecoration(
+                  labelText: StringConstants.category,
+                  labelStyle: TextStyle(color: ColorConstants.black54),
+                  contentPadding: const EdgeInsets.all(15.0),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: ColorConstants.black),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: ColorConstants.black),
+                  ),
+                ),
+                keyboardType: TextInputType.name,
+                onChanged: (value) {
+                  category = '';
+                  for (var element in categories) {
+                    if (element.toLowerCase() == value.toLowerCase()) {
+                      setState(() {
+                        category = element;
+                      });
+                    }
+                  }
+                },
               );
-            }).toList(),
+            },
+          ),
+          const SizedBox(height: 16.0),
+          TextFormField(
+            controller: openCloseTimeTEC,
+            validator: _validateTime,
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(
+                      r'[a-zA-Z0-9-: ]') // Allow alphabets, number, - and space
+                  ),
+            ],
+            style: TextStyle(color: ColorConstants.black),
+            maxLength: 20,
+            maxLengthEnforcement: openCloseTime.isNotEmpty
+                ? MaxLengthEnforcement.enforced
+                : MaxLengthEnforcement.none,
             decoration: InputDecoration(
-              labelText: StringConstants.category,
+              counterText: openCloseTime.isNotEmpty ? null : "",
+              hintText: StringConstants.openAndCloseTimeExample,
+              hintStyle: TextStyle(color: ColorConstants.black54),
+              labelText: StringConstants.openAndCloseTime,
               labelStyle: TextStyle(color: ColorConstants.black54),
               contentPadding: const EdgeInsets.all(15.0),
               enabledBorder: UnderlineInputBorder(
@@ -452,7 +592,82 @@ class _AddBusinessServiceFormState extends State<AddBusinessServiceForm> {
                 borderSide: BorderSide(color: ColorConstants.black),
               ),
             ),
+            keyboardType: TextInputType.datetime,
+            onChanged: (val) {
+              setState(() {
+                openCloseTime = val;
+              });
+            },
           ),
+          const SizedBox(height: 16.0),
+          // Products and Services
+          TextFormField(
+            controller: productsServicesTEC,
+            validator: _validateProductsServices,
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(
+                  RegExp(r'[a-zA-Z0-9 ]') // Allow alphabets, number and space
+                  ),
+              TextInputFormatter.withFunction(
+                (oldValue, newValue) {
+                  // Convert the new input to title case
+                  if (newValue.text.isNotEmpty) {
+                    final convertedValue = toTitleCase(newValue.text);
+                    return TextEditingValue(
+                      text: convertedValue,
+                      selection: TextSelection.fromPosition(
+                        TextPosition(offset: convertedValue.length),
+                      ),
+                    );
+                  }
+                  return newValue;
+                },
+              ),
+            ],
+            decoration: InputDecoration(
+              hintText: StringConstants.productsAndOrServices,
+              hintStyle: TextStyle(color: ColorConstants.black54),
+              labelText: StringConstants.productsAndOrServices,
+              labelStyle: TextStyle(color: ColorConstants.black54),
+              contentPadding: const EdgeInsets.all(15.0),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: ColorConstants.black),
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: ColorConstants.black),
+              ),
+              suffixIcon: IconButton(
+                icon: Icon(
+                  Icons.add,
+                  color: ColorConstants.black,
+                ),
+                onPressed: _addItem,
+              ),
+            ),
+            keyboardType: TextInputType.name,
+          ),
+          const SizedBox(height: 16),
+          Wrap(
+            spacing: 8,
+            children: productsServicesList.map((item) {
+              return Chip(
+                label: Text(
+                  item,
+                  style: const TextStyle(
+                    fontFamily: AssetConstants.robotoFont,
+                  ),
+                ),
+                deleteIcon: const Icon(
+                  Icons.close,
+                  size: 18,
+                ),
+                deleteIconColor: ColorConstants.red,
+                onDeleted: () => _confirmRemoveItem(item),
+                backgroundColor: ColorConstants.whiteBG,
+              );
+            }).toList(),
+          ),
+          //
           const SizedBox(height: 16.0),
           TextFormField(
             controller: addressTEC,
@@ -599,29 +814,48 @@ class _AddBusinessServiceFormState extends State<AddBusinessServiceForm> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20.0),
                     child: Obx(
-                      () => GoogleMap(
-                        mapToolbarEnabled: false,
-                        initialCameraPosition: CameraPosition(
-                          target: LatLng(
-                            selectedLat.value,
-                            selectedLon.value,
-                          ),
-                          zoom: 16,
-                        ),
-                        markers: {
-                          Marker(
-                            markerId: MarkerId(
-                              "$selectedLat, $selectedLon",
+                      () {
+                        if (googleMapController != null) {
+                          googleMapController!.moveCamera(
+                            CameraUpdate.newCameraPosition(
+                              CameraPosition(
+                                target: LatLng(
+                                  selectedLat.value,
+                                  selectedLon.value,
+                                ),
+                                zoom: 16.0,
+                              ),
                             ),
-                            position: LatLng(
+                          );
+                        }
+                        return GoogleMap(
+                          mapToolbarEnabled: false,
+                          initialCameraPosition: CameraPosition(
+                            target: LatLng(
                               selectedLat.value,
                               selectedLon.value,
                             ),
-                            infoWindow: InfoWindow(title: locationTitle.value),
-                            // icon: customMarkerIcon,
+                            zoom: 16,
                           ),
-                        },
-                      ),
+                          markers: {
+                            Marker(
+                              markerId: MarkerId(
+                                "$selectedLat, $selectedLon",
+                              ),
+                              position: LatLng(
+                                selectedLat.value,
+                                selectedLon.value,
+                              ),
+                              infoWindow:
+                                  InfoWindow(title: locationTitle.value),
+                              // icon: customMarkerIcon,
+                            ),
+                          },
+                          onMapCreated: (mapController) {
+                            googleMapController = mapController;
+                          },
+                        );
+                      },
                     ),
                   ),
                 ),
@@ -652,6 +886,29 @@ class _AddBusinessServiceFormState extends State<AddBusinessServiceForm> {
                 ),
               )
             ],
+          ),
+          const SizedBox(height: 16.0),
+          const Text(StringConstants.or),
+          const SizedBox(height: 16.0),
+          BorderButton(
+            width: 130,
+            padding: const EdgeInsets.symmetric(
+              vertical: 2.0,
+              horizontal: 0.0,
+            ),
+            onPressed: () {
+              Get.to(() => const SelectLocationScreen());
+            },
+            child: Text(
+              StringConstants.selectFromMap,
+              style: TextStyle(
+                fontFamily: AssetConstants.robotoFont,
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: ColorConstants.black,
+              ),
+              textAlign: TextAlign.center,
+            ),
           ),
           const SizedBox(height: 60.0),
           Visibility(

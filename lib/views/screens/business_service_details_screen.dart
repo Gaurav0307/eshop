@@ -4,6 +4,7 @@ import 'package:eshop/views/widgets/gradient_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../common/constants/color_constants.dart';
 import '../../common/constants/string_constants.dart';
@@ -30,6 +31,16 @@ class _BusinessServiceDetailsScreenState
     extends State<BusinessServiceDetailsScreen> {
   late ScrollController _scrollController;
   bool isCollapsed = false;
+  late BitmapDescriptor customMarkerIcon;
+
+  // Load Custom Marker from Assets
+  Future<void> _loadCustomMarker() async {
+    customMarkerIcon = await BitmapDescriptor.asset(
+      const ImageConfiguration(size: Size(40, 40)), // Adjust size if needed
+      AssetConstants.mapPointer1,
+    );
+    setState(() {}); // Refresh UI after loading
+  }
 
   @override
   void initState() {
@@ -46,6 +57,8 @@ class _BusinessServiceDetailsScreenState
         });
       }
     });
+
+    _loadCustomMarker();
   }
 
   @override
@@ -253,7 +266,77 @@ class _BusinessServiceDetailsScreenState
                         ),
                       ],
                     ),
-                    const SizedBox(height: 10.0),
+                    const SizedBox(height: 0.0),
+                    Stack(
+                      children: [
+                        Container(
+                          width: double.infinity,
+                          height: MediaQuery.of(context).size.height * 0.30,
+                          margin: const EdgeInsets.only(top: 34.0),
+                          decoration: BoxDecoration(
+                            // border: Border.all(color: ColorConstants.black54),
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          child: Card(
+                            elevation: 5.0,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20.0),
+                              child: GoogleMap(
+                                mapToolbarEnabled: false,
+                                initialCameraPosition: CameraPosition(
+                                  target: LatLng(
+                                    widget.data['location']['lat'],
+                                    widget.data['location']['lon'],
+                                  ),
+                                  zoom: 16,
+                                ),
+                                markers: {
+                                  Marker(
+                                    markerId: MarkerId(
+                                      "${widget.data['location']['lat']}, ${widget.data['location']['lon']}",
+                                    ),
+                                    position: LatLng(
+                                      widget.data['location']['lat'],
+                                      widget.data['location']['lon'],
+                                    ),
+                                    infoWindow:
+                                        InfoWindow(title: widget.data['name']),
+                                    icon: customMarkerIcon,
+                                  ),
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          left: 0,
+                          right: 0,
+                          top: 25,
+                          child: Center(
+                            child: Container(
+                              width: 80,
+                              height: 25,
+                              decoration: BoxDecoration(
+                                color: ColorConstants.white,
+                                border:
+                                    Border.all(color: ColorConstants.black54),
+                                borderRadius: BorderRadius.circular(20.0),
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  StringConstants.location,
+                                  style: TextStyle(
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                    const SizedBox(height: 20.0),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

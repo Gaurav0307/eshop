@@ -60,7 +60,20 @@ class StringConstants {
   static const String state = "State";
   static const String city = "City";
   static const String currentLocation = "Current Location";
+  static const String selectLocation = "Select Location";
   static const String selectedLocation = "Selected Location";
+  static const String productsAndOrServices = "Products and/or Services";
+  static const String selectFromMap = "Select from Map";
+  static const String pickLocation = "Pick Location";
+  static const String or = "Or";
+  static const String openAndCloseTime =
+      "Open & Close Time (hh:mm am - hh:mm pm)";
+  static const String openAndCloseTimeExample = "Example: 09:00 am - 05:00 pm";
+  static const String removeItem = "Remove Item";
+  static const String cancel = "Cancel";
+  static const String remove = "Remove";
+  static const String doYouReallyWantToRemove =
+      "Do you really want to remove '#'?";
 
   /// Validation
   static const String fullNameIsRequired = "Full Name is required.";
@@ -84,4 +97,10 @@ class StringConstants {
   static const String countryIsRequired = "Country is required.";
   static const String stateIsRequired = "State Type is required.";
   static const String cityIsRequired = "City Type is required.";
+  static const String pleaseAddAtLeastOneProductService =
+      "Please add at least one product or service.";
+  static const String openAndCloseTimeIsRequired =
+      "Open & Close Time is required.";
+  static const String enterTimeInGivenFormat =
+      "Enter time in hh:mm am - hh:mm pm format.";
 }

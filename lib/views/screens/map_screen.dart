@@ -1,3 +1,4 @@
+import 'package:eshop/common/constants/asset_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -32,8 +33,8 @@ class _MapScreenState extends State<MapScreen> {
   // Load Custom Marker from Assets
   Future<void> _loadCustomMarker() async {
     customMarkerIcon = await BitmapDescriptor.asset(
-      const ImageConfiguration(size: Size(30, 30)), // Adjust size if needed
-      'assets/icons/store.png',
+      const ImageConfiguration(size: Size(40, 40)), // Adjust size if needed
+      AssetConstants.mapPointer1,
     );
     setState(() {}); // Refresh UI after loading
   }
