@@ -74,6 +74,8 @@ class StringConstants {
   static const String remove = "Remove";
   static const String doYouReallyWantToRemove =
       "Do you really want to remove '#'?";
+  static const String openTime = "Open Time";
+  static const String closeTime = "Close Time";
 
   /// Validation
   static const String fullNameIsRequired = "Full Name is required.";
@@ -99,8 +101,6 @@ class StringConstants {
   static const String cityIsRequired = "City Type is required.";
   static const String pleaseAddAtLeastOneProductService =
       "Please add at least one product or service.";
-  static const String openAndCloseTimeIsRequired =
-      "Open & Close Time is required.";
-  static const String enterTimeInGivenFormat =
-      "Enter time in hh:mm am - hh:mm pm format.";
+  static const String openTimeIsRequired = "Open Time is required.";
+  static const String closeTimeIsRequired = "Close Time is required.";
 }

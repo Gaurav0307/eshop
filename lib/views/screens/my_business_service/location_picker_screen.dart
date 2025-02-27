@@ -6,14 +6,14 @@ import '../../../common/constants/color_constants.dart';
 import '../../../common/constants/string_constants.dart';
 import '../../../common/global/global.dart';
 
-class SelectLocationScreen extends StatefulWidget {
-  const SelectLocationScreen({super.key});
+class LocationPickerScreen extends StatefulWidget {
+  const LocationPickerScreen({super.key});
 
   @override
-  State<SelectLocationScreen> createState() => _SelectLocationScreenState();
+  State<LocationPickerScreen> createState() => _LocationPickerScreenState();
 }
 
-class _SelectLocationScreenState extends State<SelectLocationScreen> {
+class _LocationPickerScreenState extends State<LocationPickerScreen> {
   GoogleMapController? _mapController;
   LatLng? _selectedLocation;
 
@@ -30,9 +30,9 @@ class _SelectLocationScreenState extends State<SelectLocationScreen> {
       debugPrint("Selected Location: Lat: $latitude, Lon: $longitude");
 
       ///
-      selectedLat.value = latitude;
-      selectedLon.value = longitude;
-      locationTitle.value = StringConstants.selectedLocation;
+      selectedLocation.latitude.value = latitude;
+      selectedLocation.longitude.value = longitude;
+      selectedLocation.locationTitle.value = StringConstants.selectedLocation;
       Navigator.pop(context);
     }
   }
@@ -53,8 +53,8 @@ class _SelectLocationScreenState extends State<SelectLocationScreen> {
           GoogleMap(
             initialCameraPosition: CameraPosition(
               target: LatLng(
-                selectedLat.value,
-                selectedLon.value,
+                selectedLocation.latitude.value,
+                selectedLocation.longitude.value,
               ),
               zoom: 16,
             ),
@@ -64,13 +64,14 @@ class _SelectLocationScreenState extends State<SelectLocationScreen> {
                 ? {
                     Marker(
                       markerId: MarkerId(
-                        "$selectedLat, $selectedLon",
+                        "${selectedLocation.latitude}, ${selectedLocation.longitude}",
                       ),
                       position: LatLng(
-                        selectedLat.value,
-                        selectedLon.value,
+                        selectedLocation.latitude.value,
+                        selectedLocation.longitude.value,
                       ),
-                      infoWindow: InfoWindow(title: locationTitle.value),
+                      infoWindow: InfoWindow(
+                          title: selectedLocation.locationTitle.value),
                       // icon: customMarkerIcon,
                     ),
                   }

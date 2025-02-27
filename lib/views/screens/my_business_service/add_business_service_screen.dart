@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:eshop/views/screens/my_business_service/select_location_screen.dart';
+import 'package:eshop/views/screens/my_business_service/location_picker_screen.dart';
 import 'package:eshop/views/widgets/border_button.dart';
 import 'package:eshop/views/widgets/gradient_button.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 import '../../../common/constants/asset_constants.dart';
@@ -68,6 +69,58 @@ class _AddBusinessServiceFormState extends State<AddBusinessServiceForm> {
   ];
   String openCloseTime = '';
   TextEditingController openCloseTimeTEC = TextEditingController();
+
+  // Open and Close Time
+  final TextEditingController _openTimeController = TextEditingController();
+  final TextEditingController _closeTimeController = TextEditingController();
+  TimeOfDay? _selectedOpenTime;
+  TimeOfDay? _selectedCloseTime;
+
+  Future<void> _selectTime(BuildContext context, bool isOpenTime) async {
+    TimeOfDay initialTime = isOpenTime
+        ? (_selectedOpenTime ?? TimeOfDay.now())
+        : (_selectedCloseTime ?? TimeOfDay.now());
+
+    final TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: initialTime,
+    );
+
+    if (pickedTime != null) {
+      setState(() {
+        if (isOpenTime) {
+          _selectedOpenTime = pickedTime;
+          _openTimeController.text = _formatTime(pickedTime);
+        } else {
+          _selectedCloseTime = pickedTime;
+          _closeTimeController.text = _formatTime(pickedTime);
+        }
+      });
+    }
+  }
+
+  String _formatTime(TimeOfDay time) {
+    final DateTime now = DateTime.now();
+    final DateTime formattedTime =
+        DateTime(now.year, now.month, now.day, time.hour, time.minute);
+    return DateFormat('hh:mm a').format(formattedTime);
+  }
+
+  String? _validateOpenTime(String? value) {
+    if (value == null || value.isEmpty) {
+      return StringConstants.openTimeIsRequired;
+    }
+    return null;
+  }
+
+  String? _validateCloseTime(String? value) {
+    if (value == null || value.isEmpty) {
+      return StringConstants.closeTimeIsRequired;
+    }
+    return null;
+  }
+  //
+
   String address = '';
   TextEditingController addressTEC = TextEditingController();
   TextEditingController countryTEC = TextEditingController();
@@ -144,20 +197,6 @@ class _AddBusinessServiceFormState extends State<AddBusinessServiceForm> {
   String? _validateName(String? value) {
     if (value == null || value.isEmpty || UtilityMethods.isBlank(value)) {
       return StringConstants.nameIsRequired;
-    }
-    return null;
-  }
-
-  String? _validateTime(String? value) {
-    if (value == null || value.isEmpty) {
-      return StringConstants.openAndCloseTimeIsRequired;
-    }
-
-    final RegExp timeRegex = RegExp(
-        r'^(0[1-9]|1[0-2]):[0-5][0-9] (am|pm) - (0[1-9]|1[0-2]):[0-5][0-9] (am|pm)$');
-
-    if (!timeRegex.hasMatch(value)) {
-      return StringConstants.enterTimeInGivenFormat;
     }
     return null;
   }
@@ -327,9 +366,9 @@ class _AddBusinessServiceFormState extends State<AddBusinessServiceForm> {
   }
 
   void loadCurrentLocation() {
-    selectedLat.value = locationService.latitude.value;
-    selectedLon.value = locationService.longitude.value;
-    locationTitle.value = StringConstants.currentLocation;
+    selectedLocation.latitude.value = locationService.latitude.value;
+    selectedLocation.longitude.value = locationService.longitude.value;
+    selectedLocation.locationTitle.value = StringConstants.currentLocation;
   }
 
   GoogleMapController? googleMapController;
@@ -565,24 +604,15 @@ class _AddBusinessServiceFormState extends State<AddBusinessServiceForm> {
             },
           ),
           const SizedBox(height: 16.0),
+          //OpenTime
           TextFormField(
-            controller: openCloseTimeTEC,
-            validator: _validateTime,
-            inputFormatters: [
-              FilteringTextInputFormatter.allow(RegExp(
-                      r'[a-zA-Z0-9-: ]') // Allow alphabets, number, - and space
-                  ),
-            ],
-            style: TextStyle(color: ColorConstants.black),
-            maxLength: 20,
-            maxLengthEnforcement: openCloseTime.isNotEmpty
-                ? MaxLengthEnforcement.enforced
-                : MaxLengthEnforcement.none,
+            controller: _openTimeController,
+            validator: _validateOpenTime,
+            readOnly: true,
             decoration: InputDecoration(
-              counterText: openCloseTime.isNotEmpty ? null : "",
-              hintText: StringConstants.openAndCloseTimeExample,
+              hintText: StringConstants.openTime,
               hintStyle: TextStyle(color: ColorConstants.black54),
-              labelText: StringConstants.openAndCloseTime,
+              labelText: StringConstants.openTime,
               labelStyle: TextStyle(color: ColorConstants.black54),
               contentPadding: const EdgeInsets.all(15.0),
               enabledBorder: UnderlineInputBorder(
@@ -591,15 +621,39 @@ class _AddBusinessServiceFormState extends State<AddBusinessServiceForm> {
               focusedBorder: UnderlineInputBorder(
                 borderSide: BorderSide(color: ColorConstants.black),
               ),
+              suffixIcon: Icon(
+                Icons.access_time,
+                color: ColorConstants.black54,
+              ),
             ),
-            keyboardType: TextInputType.datetime,
-            onChanged: (val) {
-              setState(() {
-                openCloseTime = val;
-              });
-            },
+            onTap: () => _selectTime(context, true),
           ),
-          const SizedBox(height: 16.0),
+          const SizedBox(height: 16),
+          //CloseTime
+          TextFormField(
+            controller: _closeTimeController,
+            validator: _validateCloseTime,
+            readOnly: true,
+            decoration: InputDecoration(
+              hintText: StringConstants.closeTime,
+              hintStyle: TextStyle(color: ColorConstants.black54),
+              labelText: StringConstants.closeTime,
+              labelStyle: TextStyle(color: ColorConstants.black54),
+              contentPadding: const EdgeInsets.all(15.0),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: ColorConstants.black),
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: ColorConstants.black),
+              ),
+              suffixIcon: Icon(
+                Icons.access_time,
+                color: ColorConstants.black54,
+              ),
+            ),
+            onTap: () => _selectTime(context, false),
+          ),
+          const SizedBox(height: 16),
           // Products and Services
           TextFormField(
             controller: productsServicesTEC,
@@ -820,8 +874,8 @@ class _AddBusinessServiceFormState extends State<AddBusinessServiceForm> {
                             CameraUpdate.newCameraPosition(
                               CameraPosition(
                                 target: LatLng(
-                                  selectedLat.value,
-                                  selectedLon.value,
+                                  selectedLocation.latitude.value,
+                                  selectedLocation.longitude.value,
                                 ),
                                 zoom: 16.0,
                               ),
@@ -832,22 +886,22 @@ class _AddBusinessServiceFormState extends State<AddBusinessServiceForm> {
                           mapToolbarEnabled: false,
                           initialCameraPosition: CameraPosition(
                             target: LatLng(
-                              selectedLat.value,
-                              selectedLon.value,
+                              selectedLocation.latitude.value,
+                              selectedLocation.longitude.value,
                             ),
                             zoom: 16,
                           ),
                           markers: {
                             Marker(
                               markerId: MarkerId(
-                                "$selectedLat, $selectedLon",
+                                "${selectedLocation.latitude}, ${selectedLocation.longitude}",
                               ),
                               position: LatLng(
-                                selectedLat.value,
-                                selectedLon.value,
+                                selectedLocation.latitude.value,
+                                selectedLocation.longitude.value,
                               ),
-                              infoWindow:
-                                  InfoWindow(title: locationTitle.value),
+                              infoWindow: InfoWindow(
+                                  title: selectedLocation.locationTitle.value),
                               // icon: customMarkerIcon,
                             ),
                           },
@@ -897,7 +951,7 @@ class _AddBusinessServiceFormState extends State<AddBusinessServiceForm> {
               horizontal: 0.0,
             ),
             onPressed: () {
-              Get.to(() => const SelectLocationScreen());
+              Get.to(() => const LocationPickerScreen());
             },
             child: Text(
               StringConstants.selectFromMap,

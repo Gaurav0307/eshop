@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:eshop/common/global/global.dart';
 import 'package:flutter/foundation.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -42,6 +43,10 @@ class LocationService extends GetxController {
     country.value = locationData.country;
     latitude.value = lat;
     longitude.value = lon;
+
+    selectedLocation.country.value = country.value;
+    selectedLocation.state.value = state.value;
+    selectedLocation.city.value = city.value;
   }
 
   Future<void> setPositionListener() async {

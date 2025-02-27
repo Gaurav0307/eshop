@@ -1,3 +1,4 @@
+import 'package:eshop/common/global/selected_location.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -7,10 +8,7 @@ SharedPreferences? sharedPreferences;
 late String token;
 late String userId;
 var locationService = Get.put(LocationService());
-
-var selectedLat = 0.0.obs;
-var selectedLon = 0.0.obs;
-var locationTitle = ''.obs;
+var selectedLocation = Get.put(SelectedLocation());
 
 final demoCategories = [
   {

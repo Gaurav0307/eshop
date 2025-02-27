@@ -288,7 +288,7 @@ class _BusinessServiceDetailsScreenState
                                     widget.data['location']['lat'],
                                     widget.data['location']['lon'],
                                   ),
-                                  zoom: 16,
+                                  zoom: 14,
                                 ),
                                 markers: {
                                   Marker(

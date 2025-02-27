@@ -9,6 +9,7 @@ import 'package:eshop/views/screens/login_screen.dart';
 import 'package:eshop/views/screens/map_screen.dart';
 import 'package:eshop/views/screens/my_business_service/my_business_service.dart';
 import 'package:eshop/views/screens/search_screen.dart';
+import 'package:eshop/views/screens/select_location_screen.dart';
 import 'package:eshop/views/screens/selected_category_business_service_screen.dart';
 import 'package:eshop/views/screens/services_screen.dart';
 import 'package:eshop/views/widgets/service_business_item.dart';
@@ -81,9 +82,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Row(
                   children: [
                     const Icon(Icons.location_on_outlined),
-                    if (locationService.city.value.isNotEmpty) ...{
+                    if (selectedLocation.city.value.isNotEmpty) ...{
                       Text(
-                        "${locationService.city} (${locationService.state})",
+                        "${selectedLocation.city} (${selectedLocation.state})",
                         style: TextStyle(
                           color: ColorConstants.black,
                           fontSize: 15.0,
@@ -97,7 +98,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           vertical: 2.0,
                           horizontal: 0.0,
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          Get.to(() => const SelectLocationScreen());
+                        },
                         child: Text(
                           StringConstants.change,
                           style: TextStyle(
