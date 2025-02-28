@@ -11,6 +11,7 @@ class LocationService extends GetxController {
   var city = ''.obs;
   var state = ''.obs;
   var country = ''.obs;
+  var pinCode = ''.obs;
   var latitude = 0.0.obs;
   var longitude = 0.0.obs;
 
@@ -41,6 +42,7 @@ class LocationService extends GetxController {
     city.value = locationData.city;
     state.value = locationData.state;
     country.value = locationData.country;
+    pinCode.value = locationData.postalCode;
     latitude.value = lat;
     longitude.value = lon;
 

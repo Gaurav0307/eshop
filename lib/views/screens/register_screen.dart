@@ -225,7 +225,7 @@ class _RegisterFormState extends State<RegisterForm> {
             visible: true,
             replacement: Center(
               child: CircularProgressIndicator(
-                color: ColorConstants.white,
+                color: ColorConstants.indigo,
                 strokeWidth: 3.0,
               ),
             ),

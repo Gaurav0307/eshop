@@ -66,9 +66,6 @@ class StringConstants {
   static const String selectFromMap = "Select from Map";
   static const String pickLocation = "Pick Location";
   static const String or = "Or";
-  static const String openAndCloseTime =
-      "Open & Close Time (hh:mm am - hh:mm pm)";
-  static const String openAndCloseTimeExample = "Example: 09:00 am - 05:00 pm";
   static const String removeItem = "Remove Item";
   static const String cancel = "Cancel";
   static const String remove = "Remove";
@@ -76,6 +73,8 @@ class StringConstants {
       "Do you really want to remove '#'?";
   static const String openTime = "Open Time";
   static const String closeTime = "Close Time";
+  static const String profileAndSettings = "Profile & Settings";
+  static const String profile = "Profile";
 
   /// Validation
   static const String fullNameIsRequired = "Full Name is required.";

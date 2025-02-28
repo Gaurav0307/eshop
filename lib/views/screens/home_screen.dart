@@ -8,6 +8,7 @@ import 'package:eshop/views/screens/categories_screen.dart';
 import 'package:eshop/views/screens/login_screen.dart';
 import 'package:eshop/views/screens/map_screen.dart';
 import 'package:eshop/views/screens/my_business_service/my_business_service.dart';
+import 'package:eshop/views/screens/profile_and_settings_screen.dart';
 import 'package:eshop/views/screens/search_screen.dart';
 import 'package:eshop/views/screens/select_location_screen.dart';
 import 'package:eshop/views/screens/selected_category_business_service_screen.dart';
@@ -578,6 +579,23 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               onTap: () {
                 Get.to(() => const MyBusinessService());
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.manage_accounts),
+              title: const Text(
+                StringConstants.profileAndSettings,
+                style: TextStyle(
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              trailing: const Icon(
+                Icons.arrow_forward_ios,
+                size: 16.0,
+              ),
+              onTap: () {
+                Get.to(() => const ProfileAndSettingsScreen());
               },
             ),
             const Spacer(),

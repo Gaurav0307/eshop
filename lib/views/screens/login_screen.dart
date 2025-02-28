@@ -187,7 +187,7 @@ class _LoginFormState extends State<LoginForm> {
             visible: true,
             replacement: Center(
               child: CircularProgressIndicator(
-                color: ColorConstants.white,
+                color: ColorConstants.indigo,
                 strokeWidth: 3.0,
               ),
             ),
