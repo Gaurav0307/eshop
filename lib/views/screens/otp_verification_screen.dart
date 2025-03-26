@@ -1,28 +1,30 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../common/constants/color_constants.dart';
 import '../../common/constants/string_constants.dart';
+import '../../common/global/global.dart';
 import '../widgets/border_button.dart';
 import '../widgets/otp_field.dart';
 
 class OTPVerificationScreen extends StatefulWidget {
-  final bool isVerification;
+  final bool isRegistration;
+  final String fullName;
+  final String mobile;
   const OTPVerificationScreen({
     super.key,
-    this.isVerification = false,
+    this.isRegistration = false,
+    required this.fullName,
+    required this.mobile,
   });
   @override
   State<OTPVerificationScreen> createState() => _OTPVerificationScreenState();
 }
 
 class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
-  bool codeSent = false;
   String verificationCode = '';
-
-  bool _isLoading = false;
-  bool _isLoadingResend = false;
 
   bool _isResendingOTP = true;
   int _resendTimer = 60;
@@ -71,7 +73,7 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
           const SizedBox(height: 50),
           Center(
             child: Text(
-              widget.isVerification
+              widget.isRegistration
                   ? StringConstants.verifyYourMobileNo
                   : StringConstants.verifyOTP,
               style: TextStyle(
@@ -108,7 +110,11 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
                 verificationCode = pin;
 
                 if (verificationCode.length == 4) {
-                  /// Code here...
+                  if (widget.isRegistration) {
+                    verifyAndRegister();
+                  } else {
+                    verifyAndLogin();
+                  }
                 }
               },
             ),
@@ -117,92 +123,130 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
             height: 40,
           ),
           Center(
-            child: BorderButton(
-              width: 100,
-              padding: const EdgeInsets.symmetric(
-                vertical: 6.0,
-                horizontal: 0.0,
-              ),
-              onPressed: () {
-                if (_isLoading) {
-                  return;
-                }
-
-                /// Code here...
-              },
-              child: _isLoading
-                  ? SizedBox(
-                      height: 24,
-                      width: 24,
-                      child: CircularProgressIndicator(
-                        color: ColorConstants.black,
-                        strokeWidth: 2,
-                      ),
-                    )
-                  : Text(
-                      StringConstants.submit,
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: ColorConstants.black,
-                      ),
+            child: Obx(
+              () => Visibility(
+                visible: !authController.isLoading.value,
+                replacement: SizedBox(
+                  height: 24,
+                  width: 24,
+                  child: CircularProgressIndicator(
+                    color: ColorConstants.black,
+                    strokeWidth: 2,
+                  ),
+                ),
+                child: BorderButton(
+                  width: 100,
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 6.0,
+                    horizontal: 0.0,
+                  ),
+                  onPressed: () {
+                    if (verificationCode.length == 4) {
+                      if (widget.isRegistration) {
+                        verifyAndRegister();
+                      } else {
+                        verifyAndLogin();
+                      }
+                    }
+                  },
+                  child: Text(
+                    StringConstants.submit,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: ColorConstants.black,
                     ),
+                  ),
+                ),
+              ),
             ),
           ),
           const SizedBox(
             height: 25,
           ),
-          _isResendingOTP
-              ? Center(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 15.0),
-                    child: Text(
-                      'Resend OTP in $_resendTimer seconds',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: ColorConstants.black,
+          Visibility(
+            visible: _isResendingOTP,
+            replacement: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  StringConstants.didNotGetOTP,
+                  style: TextStyle(color: ColorConstants.black),
+                ),
+                Obx(
+                  () => TextButton(
+                    onPressed: () async {
+                      if (authController.isLoading.value) return;
+
+                      if (widget.isRegistration) {
+                        if (await authController
+                            .sendRegisterOTP(widget.mobile)) {
+                          _reStartTimer();
+                        }
+                      } else {
+                        if (await authController.sendLoginOTP(widget.mobile)) {
+                          _reStartTimer();
+                        }
+                      }
+                    },
+                    child: Visibility(
+                      visible: !authController.isLoading.value,
+                      replacement: SizedBox(
+                        height: 22,
+                        width: 22,
+                        child: CircularProgressIndicator(
+                          color: ColorConstants.black,
+                          strokeWidth: 2,
+                        ),
+                      ),
+                      child: Text(
+                        StringConstants.resendNow,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: ColorConstants.black,
+                          decoration: TextDecoration.underline,
+                          decorationColor: ColorConstants.black,
+                        ),
                       ),
                     ),
                   ),
-                )
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      StringConstants.didNotGetOTP,
-                      style: TextStyle(color: ColorConstants.black),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        if (_isLoadingResend) {
-                          return;
-                        }
-                        _reStartTimer();
-                      },
-                      child: _isLoadingResend
-                          ? SizedBox(
-                              height: 22,
-                              width: 22,
-                              child: CircularProgressIndicator(
-                                color: ColorConstants.black,
-                                strokeWidth: 2,
-                              ),
-                            )
-                          : Text(
-                              StringConstants.resendNow,
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: ColorConstants.black,
-                                decoration: TextDecoration.underline,
-                                decorationColor: ColorConstants.black,
-                              ),
-                            ),
-                    ),
-                  ],
                 ),
+              ],
+            ),
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 15.0),
+                child: Text(
+                  'Resend OTP in $_resendTimer seconds',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: ColorConstants.black,
+                  ),
+                ),
+              ),
+            ),
+          ),
           const SizedBox(height: 20),
         ],
       ),
     );
+  }
+
+  Future<void> verifyAndRegister() async {
+    if (await authController.verifyOTP(widget.mobile, verificationCode)) {
+      if (await authController.register(widget.fullName, widget.mobile)) {
+        Navigator.pop(context);
+        Navigator.pop(context);
+      }
+    }
+  }
+
+  Future<void> verifyAndLogin() async {
+    if (await authController.verifyOTP(widget.mobile, verificationCode)) {
+      if (await authController.login(widget.mobile)) {
+        Navigator.pop(context);
+        Navigator.pop(context);
+      }
+    }
   }
 }

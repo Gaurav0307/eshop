@@ -1,14 +1,30 @@
 import 'package:eshop/common/global/selected_location.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
+import '../../controllers/auth_controller.dart';
 import '../services/location.dart';
 
 SharedPreferences? sharedPreferences;
+late IO.Socket socket;
+
 late String token;
 late String userId;
+late String userMobile;
+
+String deviceId = "";
+
+// const String apiBaseUrl = "https://rest-apis-chat-app.onrender.com";
+const String apiBaseUrl =
+    "https://2646-2401-4900-8835-8f0c-f56c-ccdf-6985-6af5.ngrok-free.app";
+
+/// One Signal
+const String oneSignalAppId = "a1583783-9e3f-4045-9953-2cc1b9e1ee24";
+
 var locationService = Get.put(LocationService());
 var selectedLocation = Get.put(SelectedLocation());
+var authController = Get.put(AuthController());
 
 final demoCategories = [
   {
@@ -138,7 +154,3 @@ final List<Map<String, dynamic>> demoBusinesses = [
     'peopleRated': 1234567,
   },
 ];
-
-const String apiBaseUrl = "https://rest-apis-chat-app.onrender.com";
-// const String apiBaseUrl =
-//     "https://4351-2401-4900-8837-2bd3-2df5-57d8-4351-7750.ngrok-free.app";

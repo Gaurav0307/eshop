@@ -1,3 +1,4 @@
+import 'package:eshop/common/global/global.dart';
 import 'package:eshop/views/screens/otp_verification_screen.dart';
 import 'package:eshop/views/screens/register_screen.dart';
 import 'package:flutter/material.dart';
@@ -183,29 +184,40 @@ class _LoginFormState extends State<LoginForm> {
             ),
           ),
           const SizedBox(height: 50.0),
-          Visibility(
-            visible: true,
-            replacement: Center(
-              child: CircularProgressIndicator(
-                color: ColorConstants.indigo,
-                strokeWidth: 3.0,
-              ),
-            ),
-            child: GradientButton(
-              onPressed: () async {
-                if (_formKey.currentState!.validate()) {
-                  _formKey.currentState!.save();
-                  FocusScope.of(context).unfocus();
-                }
-                Get.to(() => const OTPVerificationScreen());
-              },
-              child: Text(
-                StringConstants.login,
-                style: TextStyle(
-                  fontSize: 16,
-                  color: ColorConstants.white,
+          Obx(
+            () => Visibility(
+              visible: !authController.isLoading.value,
+              replacement: Center(
+                child: CircularProgressIndicator(
+                  color: ColorConstants.indigo,
+                  strokeWidth: 3.0,
                 ),
-                textAlign: TextAlign.center,
+              ),
+              child: GradientButton(
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    _formKey.currentState!.save();
+                    FocusScope.of(context).unfocus();
+
+                    if (await authController.sendLoginOTP(mobile)) {
+                      Get.to(
+                        () => OTPVerificationScreen(
+                          isRegistration: false,
+                          fullName: '',
+                          mobile: mobile,
+                        ),
+                      );
+                    }
+                  }
+                },
+                child: Text(
+                  StringConstants.login,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: ColorConstants.white,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
           ),

@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
+import 'package:eshop/common/services/socket.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -19,6 +20,8 @@ class UtilityMethods {
 
     token = sharedPreferences!.getString(StorageConstants.token) ?? "";
     userId = sharedPreferences!.getString(StorageConstants.userId) ?? "";
+    userMobile =
+        sharedPreferences!.getString(StorageConstants.userMobile) ?? "";
 
     if (token.isNotEmpty && userId.isNotEmpty) {
       await Future.wait([
@@ -26,6 +29,8 @@ class UtilityMethods {
         // Get.put(UserController()).getUsers(),
       ]);
     }
+
+    connectSocket();
   }
 
   // Function to convert a string to a DateTime object

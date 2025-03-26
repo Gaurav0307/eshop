@@ -247,14 +247,14 @@ class _AddBusinessServiceFormState extends State<AddBusinessServiceForm> {
 
   String? _validateState(String? value) {
     if (value == null || value.isEmpty || UtilityMethods.isBlank(value)) {
-      return StringConstants.countryIsRequired;
+      return StringConstants.stateIsRequired;
     }
     return null;
   }
 
   String? _validateCity(String? value) {
     if (value == null || value.isEmpty || UtilityMethods.isBlank(value)) {
-      return StringConstants.countryIsRequired;
+      return StringConstants.cityIsRequired;
     }
     return null;
   }

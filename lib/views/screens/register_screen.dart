@@ -1,3 +1,4 @@
+import 'package:eshop/common/global/global.dart';
 import 'package:eshop/views/screens/otp_verification_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -221,29 +222,39 @@ class _RegisterFormState extends State<RegisterForm> {
             ),
           ),
           const SizedBox(height: 40.0),
-          Visibility(
-            visible: true,
-            replacement: Center(
-              child: CircularProgressIndicator(
-                color: ColorConstants.indigo,
-                strokeWidth: 3.0,
-              ),
-            ),
-            child: GradientButton(
-              onPressed: () async {
-                if (_formKey.currentState!.validate()) {
-                  _formKey.currentState!.save();
-                  FocusScope.of(context).unfocus();
-                }
-                Get.to(() => const OTPVerificationScreen(isVerification: true));
-              },
-              child: Text(
-                StringConstants.register,
-                style: TextStyle(
-                  fontSize: 16,
-                  color: ColorConstants.white,
+          Obx(
+            () => Visibility(
+              visible: !authController.isLoading.value,
+              replacement: Center(
+                child: CircularProgressIndicator(
+                  color: ColorConstants.indigo,
+                  strokeWidth: 3.0,
                 ),
-                textAlign: TextAlign.center,
+              ),
+              child: GradientButton(
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    _formKey.currentState!.save();
+                    FocusScope.of(context).unfocus();
+                    if (await authController.sendRegisterOTP(mobile)) {
+                      Get.to(
+                        () => OTPVerificationScreen(
+                          isRegistration: true,
+                          fullName: fullName,
+                          mobile: mobile,
+                        ),
+                      );
+                    }
+                  }
+                },
+                child: Text(
+                  StringConstants.register,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: ColorConstants.white,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
           ),
