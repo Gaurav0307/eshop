@@ -25,8 +25,7 @@ class UtilityMethods {
 
     if (token.isNotEmpty && userId.isNotEmpty) {
       await Future.wait([
-        // Get.put(UserController()).getUserDetails(),
-        // Get.put(UserController()).getUsers(),
+        userProfileController.getUserProfile(),
       ]);
     }
 
@@ -343,6 +342,18 @@ class UtilityMethods {
       return '${(number / 1e3).toStringAsFixed(1)}K'; // Thousand
     } else {
       return number.toStringAsFixed(0); // No formatting needed
+    }
+  }
+
+  static List<String> separateIsoCode(String phoneNumber) {
+    // Assuming country codes are between 1 to 2 digits long
+    RegExp regex = RegExp(r'^\+(\d{1,2})(\d+)$');
+    Match? match = regex.firstMatch(phoneNumber);
+
+    if (match != null) {
+      return [match.group(1)!, match.group(2)!]; // Return ISO code and number
+    } else {
+      throw const FormatException("Invalid phone number format");
     }
   }
 }

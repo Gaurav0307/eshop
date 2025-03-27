@@ -1,6 +1,6 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:eshop/common/constants/asset_constants.dart';
-import 'package:eshop/views/screens/home_screen.dart';
+import 'package:eshop/views/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -41,7 +41,7 @@ class _MyAppState extends State<MyApp> {
           ),
           useMaterial3: true,
         ),
-        home: const HomeScreen(),
+        home: const SplashScreen(),
       ),
     );
   }

@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <application
-        android:label="eShop"
+        android:label="Our Shop"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <!-- Google Map -->

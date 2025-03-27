@@ -8,7 +8,7 @@ import 'package:eshop/views/screens/categories_screen.dart';
 import 'package:eshop/views/screens/login_screen.dart';
 import 'package:eshop/views/screens/map_screen.dart';
 import 'package:eshop/views/screens/my_business_service/my_business_service.dart';
-import 'package:eshop/views/screens/profile_and_settings_screen.dart';
+import 'package:eshop/views/screens/profile_screen.dart';
 import 'package:eshop/views/screens/search_screen.dart';
 import 'package:eshop/views/screens/select_location_screen.dart';
 import 'package:eshop/views/screens/selected_category_business_service_screen.dart';
@@ -32,6 +32,26 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: [
+        SystemUiOverlay.top,
+        SystemUiOverlay.bottom,
+      ],
+    );
+
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light,
+      ),
+    );
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -523,45 +543,53 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Drawer(
         child: Column(
           children: [
-            Container(
-              width: double.infinity,
-              height: 230.0,
-              padding: const EdgeInsets.symmetric(
-                vertical: 10.0,
-                horizontal: 10.0,
-              ),
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Colors.blue,
-                    Colors.purple,
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+            Obx(
+              () => Container(
+                width: double.infinity,
+                height: 230.0,
+                padding: const EdgeInsets.symmetric(
+                  vertical: 10.0,
+                  horizontal: 10.0,
                 ),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 10.0),
-                  const UserImageWidget(
-                    imageUrl:
-                        "https://images.unsplash.com/photo-1603415526960-f7e0328c63b1",
-                    title: "User Name",
-                    size: 120,
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.blue,
+                      Colors.purple,
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
                   ),
-                  const SizedBox(height: 10.0),
-                  Text(
-                    "User Name",
-                    maxLines: 2,
-                    style: TextStyle(
-                      fontSize: 24.0,
-                      fontWeight: FontWeight.w500,
-                      color: ColorConstants.white,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 10.0),
+                    UserImageWidget(
+                      imageUrl: UtilityMethods.getProperFileUrl(
+                          userProfileController
+                                  .userProfileModel.value.profile?.image ??
+                              ''),
+                      title: userProfileController
+                              .userProfileModel.value.profile?.fullname ??
+                          "Guest User",
+                      size: 120,
                     ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
+                    const SizedBox(height: 10.0),
+                    Text(
+                      userProfileController
+                              .userProfileModel.value.profile?.fullname ??
+                          "Guest User",
+                      maxLines: 2,
+                      style: TextStyle(
+                        fontSize: 24.0,
+                        fontWeight: FontWeight.w500,
+                        color: ColorConstants.white,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
               ),
             ),
             ListTile(
@@ -584,7 +612,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ListTile(
               leading: const Icon(Icons.manage_accounts),
               title: const Text(
-                StringConstants.profileAndSettings,
+                StringConstants.profile,
                 style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.w500,
@@ -595,7 +623,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 size: 16.0,
               ),
               onTap: () {
-                Get.to(() => const ProfileAndSettingsScreen());
+                Get.to(() => const ProfileScreen());
               },
             ),
             const Spacer(),

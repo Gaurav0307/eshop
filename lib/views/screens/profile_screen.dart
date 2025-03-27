@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:eshop/common/global/global.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
@@ -51,8 +53,24 @@ class ProfileForm extends StatefulWidget {
 }
 
 class _ProfileFormState extends State<ProfileForm> {
-  String fullName = '';
-  String mobile = '';
+  String fullName =
+      userProfileController.userProfileModel.value.profile?.fullname ?? '';
+  String mobile =
+      userProfileController.userProfileModel.value.profile?.mobile ?? '';
+
+  TextEditingController fullNameTEC = TextEditingController();
+  TextEditingController mobileTEC = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fullNameTEC.text = fullName;
+    mobile = UtilityMethods.separateIsoCode(mobile).last;
+    mobileTEC.text = mobile;
+    imageUrl = UtilityMethods.getProperFileUrl(
+        userProfileController.userProfileModel.value.profile?.image ?? '');
+  }
 
   final _formKey = GlobalKey<FormState>();
 
@@ -89,7 +107,7 @@ class _ProfileFormState extends State<ProfileForm> {
     return null;
   }
 
-  PhoneNumber number = PhoneNumber(isoCode: 'IN');
+  late PhoneNumber number = PhoneNumber(isoCode: 'IN');
 
   String imageUrl = '';
   File? _imageFile;
@@ -270,6 +288,7 @@ class _ProfileFormState extends State<ProfileForm> {
           ),
           const SizedBox(height: 60.0),
           TextFormField(
+            controller: fullNameTEC,
             style: TextStyle(color: ColorConstants.black),
             validator: _validateFullName,
             inputFormatters: [
@@ -321,6 +340,7 @@ class _ProfileFormState extends State<ProfileForm> {
           ),
           const SizedBox(height: 16),
           InternationalPhoneNumberInput(
+            isEnabled: false,
             onInputChanged: (PhoneNumber number) {
               mobile = number.phoneNumber!;
             },
@@ -332,7 +352,7 @@ class _ProfileFormState extends State<ProfileForm> {
             autoValidateMode: AutovalidateMode.disabled,
             selectorTextStyle: const TextStyle(color: Colors.black),
             initialValue: number,
-            // textFieldController: mobileTEC,
+            textFieldController: mobileTEC,
             formatInput: false,
             keyboardType: const TextInputType.numberWithOptions(
               signed: true,
@@ -350,28 +370,32 @@ class _ProfileFormState extends State<ProfileForm> {
             ),
           ),
           const SizedBox(height: 40.0),
-          Visibility(
-            visible: true,
-            replacement: Center(
-              child: CircularProgressIndicator(
-                color: ColorConstants.indigo,
-                strokeWidth: 3.0,
-              ),
-            ),
-            child: GradientButton(
-              onPressed: () async {
-                if (_formKey.currentState!.validate()) {
-                  _formKey.currentState!.save();
-                  FocusScope.of(context).unfocus();
-                }
-              },
-              child: Text(
-                StringConstants.save,
-                style: TextStyle(
-                  fontSize: 16,
-                  color: ColorConstants.white,
+          Obx(
+            () => Visibility(
+              visible: !userProfileController.isLoading.value,
+              replacement: Center(
+                child: CircularProgressIndicator(
+                  color: ColorConstants.indigo,
+                  strokeWidth: 3.0,
                 ),
-                textAlign: TextAlign.center,
+              ),
+              child: GradientButton(
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    _formKey.currentState!.save();
+                    FocusScope.of(context).unfocus();
+                    await userProfileController.updateProfile(
+                        fullName, _imageFile);
+                  }
+                },
+                child: Text(
+                  StringConstants.save,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: ColorConstants.white,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
           ),

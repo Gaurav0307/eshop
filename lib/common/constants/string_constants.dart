@@ -1,5 +1,5 @@
 class StringConstants {
-  static const String appName = "eShop";
+  static const String appName = "Our Shop";
   static const String confirm = "Confirm";
   static const String doYouWantToExitTheApp = "Do you want to exit the App?";
   static const String yes = "Yes";
@@ -73,7 +73,6 @@ class StringConstants {
       "Do you really want to remove '#'?";
   static const String openTime = "Open Time";
   static const String closeTime = "Close Time";
-  static const String profileAndSettings = "Profile & Settings";
   static const String profile = "Profile";
 
   /// Validation

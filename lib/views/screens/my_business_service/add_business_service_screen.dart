@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eshop/views/screens/my_business_service/location_picker_screen.dart';
 import 'package:eshop/views/widgets/border_button.dart';
 import 'package:eshop/views/widgets/gradient_button.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -127,6 +128,9 @@ class _AddBusinessServiceFormState extends State<AddBusinessServiceForm> {
   TextEditingController stateTEC = TextEditingController();
   TextEditingController cityTEC = TextEditingController();
   String mobile = '';
+
+  bool callEnabled = false;
+  bool messageEnabled = false;
 
   // Product and Services
   final TextEditingController productsServicesTEC = TextEditingController();
@@ -962,6 +966,52 @@ class _AddBusinessServiceFormState extends State<AddBusinessServiceForm> {
                 color: ColorConstants.black,
               ),
               textAlign: TextAlign.center,
+            ),
+          ),
+          const SizedBox(height: 30.0),
+          ListTile(
+            leading: Icon(
+              Icons.phone,
+              color: ColorConstants.black,
+            ),
+            title: const Text(
+              StringConstants.call,
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            trailing: Switch(
+              activeColor: Colors.green,
+              value: callEnabled,
+              onChanged: (isEnabled) {
+                setState(() {
+                  callEnabled = isEnabled;
+                });
+              },
+            ),
+          ),
+          const SizedBox(height: 16.0),
+          ListTile(
+            leading: Icon(
+              Icons.message,
+              color: ColorConstants.black,
+            ),
+            title: const Text(
+              StringConstants.message,
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            trailing: CupertinoSwitch(
+              activeColor: Colors.green,
+              value: messageEnabled,
+              onChanged: (isEnabled) {
+                setState(() {
+                  messageEnabled = isEnabled;
+                });
+              },
             ),
           ),
           const SizedBox(height: 60.0),

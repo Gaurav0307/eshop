@@ -1,6 +1,6 @@
 class AssetConstants {
   ///Images
-  static const String backgroundImage1 = "assets/images/background1.jpg";
+  static const String backgroundImage1 = "assets/images/background1.png";
   static const String search = "assets/images/search.png";
   static const String store = "assets/images/store.png";
   static const String user = "assets/images/user.png";

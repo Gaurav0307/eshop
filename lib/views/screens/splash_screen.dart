@@ -7,9 +7,8 @@ import 'package:get/get.dart';
 import '../../common/constants/asset_constants.dart';
 import '../../common/constants/color_constants.dart';
 import '../../common/constants/string_constants.dart';
-import '../../common/global/global.dart';
 import '../../common/utils/utility_methods.dart';
-import 'login_screen.dart';
+import 'home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -46,11 +45,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     await UtilityMethods.loadInitialData();
 
-    if (token.isNotEmpty) {
-      // Get.to(() => const HomeScreen());
-    } else {
-      Get.to(() => const LoginScreen());
-    }
+    Get.to(() => const HomeScreen());
   }
 
   @override
