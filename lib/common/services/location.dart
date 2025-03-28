@@ -165,6 +165,22 @@ class LocationService extends GetxController {
         forceAndroidLocationManager: true);
   }
 
+  Future<void> getLocationFromAddress(String address) async {
+    try {
+      var location = await locationFromAddress(address);
+
+      var lat = location.first.latitude;
+      var lon = location.first.longitude;
+
+      debugPrint("Location From Address: Lat: $lat, Lon: $lon");
+
+      latitude.value = lat;
+      longitude.value = lon;
+    } catch (e) {
+      debugPrint('Error fetching geocoding data: $e');
+    }
+  }
+
   Future<LocationData> getLocationData({
     required double lat,
     required double lon,

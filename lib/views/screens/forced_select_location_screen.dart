@@ -188,6 +188,10 @@ class _SelectLocationFormState extends State<SelectLocationForm> {
                   selectedLocation.country.value = countryTEC.text;
                   selectedLocation.state.value = stateTEC.text;
                   selectedLocation.city.value = cityTEC.text;
+
+                  locationService.getLocationFromAddress(
+                      "${cityTEC.text}, ${stateTEC.text}, ${countryTEC.text}");
+
                   Navigator.pop(context);
                 }
               },
