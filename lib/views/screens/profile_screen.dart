@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:eshop/common/global/global.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -12,6 +11,7 @@ import '../../common/constants/asset_constants.dart';
 import '../../common/constants/color_constants.dart';
 import '../../common/constants/string_constants.dart';
 import '../../common/utils/utility_methods.dart';
+import '../../controllers/user_profile_controller.dart';
 import '../widgets/gradient_button.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -53,24 +53,11 @@ class ProfileForm extends StatefulWidget {
 }
 
 class _ProfileFormState extends State<ProfileForm> {
-  String fullName =
-      userProfileController.userProfileModel.value.profile?.fullname ?? '';
-  String mobile =
-      userProfileController.userProfileModel.value.profile?.mobile ?? '';
+  String fullName = '';
+  String mobile = '';
 
   TextEditingController fullNameTEC = TextEditingController();
   TextEditingController mobileTEC = TextEditingController();
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    fullNameTEC.text = fullName;
-    mobile = UtilityMethods.separateIsoCode(mobile).last;
-    mobileTEC.text = mobile;
-    imageUrl = UtilityMethods.getProperFileUrl(
-        userProfileController.userProfileModel.value.profile?.image ?? '');
-  }
 
   final _formKey = GlobalKey<FormState>();
 
@@ -172,6 +159,26 @@ class _ProfileFormState extends State<ProfileForm> {
         );
       },
     );
+  }
+
+  var userProfileController = Get.find<UserProfileController>();
+
+  @override
+  void initState() {
+    super.initState();
+    fullName =
+        userProfileController.userProfileModel.value.profile?.fullname ?? '';
+    mobile = userProfileController.userProfileModel.value.profile?.mobile ?? '';
+
+    fullNameTEC.text = fullName;
+    mobile =
+        mobile.isNotEmpty ? UtilityMethods.separateIsoCode(mobile).last : '';
+    mobileTEC.text = mobile;
+    imageUrl =
+        userProfileController.userProfileModel.value.profile?.image != null
+            ? UtilityMethods.getProperFileUrl(
+                userProfileController.userProfileModel.value.profile!.image!)
+            : '';
   }
 
   @override

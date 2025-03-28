@@ -62,17 +62,19 @@ class UserProfileController extends GetxController with BaseController {
     if (responseJson == null || responseJson.toString().contains("jwt")) {
       if (sharedPreferences!.containsKey(StorageConstants.token)) {
         await sharedPreferences!.clear();
+
         token = "";
         userId = "";
         userMobile = "";
       }
     } else {
       var message = jsonDecode(responseJson)["message"];
+
       if (message != null) {
         // showMessage(description: message);
       }
-      userProfileModel.value =
-          UserProfileModel.fromJson(jsonDecode(responseJson));
+
+      userProfileModel.value = userProfileModelFromJson(responseJson);
     }
   }
 

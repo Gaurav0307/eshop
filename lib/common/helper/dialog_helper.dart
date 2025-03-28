@@ -14,15 +14,29 @@ class DialogHelper {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(title),
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const Divider(),
               Text(
                 description ?? '',
+                textAlign: TextAlign.center,
               ),
+              const SizedBox(height: 10),
               ElevatedButton(
                 onPressed: () {
                   if (Get.isDialogOpen!) Get.back();
                 },
-                child: const Text('Okay'),
+                child: const Text(
+                  'Okay',
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
+                ),
               ),
             ],
           ),

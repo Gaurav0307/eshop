@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:eshop/common/global/global.dart';
+import 'package:eshop/views/screens/forced_select_location_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -89,11 +90,17 @@ class LocationService extends GetxController {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
+        if (selectedLocation.country.value.isEmpty) {
+          Get.to(() => const ForcedSelectLocationScreen());
+        }
         throw 'Location permissions are denied';
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
+      if (selectedLocation.country.value.isEmpty) {
+        Get.to(() => const ForcedSelectLocationScreen());
+      }
       throw 'Location permissions are permanently denied, we cannot request permissions.';
     }
   }

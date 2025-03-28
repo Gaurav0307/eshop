@@ -74,6 +74,9 @@ class StringConstants {
   static const String openTime = "Open Time";
   static const String closeTime = "Close Time";
   static const String profile = "Profile";
+  static const String appDoesNotHaveLocationPermission =
+      "The App does not have the location permission. You will have to select the location manually to get proper results.";
+  static const String important = "Important";
 
   /// Validation
   static const String fullNameIsRequired = "Full Name is required.";

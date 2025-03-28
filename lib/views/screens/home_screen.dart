@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eshop/common/constants/asset_constants.dart';
 import 'package:eshop/common/global/global.dart';
 import 'package:eshop/common/utils/utility_methods.dart';
+import 'package:eshop/controllers/category_controller.dart';
 import 'package:eshop/views/screens/business_service_details_screen.dart';
 import 'package:eshop/views/screens/businesses_screen.dart';
 import 'package:eshop/views/screens/categories_screen.dart';
@@ -51,6 +52,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
     super.initState();
   }
+
+  var categoryController = Get.find<CategoryController>();
 
   @override
   Widget build(BuildContext context) {
@@ -104,6 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     const Icon(Icons.location_on_outlined),
                     if (selectedLocation.city.value.isNotEmpty) ...{
+                      /// Todo (Fetch Near By Business/Service)
                       Text(
                         "${selectedLocation.city} (${selectedLocation.state})",
                         style: TextStyle(
@@ -194,35 +198,44 @@ class _HomeScreenState extends State<HomeScreen> {
                       )
                     ],
                   ),
-                  GridView.builder(
-                    padding: const EdgeInsets.symmetric(vertical: 5.0),
-                    shrinkWrap: true,
-                    physics:
-                        const NeverScrollableScrollPhysics(), // Disable inner scrolling
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 4, // 4 columns
-                      crossAxisSpacing: 16, // Spacing between columns
-                      mainAxisSpacing: 16, // Spacing between rows
-                      childAspectRatio: 1.0, // Adjust aspect ratio as needed
-                      mainAxisExtent: 115,
+                  Obx(
+                    () => GridView.builder(
+                      padding: const EdgeInsets.symmetric(vertical: 5.0),
+                      shrinkWrap: true,
+                      physics:
+                          const NeverScrollableScrollPhysics(), // Disable inner scrolling
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 4, // 4 columns
+                        crossAxisSpacing: 16, // Spacing between columns
+                        mainAxisSpacing: 16, // Spacing between rows
+                        childAspectRatio: 1.0, // Adjust aspect ratio as needed
+                        mainAxisExtent: 115,
+                      ),
+                      itemCount: categoryController
+                                  .categoryModel.value.categories!.length >
+                              8
+                          ? 8
+                          : categoryController.categoryModel.value.categories!
+                              .length, // 4x2 grid = 8 items
+                      itemBuilder: (context, index) {
+                        return categoryItem(
+                          imageUrl: UtilityMethods.getProperFileUrl(
+                              categoryController.categoryModel.value
+                                  .categories![index].image!),
+                          categoryName: categoryController
+                              .categoryModel.value.categories![index].title!,
+                          onTap: () {
+                            Get.to(
+                              () => SelectedCategoryBusinessServiceScreen(
+                                categoryName: categoryController.categoryModel
+                                    .value.categories![index].title!,
+                              ),
+                            );
+                          },
+                        );
+                      },
                     ),
-                    itemCount: demoCategories.length > 8
-                        ? 8
-                        : demoCategories.length, // 4x2 grid = 8 items
-                    itemBuilder: (context, index) {
-                      return categoryItem(
-                        imageUrl: demoCategories[index]['imageUrl']!,
-                        categoryName: demoCategories[index]['category']!,
-                        onTap: () {
-                          Get.to(
-                            () => SelectedCategoryBusinessServiceScreen(
-                              categoryName: demoCategories[index]['category']!,
-                            ),
-                          );
-                        },
-                      );
-                    },
                   ),
                 ],
               ),

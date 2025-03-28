@@ -23,11 +23,12 @@ class UtilityMethods {
     userMobile =
         sharedPreferences!.getString(StorageConstants.userMobile) ?? "";
 
-    if (token.isNotEmpty && userId.isNotEmpty) {
-      await Future.wait([
+    await Future.wait([
+      if (token.isNotEmpty && userId.isNotEmpty) ...{
         userProfileController.getUserProfile(),
-      ]);
-    }
+      },
+      categoryController.getCategory(),
+    ]);
 
     connectSocket();
   }
@@ -346,14 +347,19 @@ class UtilityMethods {
   }
 
   static List<String> separateIsoCode(String phoneNumber) {
-    // Assuming country codes are between 1 to 2 digits long
-    RegExp regex = RegExp(r'^\+(\d{1,2})(\d+)$');
-    Match? match = regex.firstMatch(phoneNumber);
+    try {
+      // Assuming country codes are between 1 to 2 digits long
+      RegExp regex = RegExp(r'^\+(\d{1,2})(\d+)$');
+      Match? match = regex.firstMatch(phoneNumber);
 
-    if (match != null) {
-      return [match.group(1)!, match.group(2)!]; // Return ISO code and number
-    } else {
-      throw const FormatException("Invalid phone number format");
+      if (match != null) {
+        return [match.group(1)!, match.group(2)!]; // Return ISO code and number
+      } else {
+        throw const FormatException("Invalid phone number format");
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      return [];
     }
   }
 }
