@@ -28,6 +28,7 @@ class UtilityMethods {
         userProfileController.getUserProfile(),
       },
       categoryController.getCategory(),
+      businessServiceController.getAllBusinessService(),
     ]);
 
     connectSocket();

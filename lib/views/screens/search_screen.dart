@@ -1,4 +1,5 @@
 import 'package:eshop/common/global/global.dart';
+import 'package:eshop/models/BusinessServiceModel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -12,36 +13,38 @@ import 'map_screen.dart';
 class SearchScreen extends SearchDelegate {
   final List<String> listExample;
 
-  List<Map<String, dynamic>> allData = [...demoServices, ...demoBusinesses];
+  List<BusinessesServices> allData =
+      businessServiceController.businessServiceModel.value.businessesServices!;
 
   SearchScreen(this.listExample);
 
-  List<Map<String, dynamic>> searchResults(String query) {
-    List<Map<String, dynamic>> results = [];
+  List<BusinessesServices> searchResults(String query) {
+    List<BusinessesServices> results = [];
 
     allData.sort((a, b) {
       return locationService
           .getDistanceBetween(
             startLatitude: locationService.latitude.value,
             startLongitude: locationService.longitude.value,
-            endLatitude: a['location']['lat'],
-            endLongitude: a['location']['lon'],
+            endLatitude: a.location!.lat!.toDouble(),
+            endLongitude: a.location!.lon!.toDouble(),
           )
           .compareTo(locationService.getDistanceBetween(
             startLatitude: locationService.latitude.value,
             startLongitude: locationService.longitude.value,
-            endLatitude: b['location']['lat'],
-            endLongitude: b['location']['lon'],
+            endLatitude: b.location!.lat!.toDouble(),
+            endLongitude: b.location!.lon!.toDouble(),
           ));
     });
 
     for (var data in allData) {
-      if (data['name'].toString().toLowerCase().contains(query.toLowerCase()) ||
-          data['category']
+      if (data.name.toString().toLowerCase().contains(query.toLowerCase()) ||
+          data.category
               .toString()
               .toLowerCase()
               .contains(query.toLowerCase()) ||
-          data['servicesAndProducts']
+          data.productsServices!
+              .join(", ")
               .toString()
               .toLowerCase()
               .contains(query.toLowerCase())) {
@@ -127,7 +130,7 @@ class SearchScreen extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    List<Map<String, dynamic>> searchResult = searchResults(query);
+    List<BusinessesServices> searchResult = searchResults(query);
 
     return searchResult.isEmpty
         ? whenSearchResultEmpty()
@@ -139,32 +142,41 @@ class SearchScreen extends SearchDelegate {
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
                 child: ServiceBusinessItem(
                   heroTag: index,
-                  imageUrl: searchResult[index]['imageUrl'].toString(),
-                  name: searchResult[index]['name'].toString(),
-                  category: searchResult[index]['category'].toString(),
-                  timing: searchResult[index]['timing'].toString(),
-                  servicesAndProducts:
-                      searchResult[index]['servicesAndProducts'].toString(),
-                  address: searchResult[index]['address'].toString(),
-                  city: searchResult[index]['city'].toString(),
-                  state: searchResult[index]['state'].toString(),
-                  rating: searchResult[index]['rating'].toString(),
+                  imageUrl: UtilityMethods.getProperFileUrl(
+                      searchResult[index].image.toString()),
+                  name: searchResult[index].name.toString(),
+                  category: searchResult[index].category.toString(),
+                  timing:
+                      "${searchResult[index].openTime} - ${searchResult[index].closeTime}",
+                  servicesAndProducts: searchResult[index]
+                      .productsServices!
+                      .join(", ")
+                      .toString(),
+                  address: searchResult[index].address.toString(),
+                  city: searchResult[index].city.toString(),
+                  state: searchResult[index].state.toString(),
+                  rating: searchResult[index]
+                      .rating!
+                      .toDouble()
+                      .toPrecision(1)
+                      .toString(),
                   maxRating: "5.0",
-                  peopleRated: UtilityMethods.formatNumberToKMB(double.tryParse(
-                          searchResult[index]['peopleRated'].toString()) ??
-                      0.0),
+                  peopleRated: UtilityMethods.formatNumberToKMB(
+                      searchResult[index].ratedBy!.toDouble()),
                   distance: "${(locationService.getDistanceBetween(
                         startLatitude: locationService.latitude.value,
                         startLongitude: locationService.longitude.value,
-                        endLatitude: searchResult[index]['location']['lat'],
-                        endLongitude: searchResult[index]['location']['lon'],
+                        endLatitude:
+                            searchResult[index].location!.lat!.toDouble(),
+                        endLongitude:
+                            searchResult[index].location!.lon!.toDouble(),
                       ) / 1000.0).toPrecision(1)} KM",
                   onLocationPressed: () {
                     Get.to(
                       () => MapScreen(
-                        lat: searchResult[index]['location']['lat'],
-                        lon: searchResult[index]['location']['lon'],
-                        title: searchResult[index]['name'].toString(),
+                        lat: searchResult[index].location!.lat!.toDouble(),
+                        lon: searchResult[index].location!.lon!.toDouble(),
+                        title: searchResult[index].name.toString(),
                       ),
                     );
                   },
@@ -186,7 +198,7 @@ class SearchScreen extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    List<Map<String, dynamic>> searchResult = searchResults(query);
+    List<BusinessesServices> searchResult = searchResults(query);
 
     return searchResult.isEmpty
         ? whenSearchResultEmpty()
@@ -198,32 +210,41 @@ class SearchScreen extends SearchDelegate {
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
                 child: ServiceBusinessItem(
                   heroTag: index,
-                  imageUrl: searchResult[index]['imageUrl'].toString(),
-                  name: searchResult[index]['name'].toString(),
-                  category: searchResult[index]['category'].toString(),
-                  timing: searchResult[index]['timing'].toString(),
-                  servicesAndProducts:
-                      searchResult[index]['servicesAndProducts'].toString(),
-                  address: searchResult[index]['address'].toString(),
-                  city: searchResult[index]['city'].toString(),
-                  state: searchResult[index]['state'].toString(),
-                  rating: searchResult[index]['rating'].toString(),
+                  imageUrl: UtilityMethods.getProperFileUrl(
+                      searchResult[index].image.toString()),
+                  name: searchResult[index].name.toString(),
+                  category: searchResult[index].category.toString(),
+                  timing:
+                      "${searchResult[index].openTime} - ${searchResult[index].closeTime}",
+                  servicesAndProducts: searchResult[index]
+                      .productsServices!
+                      .join(", ")
+                      .toString(),
+                  address: searchResult[index].address.toString(),
+                  city: searchResult[index].city.toString(),
+                  state: searchResult[index].state.toString(),
+                  rating: searchResult[index]
+                      .rating!
+                      .toDouble()
+                      .toPrecision(1)
+                      .toString(),
                   maxRating: "5.0",
-                  peopleRated: UtilityMethods.formatNumberToKMB(double.tryParse(
-                          searchResult[index]['peopleRated'].toString()) ??
-                      0.0),
+                  peopleRated: UtilityMethods.formatNumberToKMB(
+                      searchResult[index].ratedBy!.toDouble()),
                   distance: "${(locationService.getDistanceBetween(
                         startLatitude: locationService.latitude.value,
                         startLongitude: locationService.longitude.value,
-                        endLatitude: searchResult[index]['location']['lat'],
-                        endLongitude: searchResult[index]['location']['lon'],
+                        endLatitude:
+                            searchResult[index].location!.lat!.toDouble(),
+                        endLongitude:
+                            searchResult[index].location!.lon!.toDouble(),
                       ) / 1000.0).toPrecision(1)} KM",
                   onLocationPressed: () {
                     Get.to(
                       () => MapScreen(
-                        lat: searchResult[index]['location']['lat'],
-                        lon: searchResult[index]['location']['lon'],
-                        title: searchResult[index]['name'].toString(),
+                        lat: searchResult[index].location!.lat!.toDouble(),
+                        lon: searchResult[index].location!.lon!.toDouble(),
+                        title: searchResult[index].name.toString(),
                       ),
                     );
                   },

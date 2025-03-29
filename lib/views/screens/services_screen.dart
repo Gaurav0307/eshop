@@ -44,17 +44,17 @@ class _ServicesScreenState extends State<ServicesScreen> {
 
           ///Services
           Expanded(
-            child: demoServices
-                    .where((item) => item['name']!
+            child: businessServiceController.services
+                    .where((item) => item.name!
                         .toString()
                         .toLowerCase()
                         .contains(searchTEC.text.toLowerCase()))
                     .isNotEmpty
                 ? ListView.builder(
                     padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                    itemCount: 10,
+                    itemCount: businessServiceController.services.length,
                     itemBuilder: (context, index) {
-                      return demoServices[index % 2]['name']!
+                      return businessServiceController.services[index].name!
                               .toString()
                               .toLowerCase()
                               .contains(searchTEC.text.toLowerCase())
@@ -62,52 +62,64 @@ class _ServicesScreenState extends State<ServicesScreen> {
                               padding:
                                   const EdgeInsets.symmetric(vertical: 10.0),
                               child: ServiceBusinessItem(
-                                heroTag: index,
-                                imageUrl: demoServices[index % 2]['imageUrl']
-                                    .toString(),
-                                name:
-                                    demoServices[index % 2]['name'].toString(),
-                                category: demoServices[index % 2]['category']
-                                    .toString(),
-                                timing: demoServices[index % 2]['timing']
-                                    .toString(),
-                                servicesAndProducts: demoServices[index % 2]
-                                        ['servicesAndProducts']
-                                    .toString(),
-                                address: demoServices[index % 2]['address']
-                                    .toString(),
-                                city:
-                                    demoServices[index % 2]['city'].toString(),
-                                state:
-                                    demoServices[index % 2]['state'].toString(),
-                                rating: demoServices[index % 2]['rating']
+                                heroTag: "Service-$index",
+                                imageUrl: UtilityMethods.getProperFileUrl(
+                                    businessServiceController
+                                        .services[index].image!),
+                                name: businessServiceController
+                                    .services[index].name!,
+                                category: businessServiceController
+                                    .services[index].category!,
+                                timing:
+                                    "${businessServiceController.services[index].openTime!} - "
+                                    "${businessServiceController.services[index].closeTime!}",
+                                servicesAndProducts: businessServiceController
+                                    .services[index].productsServices!
+                                    .join(", "),
+                                address: businessServiceController
+                                    .services[index].address!,
+                                city: businessServiceController
+                                    .services[index].city!,
+                                state: businessServiceController
+                                    .services[index].state!,
+                                rating: businessServiceController
+                                    .services[index].rating!
+                                    .toDouble()
+                                    .toPrecision(1)
                                     .toString(),
                                 maxRating: "5.0",
                                 peopleRated: UtilityMethods.formatNumberToKMB(
-                                    double.tryParse(demoServices[index % 2]
-                                                ['peopleRated']
-                                            .toString()) ??
-                                        0.0),
+                                  businessServiceController
+                                      .services[index].ratedBy!
+                                      .toDouble(),
+                                ),
                                 distance:
                                     "${(locationService.getDistanceBetween(
                                           startLatitude:
                                               locationService.latitude.value,
                                           startLongitude:
                                               locationService.longitude.value,
-                                          endLatitude: demoServices[index % 2]
-                                              ['location']['lat'],
-                                          endLongitude: demoServices[index % 2]
-                                              ['location']['lon'],
+                                          endLatitude: businessServiceController
+                                              .services[index].location!.lat!
+                                              .toDouble(),
+                                          endLongitude:
+                                              businessServiceController
+                                                  .services[index]
+                                                  .location!
+                                                  .lon!
+                                                  .toDouble(),
                                         ) / 1000.0).toPrecision(1)} KM",
                                 onLocationPressed: () {
                                   Get.to(
                                     () => MapScreen(
-                                      lat: demoServices[index % 2]['location']
-                                          ['lat'],
-                                      lon: demoServices[index % 2]['location']
-                                          ['lon'],
-                                      title: demoServices[index % 2]['name']
-                                          .toString(),
+                                      lat: businessServiceController
+                                          .services[index].location!.lat!
+                                          .toDouble(),
+                                      lon: businessServiceController
+                                          .services[index].location!.lon!
+                                          .toDouble(),
+                                      title: businessServiceController
+                                          .services[index].name!,
                                     ),
                                   );
                                 },
@@ -116,8 +128,9 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                 onTap: () {
                                   Get.to(
                                     () => BusinessServiceDetailsScreen(
-                                      heroTag: index,
-                                      data: demoServices[index % 2],
+                                      heroTag: "Service-$index",
+                                      data: businessServiceController
+                                          .services[index],
                                     ),
                                   );
                                 },

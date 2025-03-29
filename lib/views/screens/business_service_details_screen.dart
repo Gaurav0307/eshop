@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eshop/common/constants/asset_constants.dart';
+import 'package:eshop/models/BusinessServiceModel.dart';
 import 'package:eshop/views/widgets/gradient_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -15,7 +16,7 @@ import 'map_screen.dart';
 
 class BusinessServiceDetailsScreen extends StatefulWidget {
   final Object heroTag;
-  final Map<String, dynamic> data;
+  final BusinessesServices data;
   const BusinessServiceDetailsScreen({
     super.key,
     required this.heroTag,
@@ -91,7 +92,7 @@ class _BusinessServiceDetailsScreenState
                 centerTitle: true,
                 title: isCollapsed
                     ? Text(
-                        widget.data['name'],
+                        widget.data.name!,
                         style: TextStyle(
                           fontSize: 18.0,
                           fontWeight: FontWeight.w600,
@@ -114,7 +115,8 @@ class _BusinessServiceDetailsScreenState
                         height: double.infinity,
                         width: double.infinity,
                         fit: BoxFit.cover,
-                        imageUrl: widget.data['imageUrl'],
+                        imageUrl:
+                            UtilityMethods.getProperFileUrl(widget.data.image!),
                       ),
                     ),
                     Positioned(
@@ -130,7 +132,7 @@ class _BusinessServiceDetailsScreenState
                         child: Column(
                           children: [
                             Text(
-                              widget.data['name'],
+                              widget.data.name!,
                               style: TextStyle(
                                 fontSize: 18.0,
                                 color: ColorConstants.white,
@@ -139,7 +141,7 @@ class _BusinessServiceDetailsScreenState
                               textAlign: TextAlign.center,
                             ),
                             Text(
-                              "(${widget.data['category']})",
+                              "(${widget.data.category})",
                               style: TextStyle(
                                 fontFamily: AssetConstants.robotoFont,
                                 fontSize: 14.0,
@@ -173,7 +175,7 @@ class _BusinessServiceDetailsScreenState
                           width: MediaQuery.of(context).size.width * 0.8,
                           margin: const EdgeInsets.only(left: 10.0),
                           child: Text(
-                            widget.data['timing'],
+                            "${widget.data.openTime} - ${widget.data.closeTime}",
                             style: const TextStyle(
                               fontFamily: AssetConstants.robotoFont,
                               fontSize: 16.0,
@@ -196,7 +198,7 @@ class _BusinessServiceDetailsScreenState
                           width: MediaQuery.of(context).size.width * 0.8,
                           margin: const EdgeInsets.only(left: 10.0),
                           child: Text(
-                            widget.data['servicesAndProducts'],
+                            widget.data.productsServices!.join(", "),
                             style: const TextStyle(
                               fontFamily: AssetConstants.robotoFont,
                               fontSize: 16.0,
@@ -219,7 +221,7 @@ class _BusinessServiceDetailsScreenState
                           width: MediaQuery.of(context).size.width * 0.8,
                           margin: const EdgeInsets.only(left: 10.0),
                           child: Text(
-                            "${widget.data['address']}, ${widget.data['city']} (${widget.data['state']})",
+                            "${widget.data.address}, ${widget.data.city} (${widget.data.state})",
                             style: const TextStyle(
                               fontFamily: AssetConstants.robotoFont,
                               fontSize: 16.0,
@@ -249,10 +251,10 @@ class _BusinessServiceDetailsScreenState
                                           locationService.latitude.value,
                                       startLongitude:
                                           locationService.longitude.value,
-                                      endLatitude: widget.data['location']
-                                          ['lat'],
-                                      endLongitude: widget.data['location']
-                                          ['lon'],
+                                      endLatitude:
+                                          widget.data.location!.lat!.toDouble(),
+                                      endLongitude:
+                                          widget.data.location!.lon!.toDouble(),
                                     ) / 1000.0).toPrecision(1)} KM (${StringConstants.fromYourCurrentLocation})",
                                 style: const TextStyle(
                                   fontFamily: AssetConstants.robotoFont,
@@ -285,22 +287,22 @@ class _BusinessServiceDetailsScreenState
                                 mapToolbarEnabled: false,
                                 initialCameraPosition: CameraPosition(
                                   target: LatLng(
-                                    widget.data['location']['lat'],
-                                    widget.data['location']['lon'],
+                                    widget.data.location!.lat!.toDouble(),
+                                    widget.data.location!.lon!.toDouble(),
                                   ),
                                   zoom: 14,
                                 ),
                                 markers: {
                                   Marker(
                                     markerId: MarkerId(
-                                      "${widget.data['location']['lat']}, ${widget.data['location']['lon']}",
+                                      "${widget.data.location!.lat!.toDouble()}, ${widget.data.location!.lon!.toDouble()}",
                                     ),
                                     position: LatLng(
-                                      widget.data['location']['lat'],
-                                      widget.data['location']['lon'],
+                                      widget.data.location!.lat!.toDouble(),
+                                      widget.data.location!.lon!.toDouble(),
                                     ),
                                     infoWindow:
-                                        InfoWindow(title: widget.data['name']),
+                                        InfoWindow(title: widget.data.name),
                                     icon: customMarkerIcon,
                                   ),
                                 },
@@ -347,7 +349,7 @@ class _BusinessServiceDetailsScreenState
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: Text(
-                            "${widget.data['rating']}/5.0 (${UtilityMethods.formatNumberToKMB(double.tryParse(widget.data['peopleRated'].toString()) ?? 0.0)})",
+                            "${widget.data.rating!.toDouble().toPrecision(1)}/5.0 (${UtilityMethods.formatNumberToKMB(widget.data.ratedBy!.toDouble())})",
                             style: const TextStyle(
                               fontFamily: AssetConstants.robotoFont,
                               fontSize: 16.0,
@@ -408,9 +410,9 @@ class _BusinessServiceDetailsScreenState
               onPressed: () {
                 Get.to(
                   () => MapScreen(
-                    lat: widget.data['location']['lat'],
-                    lon: widget.data['location']['lon'],
-                    title: widget.data['name'].toString(),
+                    lat: widget.data.location!.lat!.toDouble(),
+                    lon: widget.data.location!.lon!.toDouble(),
+                    title: widget.data.name!,
                   ),
                 );
               },
@@ -511,7 +513,7 @@ class _BusinessServiceDetailsScreenState
           ),
           iconPadding: const EdgeInsets.all(5.0),
           title: Text(
-            widget.data['name'],
+            widget.data.name!,
             style: TextStyle(
               fontWeight: FontWeight.w500,
               color: ColorConstants.black,

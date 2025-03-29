@@ -44,17 +44,17 @@ class _BusinessesScreenState extends State<BusinessesScreen> {
 
           ///Businesses
           Expanded(
-            child: demoBusinesses
-                    .where((item) => item['name']!
+            child: businessServiceController.businesses
+                    .where((item) => item.name!
                         .toString()
                         .toLowerCase()
                         .contains(searchTEC.text.toLowerCase()))
                     .isNotEmpty
                 ? ListView.builder(
                     padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                    itemCount: 10,
+                    itemCount: businessServiceController.businesses.length,
                     itemBuilder: (context, index) {
-                      return demoBusinesses[index % 2]['name']!
+                      return businessServiceController.businesses[index].name!
                               .toString()
                               .toLowerCase()
                               .contains(searchTEC.text.toLowerCase())
@@ -62,53 +62,64 @@ class _BusinessesScreenState extends State<BusinessesScreen> {
                               padding:
                                   const EdgeInsets.symmetric(vertical: 10.0),
                               child: ServiceBusinessItem(
-                                heroTag: index,
-                                imageUrl: demoBusinesses[index % 2]['imageUrl']
-                                    .toString(),
-                                name: demoBusinesses[index % 2]['name']
-                                    .toString(),
-                                category: demoBusinesses[index % 2]['category']
-                                    .toString(),
-                                timing: demoBusinesses[index % 2]['timing']
-                                    .toString(),
-                                servicesAndProducts: demoBusinesses[index % 2]
-                                        ['servicesAndProducts']
-                                    .toString(),
-                                address: demoBusinesses[index % 2]['address']
-                                    .toString(),
-                                city: demoBusinesses[index % 2]['city']
-                                    .toString(),
-                                state: demoBusinesses[index % 2]['state']
-                                    .toString(),
-                                rating: demoBusinesses[index % 2]['rating']
+                                heroTag: "Business-$index",
+                                imageUrl: UtilityMethods.getProperFileUrl(
+                                    businessServiceController
+                                        .businesses[index].image!),
+                                name: businessServiceController
+                                    .businesses[index].name!,
+                                category: businessServiceController
+                                    .businesses[index].category!,
+                                timing:
+                                    "${businessServiceController.businesses[index].openTime!} - "
+                                    "${businessServiceController.businesses[index].closeTime!}",
+                                servicesAndProducts: businessServiceController
+                                    .businesses[index].productsServices!
+                                    .join(", "),
+                                address: businessServiceController
+                                    .businesses[index].address!,
+                                city: businessServiceController
+                                    .businesses[index].city!,
+                                state: businessServiceController
+                                    .businesses[index].state!,
+                                rating: businessServiceController
+                                    .businesses[index].rating!
+                                    .toDouble()
+                                    .toPrecision(1)
                                     .toString(),
                                 maxRating: "5.0",
                                 peopleRated: UtilityMethods.formatNumberToKMB(
-                                    double.tryParse(demoBusinesses[index % 2]
-                                                ['peopleRated']
-                                            .toString()) ??
-                                        0.0),
+                                  businessServiceController
+                                      .businesses[index].ratedBy!
+                                      .toDouble(),
+                                ),
                                 distance:
                                     "${(locationService.getDistanceBetween(
                                           startLatitude:
                                               locationService.latitude.value,
                                           startLongitude:
                                               locationService.longitude.value,
-                                          endLatitude: demoBusinesses[index % 2]
-                                              ['location']['lat'],
+                                          endLatitude: businessServiceController
+                                              .businesses[index].location!.lat!
+                                              .toDouble(),
                                           endLongitude:
-                                              demoBusinesses[index % 2]
-                                                  ['location']['lon'],
+                                              businessServiceController
+                                                  .businesses[index]
+                                                  .location!
+                                                  .lon!
+                                                  .toDouble(),
                                         ) / 1000.0).toPrecision(1)} KM",
                                 onLocationPressed: () {
                                   Get.to(
                                     () => MapScreen(
-                                      lat: demoBusinesses[index % 2]['location']
-                                          ['lat'],
-                                      lon: demoBusinesses[index % 2]['location']
-                                          ['lon'],
-                                      title: demoBusinesses[index % 2]['name']
-                                          .toString(),
+                                      lat: businessServiceController
+                                          .businesses[index].location!.lat!
+                                          .toDouble(),
+                                      lon: businessServiceController
+                                          .businesses[index].location!.lon!
+                                          .toDouble(),
+                                      title: businessServiceController
+                                          .businesses[index].name!,
                                     ),
                                   );
                                 },
@@ -117,8 +128,9 @@ class _BusinessesScreenState extends State<BusinessesScreen> {
                                 onTap: () {
                                   Get.to(
                                     () => BusinessServiceDetailsScreen(
-                                      heroTag: index,
-                                      data: demoBusinesses[index % 2],
+                                      heroTag: "Business-$index",
+                                      data: businessServiceController
+                                          .businesses[index],
                                     ),
                                   );
                                 },

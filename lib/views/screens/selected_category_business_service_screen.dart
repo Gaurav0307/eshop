@@ -24,7 +24,8 @@ class _SelectedCategoryBusinessServiceScreenState
     extends State<SelectedCategoryBusinessServiceScreen> {
   TextEditingController searchTEC = TextEditingController();
 
-  final allData = [...demoBusinesses, ...demoServices];
+  final allData =
+      businessServiceController.businessServiceModel.value.businessesServices;
 
   @override
   Widget build(BuildContext context) {
@@ -51,14 +52,14 @@ class _SelectedCategoryBusinessServiceScreenState
 
           ///Services
           Expanded(
-            child: allData
+            child: allData!
                     .where(
                       (item) =>
-                          item['name']!
+                          item.name!
                               .toString()
                               .toLowerCase()
                               .contains(searchTEC.text.toLowerCase()) &&
-                          item['category']!
+                          item.category!
                               .toString()
                               .toLowerCase()
                               .contains(widget.categoryName.toLowerCase()),
@@ -66,13 +67,15 @@ class _SelectedCategoryBusinessServiceScreenState
                     .isNotEmpty
                 ? ListView.builder(
                     padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                    itemCount: allData.length,
+                    itemCount: allData?.length,
                     itemBuilder: (context, index) {
-                      return allData[index]['name']!
+                      return allData![index]
+                                  .name!
                                   .toString()
                                   .toLowerCase()
                                   .contains(searchTEC.text.toLowerCase()) &&
-                              allData[index]['category']!
+                              allData![index]
+                                  .category!
                                   .toString()
                                   .toLowerCase()
                                   .contains(widget.categoryName.toLowerCase())
@@ -81,21 +84,28 @@ class _SelectedCategoryBusinessServiceScreenState
                                   const EdgeInsets.symmetric(vertical: 10.0),
                               child: ServiceBusinessItem(
                                 heroTag: index,
-                                imageUrl: allData[index]['imageUrl'].toString(),
-                                name: allData[index]['name'].toString(),
-                                category: allData[index]['category'].toString(),
-                                timing: allData[index]['timing'].toString(),
-                                servicesAndProducts: allData[index]
-                                        ['servicesAndProducts']
+                                imageUrl: UtilityMethods.getProperFileUrl(
+                                    allData![index].image.toString()),
+                                name: allData![index].name.toString(),
+                                category: allData![index].category.toString(),
+                                timing:
+                                    "${allData![index].openTime!} - ${allData![index].closeTime!}",
+                                servicesAndProducts: allData![index]
+                                    .productsServices!
+                                    .join(", ")
                                     .toString(),
-                                address: allData[index]['address'].toString(),
-                                city: allData[index]['city'].toString(),
-                                state: allData[index]['state'].toString(),
-                                rating: allData[index]['rating'].toString(),
+                                address: allData![index].address.toString(),
+                                city: allData![index].city.toString(),
+                                state: allData![index].state.toString(),
+                                rating: allData![index]
+                                    .rating!
+                                    .toDouble()
+                                    .toPrecision(1)
+                                    .toString(),
                                 maxRating: "5.0",
                                 peopleRated: UtilityMethods.formatNumberToKMB(
-                                    double.tryParse(allData[index]
-                                                ['peopleRated']
+                                    double.tryParse(allData![index]
+                                            .ratedBy
                                             .toString()) ??
                                         0.0),
                                 distance:
@@ -104,17 +114,27 @@ class _SelectedCategoryBusinessServiceScreenState
                                               locationService.latitude.value,
                                           startLongitude:
                                               locationService.longitude.value,
-                                          endLatitude: allData[index]
-                                              ['location']['lat'],
-                                          endLongitude: allData[index]
-                                              ['location']['lon'],
+                                          endLatitude: allData![index]
+                                              .location!
+                                              .lat!
+                                              .toDouble(),
+                                          endLongitude: allData![index]
+                                              .location!
+                                              .lon!
+                                              .toDouble(),
                                         ) / 1000.0).toPrecision(1)} KM",
                                 onLocationPressed: () {
                                   Get.to(
                                     () => MapScreen(
-                                      lat: allData[index]['location']['lat'],
-                                      lon: allData[index]['location']['lon'],
-                                      title: allData[index]['name'].toString(),
+                                      lat: allData![index]
+                                          .location!
+                                          .lat!
+                                          .toDouble(),
+                                      lon: allData![index]
+                                          .location!
+                                          .lon!
+                                          .toDouble(),
+                                      title: allData![index].name.toString(),
                                     ),
                                   );
                                 },
@@ -124,7 +144,7 @@ class _SelectedCategoryBusinessServiceScreenState
                                   Get.to(
                                     () => BusinessServiceDetailsScreen(
                                       heroTag: index,
-                                      data: allData[index],
+                                      data: allData![index],
                                     ),
                                   );
                                 },

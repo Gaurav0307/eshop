@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../common/utils/utility_methods.dart';
-import '../business_service_details_screen.dart';
 
 class MyBusinessService extends StatefulWidget {
   const MyBusinessService({super.key});
@@ -62,12 +61,12 @@ class _MyBusinessServiceState extends State<MyBusinessService> {
               onDeletePressed: () {},
               onMessagePressed: () {},
               onTap: () {
-                Get.to(
-                  () => BusinessServiceDetailsScreen(
-                    heroTag: index,
-                    data: allData[index],
-                  ),
-                );
+                // Get.to(
+                //   () => BusinessServiceDetailsScreen(
+                //     heroTag: index,
+                //     data: allData[index],
+                //   ),
+                // );
               },
             ),
           );
