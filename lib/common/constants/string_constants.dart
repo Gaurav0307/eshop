@@ -77,6 +77,9 @@ class StringConstants {
   static const String appDoesNotHaveLocationPermission =
       "The App does not have the location permission. You will have to select the location manually to get proper results.";
   static const String important = "Important";
+  static const String noInternet = "No Internet";
+  static const String thereIsNoInternetConnectivity =
+      "There is no internet connectivity.";
 
   /// Validation
   static const String fullNameIsRequired = "Full Name is required.";

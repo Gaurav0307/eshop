@@ -21,6 +21,7 @@ import 'package:get/get.dart';
 
 import '../../common/constants/color_constants.dart';
 import '../../common/constants/string_constants.dart';
+import '../../common/services/internet_connectivity.dart';
 import '../widgets/SearchTextField.dart';
 import '../widgets/border_button.dart';
 import '../widgets/user_image_widget.dart';
@@ -49,6 +50,8 @@ class _HomeScreenState extends State<HomeScreen> {
         statusBarIconBrightness: Brightness.light,
       ),
     );
+
+    InternetConnectivity.addConnectivityListener();
 
     super.initState();
   }
@@ -163,346 +166,388 @@ class _HomeScreenState extends State<HomeScreen> {
               SearchTextField(
                 hintText: StringConstants.search_,
                 onTap: () {
-                  showSearch(
-                    context: context,
-                    delegate: SearchScreen(
-                      List.generate(10, (index) => "Text $index"),
-                    ),
-                  );
+                  if (businessServiceController
+                          .businessServiceModel.value.businessesServices !=
+                      null) {
+                    showSearch(
+                      context: context,
+                      delegate: SearchScreen(
+                        List.generate(10, (index) => "Text $index"),
+                      ),
+                    );
+                  }
                 },
               ),
               const SizedBox(height: 5.0),
 
               ///Category
               Obx(
-                () => Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                () {
+                  if (categoryController.categoryModel.value.categories !=
+                      null) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            StringConstants.categories,
-                            style: TextStyle(
-                              color: ColorConstants.black,
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              Get.to(() => const CategoriesScreen());
-                            },
-                            child: Text(
-                              StringConstants.viewMore,
-                              maxLines: 2,
-                              style: TextStyle(
-                                fontFamily: AssetConstants.robotoFont,
-                                color: ColorConstants.lightBlue,
-                                fontSize: 13,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                      GridView.builder(
-                        padding: const EdgeInsets.symmetric(vertical: 5.0),
-                        shrinkWrap: true,
-                        physics:
-                            const NeverScrollableScrollPhysics(), // Disable inner scrolling
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 4, // 4 columns
-                          crossAxisSpacing: 16, // Spacing between columns
-                          mainAxisSpacing: 16, // Spacing between rows
-                          childAspectRatio:
-                              1.0, // Adjust aspect ratio as needed
-                          mainAxisExtent: 115,
-                        ),
-                        itemCount: categoryController
-                                    .categoryModel.value.categories!.length >
-                                8
-                            ? 8
-                            : categoryController.categoryModel.value.categories!
-                                .length, // 4x2 grid = 8 items
-                        itemBuilder: (context, index) {
-                          return categoryItem(
-                            imageUrl: UtilityMethods.getProperFileUrl(
-                                categoryController.categoryModel.value
-                                    .categories![index].image!),
-                            categoryName: categoryController
-                                .categoryModel.value.categories![index].title!,
-                            onTap: () {
-                              Get.to(
-                                () => SelectedCategoryBusinessServiceScreen(
-                                  categoryName: categoryController.categoryModel
-                                      .value.categories![index].title!,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                StringConstants.categories,
+                                style: TextStyle(
+                                  color: ColorConstants.black,
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.w600,
                                 ),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Get.to(() => const CategoriesScreen());
+                                },
+                                child: Text(
+                                  StringConstants.viewMore,
+                                  maxLines: 2,
+                                  style: TextStyle(
+                                    fontFamily: AssetConstants.robotoFont,
+                                    color: ColorConstants.lightBlue,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                          GridView.builder(
+                            padding: const EdgeInsets.symmetric(vertical: 5.0),
+                            shrinkWrap: true,
+                            physics:
+                                const NeverScrollableScrollPhysics(), // Disable inner scrolling
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 4, // 4 columns
+                              crossAxisSpacing: 16, // Spacing between columns
+                              mainAxisSpacing: 16, // Spacing between rows
+                              childAspectRatio:
+                                  1.0, // Adjust aspect ratio as needed
+                              mainAxisExtent: 115,
+                            ),
+                            itemCount: categoryController.categoryModel.value
+                                        .categories!.length >
+                                    8
+                                ? 8
+                                : categoryController.categoryModel.value
+                                    .categories!.length, // 4x2 grid = 8 items
+                            itemBuilder: (context, index) {
+                              return categoryItem(
+                                imageUrl: UtilityMethods.getProperFileUrl(
+                                    categoryController.categoryModel.value
+                                        .categories![index].image!),
+                                categoryName: categoryController.categoryModel
+                                    .value.categories![index].title!,
+                                onTap: () {
+                                  Get.to(
+                                    () => SelectedCategoryBusinessServiceScreen(
+                                      categoryName: categoryController
+                                          .categoryModel
+                                          .value
+                                          .categories![index]
+                                          .title!,
+                                    ),
+                                  );
+                                },
                               );
                             },
-                          );
-                        },
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
+                    );
+                  } else {
+                    return const SizedBox.shrink();
+                  }
+                },
               ),
               const SizedBox(height: 5.0),
 
               ///Services
               Obx(
-                () => Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            StringConstants.services,
-                            style: TextStyle(
-                              color: ColorConstants.black,
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.w600,
-                            ),
+                () {
+                  if (businessServiceController.services.isNotEmpty) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                StringConstants.services,
+                                style: TextStyle(
+                                  color: ColorConstants.black,
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Get.to(() => const ServicesScreen());
+                                },
+                                child: Text(
+                                  StringConstants.viewMore,
+                                  maxLines: 2,
+                                  style: TextStyle(
+                                    fontFamily: AssetConstants.robotoFont,
+                                    color: ColorConstants.lightBlue,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              )
+                            ],
                           ),
-                          TextButton(
-                            onPressed: () {
-                              Get.to(() => const ServicesScreen());
-                            },
-                            child: Text(
-                              StringConstants.viewMore,
-                              maxLines: 2,
-                              style: TextStyle(
-                                fontFamily: AssetConstants.robotoFont,
-                                color: ColorConstants.lightBlue,
-                                fontSize: 13,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 300,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: businessServiceController.services.length,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10.0,
-                          vertical: 10.0,
                         ),
-                        itemBuilder: (_, index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(right: 20.0),
-                            child: ServiceBusinessItem(
-                              heroTag: "Service-$index",
-                              imageUrl: UtilityMethods.getProperFileUrl(
-                                  businessServiceController
-                                      .services[index].image!),
-                              name: businessServiceController
-                                  .services[index].name!,
-                              category: businessServiceController
-                                  .services[index].category!,
-                              timing:
-                                  "${businessServiceController.services[index].openTime!} - "
-                                  "${businessServiceController.services[index].closeTime!}",
-                              servicesAndProducts: businessServiceController
-                                  .services[index].productsServices!
-                                  .join(", "),
-                              address: businessServiceController
-                                  .services[index].address!,
-                              city: businessServiceController
-                                  .services[index].city!,
-                              state: businessServiceController
-                                  .services[index].state!,
-                              rating: businessServiceController
-                                  .services[index].rating!
-                                  .toDouble()
-                                  .toPrecision(1)
-                                  .toString(),
-                              maxRating: "5.0",
-                              peopleRated: UtilityMethods.formatNumberToKMB(
-                                businessServiceController
-                                    .services[index].ratedBy!
-                                    .toDouble(),
-                              ),
-                              distance: "${(locationService.getDistanceBetween(
-                                    startLatitude:
-                                        locationService.latitude.value,
-                                    startLongitude:
-                                        locationService.longitude.value,
-                                    endLatitude: businessServiceController
-                                        .services[index].location!.lat!
-                                        .toDouble(),
-                                    endLongitude: businessServiceController
-                                        .services[index].location!.lon!
-                                        .toDouble(),
-                                  ) / 1000.0).toPrecision(1)} KM",
-                              onLocationPressed: () {
-                                Get.to(
-                                  () => MapScreen(
-                                    lat: businessServiceController
-                                        .services[index].location!.lat!
-                                        .toDouble(),
-                                    lon: businessServiceController
-                                        .services[index].location!.lon!
-                                        .toDouble(),
-                                    title: businessServiceController
-                                        .services[index].name!,
-                                  ),
-                                );
-                              },
-                              onCallPressed: () {},
-                              onMessagePressed: () {},
-                              onTap: () {
-                                Get.to(
-                                  () => BusinessServiceDetailsScreen(
-                                    heroTag: "Service-$index",
-                                    data: businessServiceController
-                                        .services[index],
-                                  ),
-                                );
-                              },
+                        SizedBox(
+                          height: 300,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount:
+                                businessServiceController.services.length,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10.0,
+                              vertical: 10.0,
                             ),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
+                            itemBuilder: (_, index) {
+                              return Padding(
+                                padding: const EdgeInsets.only(right: 20.0),
+                                child: ServiceBusinessItem(
+                                  heroTag: "Service-$index",
+                                  imageUrl: UtilityMethods.getProperFileUrl(
+                                      businessServiceController
+                                          .services[index].image!),
+                                  name: businessServiceController
+                                      .services[index].name!,
+                                  category: businessServiceController
+                                      .services[index].category!,
+                                  timing:
+                                      "${businessServiceController.services[index].openTime!} - "
+                                      "${businessServiceController.services[index].closeTime!}",
+                                  servicesAndProducts: businessServiceController
+                                      .services[index].productsServices!
+                                      .join(", "),
+                                  address: businessServiceController
+                                      .services[index].address!,
+                                  city: businessServiceController
+                                      .services[index].city!,
+                                  state: businessServiceController
+                                      .services[index].state!,
+                                  rating: businessServiceController
+                                      .services[index].rating!
+                                      .toDouble()
+                                      .toPrecision(1)
+                                      .toString(),
+                                  maxRating: "5.0",
+                                  peopleRated: UtilityMethods.formatNumberToKMB(
+                                    businessServiceController
+                                        .services[index].ratedBy!
+                                        .toDouble(),
+                                  ),
+                                  distance:
+                                      "${(locationService.getDistanceBetween(
+                                            startLatitude:
+                                                locationService.latitude.value,
+                                            startLongitude:
+                                                locationService.longitude.value,
+                                            endLatitude:
+                                                businessServiceController
+                                                    .services[index]
+                                                    .location!
+                                                    .lat!
+                                                    .toDouble(),
+                                            endLongitude:
+                                                businessServiceController
+                                                    .services[index]
+                                                    .location!
+                                                    .lon!
+                                                    .toDouble(),
+                                          ) / 1000.0).toPrecision(1)} KM",
+                                  onLocationPressed: () {
+                                    Get.to(
+                                      () => MapScreen(
+                                        lat: businessServiceController
+                                            .services[index].location!.lat!
+                                            .toDouble(),
+                                        lon: businessServiceController
+                                            .services[index].location!.lon!
+                                            .toDouble(),
+                                        title: businessServiceController
+                                            .services[index].name!,
+                                      ),
+                                    );
+                                  },
+                                  onCallPressed: () {},
+                                  onMessagePressed: () {},
+                                  onTap: () {
+                                    Get.to(
+                                      () => BusinessServiceDetailsScreen(
+                                        heroTag: "Service-$index",
+                                        data: businessServiceController
+                                            .services[index],
+                                      ),
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    );
+                  } else {
+                    return const SizedBox.shrink();
+                  }
+                },
               ),
               const SizedBox(height: 15.0),
 
               ///Businesses
               Obx(
-                () => Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            StringConstants.businesses,
-                            style: TextStyle(
-                              color: ColorConstants.black,
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.w600,
-                            ),
+                () {
+                  if (businessServiceController.businesses.isNotEmpty) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                StringConstants.businesses,
+                                style: TextStyle(
+                                  color: ColorConstants.black,
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Get.to(() => const BusinessesScreen());
+                                },
+                                child: Text(
+                                  StringConstants.viewMore,
+                                  maxLines: 2,
+                                  style: TextStyle(
+                                    fontFamily: AssetConstants.robotoFont,
+                                    color: ColorConstants.lightBlue,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              )
+                            ],
                           ),
-                          TextButton(
-                            onPressed: () {
-                              Get.to(() => const BusinessesScreen());
-                            },
-                            child: Text(
-                              StringConstants.viewMore,
-                              maxLines: 2,
-                              style: TextStyle(
-                                fontFamily: AssetConstants.robotoFont,
-                                color: ColorConstants.lightBlue,
-                                fontSize: 13,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 300,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: businessServiceController.businesses.length,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10.0,
-                          vertical: 10.0,
                         ),
-                        itemBuilder: (_, index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(right: 20.0),
-                            child: ServiceBusinessItem(
-                              heroTag: "Business-$index",
-                              imageUrl: UtilityMethods.getProperFileUrl(
-                                  businessServiceController
-                                      .businesses[index].image!),
-                              name: businessServiceController
-                                  .businesses[index].name!,
-                              category: businessServiceController
-                                  .businesses[index].category!,
-                              timing:
-                                  "${businessServiceController.businesses[index].openTime!} - "
-                                  "${businessServiceController.businesses[index].closeTime!}",
-                              servicesAndProducts: businessServiceController
-                                  .businesses[index].productsServices!
-                                  .join(", "),
-                              address: businessServiceController
-                                  .businesses[index].address!,
-                              city: businessServiceController
-                                  .businesses[index].city!,
-                              state: businessServiceController
-                                  .businesses[index].state!,
-                              rating: businessServiceController
-                                  .businesses[index].rating!
-                                  .toDouble()
-                                  .toPrecision(1)
-                                  .toString(),
-                              maxRating: "5.0",
-                              peopleRated: UtilityMethods.formatNumberToKMB(
-                                businessServiceController
-                                    .businesses[index].ratedBy!
-                                    .toDouble(),
-                              ),
-                              distance: "${(locationService.getDistanceBetween(
-                                    startLatitude:
-                                        locationService.latitude.value,
-                                    startLongitude:
-                                        locationService.longitude.value,
-                                    endLatitude: businessServiceController
-                                        .businesses[index].location!.lat!
-                                        .toDouble(),
-                                    endLongitude: businessServiceController
-                                        .businesses[index].location!.lon!
-                                        .toDouble(),
-                                  ) / 1000.0).toPrecision(1)} KM",
-                              onLocationPressed: () {
-                                Get.to(
-                                  () => MapScreen(
-                                    lat: businessServiceController
-                                        .businesses[index].location!.lat!
-                                        .toDouble(),
-                                    lon: businessServiceController
-                                        .businesses[index].location!.lon!
-                                        .toDouble(),
-                                    title: businessServiceController
-                                        .businesses[index].name!,
-                                  ),
-                                );
-                              },
-                              onCallPressed: () {},
-                              onMessagePressed: () {},
-                              onTap: () {
-                                Get.to(
-                                  () => BusinessServiceDetailsScreen(
-                                    heroTag: "Business-$index",
-                                    data: businessServiceController
-                                        .businesses[index],
-                                  ),
-                                );
-                              },
+                        SizedBox(
+                          height: 300,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount:
+                                businessServiceController.businesses.length,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10.0,
+                              vertical: 10.0,
                             ),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
+                            itemBuilder: (_, index) {
+                              return Padding(
+                                padding: const EdgeInsets.only(right: 20.0),
+                                child: ServiceBusinessItem(
+                                  heroTag: "Business-$index",
+                                  imageUrl: UtilityMethods.getProperFileUrl(
+                                      businessServiceController
+                                          .businesses[index].image!),
+                                  name: businessServiceController
+                                      .businesses[index].name!,
+                                  category: businessServiceController
+                                      .businesses[index].category!,
+                                  timing:
+                                      "${businessServiceController.businesses[index].openTime!} - "
+                                      "${businessServiceController.businesses[index].closeTime!}",
+                                  servicesAndProducts: businessServiceController
+                                      .businesses[index].productsServices!
+                                      .join(", "),
+                                  address: businessServiceController
+                                      .businesses[index].address!,
+                                  city: businessServiceController
+                                      .businesses[index].city!,
+                                  state: businessServiceController
+                                      .businesses[index].state!,
+                                  rating: businessServiceController
+                                      .businesses[index].rating!
+                                      .toDouble()
+                                      .toPrecision(1)
+                                      .toString(),
+                                  maxRating: "5.0",
+                                  peopleRated: UtilityMethods.formatNumberToKMB(
+                                    businessServiceController
+                                        .businesses[index].ratedBy!
+                                        .toDouble(),
+                                  ),
+                                  distance:
+                                      "${(locationService.getDistanceBetween(
+                                            startLatitude:
+                                                locationService.latitude.value,
+                                            startLongitude:
+                                                locationService.longitude.value,
+                                            endLatitude:
+                                                businessServiceController
+                                                    .businesses[index]
+                                                    .location!
+                                                    .lat!
+                                                    .toDouble(),
+                                            endLongitude:
+                                                businessServiceController
+                                                    .businesses[index]
+                                                    .location!
+                                                    .lon!
+                                                    .toDouble(),
+                                          ) / 1000.0).toPrecision(1)} KM",
+                                  onLocationPressed: () {
+                                    Get.to(
+                                      () => MapScreen(
+                                        lat: businessServiceController
+                                            .businesses[index].location!.lat!
+                                            .toDouble(),
+                                        lon: businessServiceController
+                                            .businesses[index].location!.lon!
+                                            .toDouble(),
+                                        title: businessServiceController
+                                            .businesses[index].name!,
+                                      ),
+                                    );
+                                  },
+                                  onCallPressed: () {},
+                                  onMessagePressed: () {},
+                                  onTap: () {
+                                    Get.to(
+                                      () => BusinessServiceDetailsScreen(
+                                        heroTag: "Business-$index",
+                                        data: businessServiceController
+                                            .businesses[index],
+                                      ),
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    );
+                  } else {
+                    return const SizedBox.shrink();
+                  }
+                },
               ),
               const SizedBox(height: 15.0),
             ],

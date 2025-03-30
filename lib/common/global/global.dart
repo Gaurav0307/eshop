@@ -20,7 +20,7 @@ String deviceId = "";
 
 // const String apiBaseUrl = "https://rest-apis-chat-app.onrender.com";
 const String apiBaseUrl =
-    "https://384b-2401-4900-8836-78c9-65d4-6e33-939c-5955.ngrok-free.app";
+    "https://fe59-2401-4900-8836-78c9-1807-8bff-e61e-876e.ngrok-free.app";
 
 /// One Signal
 const String oneSignalAppId = "a1583783-9e3f-4045-9953-2cc1b9e1ee24";
