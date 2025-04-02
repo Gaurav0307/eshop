@@ -1,4 +1,3 @@
-import 'package:eshop/common/global/global.dart';
 import 'package:eshop/views/screens/otp_verification_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,6 +7,7 @@ import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import '../../common/constants/color_constants.dart';
 import '../../common/constants/string_constants.dart';
 import '../../common/utils/utility_methods.dart';
+import '../../controllers/auth_controller.dart';
 import '../widgets/border_button.dart';
 import '../widgets/gradient_button.dart';
 
@@ -134,6 +134,8 @@ class _RegisterFormState extends State<RegisterForm> {
   }
 
   PhoneNumber number = PhoneNumber(isoCode: 'IN');
+
+  var authController = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {

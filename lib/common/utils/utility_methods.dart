@@ -6,11 +6,15 @@ import 'package:dio/dio.dart';
 import 'package:eshop/common/services/socket.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../controllers/business_service_controller.dart';
+import '../../controllers/category_controller.dart';
+import '../../controllers/user_profile_controller.dart';
 import '../constants/storage_constants.dart';
 import '../global/global.dart';
 
@@ -22,6 +26,10 @@ class UtilityMethods {
     userId = sharedPreferences!.getString(StorageConstants.userId) ?? "";
     userMobile =
         sharedPreferences!.getString(StorageConstants.userMobile) ?? "";
+
+    var userProfileController = Get.put(UserProfileController());
+    var categoryController = Get.put(CategoryController());
+    var businessServiceController = Get.put(BusinessServiceController());
 
     await Future.wait([
       if (token.isNotEmpty && userId.isNotEmpty) ...{

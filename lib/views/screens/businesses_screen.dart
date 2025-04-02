@@ -1,3 +1,4 @@
+import 'package:eshop/controllers/business_service_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -19,6 +20,8 @@ class BusinessesScreen extends StatefulWidget {
 
 class _BusinessesScreenState extends State<BusinessesScreen> {
   TextEditingController searchTEC = TextEditingController();
+
+  var businessServiceController = Get.put(BusinessServiceController());
 
   @override
   Widget build(BuildContext context) {

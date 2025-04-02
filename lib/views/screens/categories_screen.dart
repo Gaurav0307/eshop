@@ -21,7 +21,7 @@ class CategoriesScreen extends StatefulWidget {
 class _CategoriesScreenState extends State<CategoriesScreen> {
   TextEditingController searchTEC = TextEditingController();
 
-  var categoryController = Get.find<CategoryController>();
+  var categoryController = Get.put(CategoryController());
 
   @override
   Widget build(BuildContext context) {

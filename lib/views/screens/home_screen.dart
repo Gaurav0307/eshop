@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eshop/common/constants/asset_constants.dart';
 import 'package:eshop/common/global/global.dart';
 import 'package:eshop/common/utils/utility_methods.dart';
+import 'package:eshop/controllers/business_service_controller.dart';
 import 'package:eshop/controllers/category_controller.dart';
 import 'package:eshop/views/screens/business_service_details_screen.dart';
 import 'package:eshop/views/screens/businesses_screen.dart';
@@ -22,6 +23,7 @@ import 'package:get/get.dart';
 import '../../common/constants/color_constants.dart';
 import '../../common/constants/string_constants.dart';
 import '../../common/services/internet_connectivity.dart';
+import '../../controllers/user_profile_controller.dart';
 import '../widgets/SearchTextField.dart';
 import '../widgets/border_button.dart';
 import '../widgets/user_image_widget.dart';
@@ -51,12 +53,24 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
 
-    InternetConnectivity.addConnectivityListener();
+    InternetConnectivity.addConnectivityListener(() {
+      UtilityMethods.loadInitialData().then((_) {
+        if (selectedLocation.city.value.isNotEmpty) {
+          businessServiceController.getNearByBusinessService(
+            country: selectedLocation.country.value,
+            state: selectedLocation.state.value,
+            city: selectedLocation.city.value,
+          );
+        }
+      });
+    });
 
     super.initState();
   }
 
-  var categoryController = Get.find<CategoryController>();
+  var categoryController = Get.put(CategoryController());
+  var businessServiceController = Get.put(BusinessServiceController());
+  var userProfileController = Get.put(UserProfileController());
 
   @override
   Widget build(BuildContext context) {

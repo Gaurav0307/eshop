@@ -3,10 +3,6 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
-import '../../controllers/auth_controller.dart';
-import '../../controllers/business_service_controller.dart';
-import '../../controllers/category_controller.dart';
-import '../../controllers/user_profile_controller.dart';
 import '../services/location.dart';
 
 SharedPreferences? sharedPreferences;
@@ -20,17 +16,13 @@ String deviceId = "";
 
 // const String apiBaseUrl = "https://rest-apis-chat-app.onrender.com";
 const String apiBaseUrl =
-    "https://fe59-2401-4900-8836-78c9-1807-8bff-e61e-876e.ngrok-free.app";
+    "https://d25c-2401-4900-8836-cf4f-6d7c-f34b-162e-ce4f.ngrok-free.app";
 
 /// One Signal
 const String oneSignalAppId = "a1583783-9e3f-4045-9953-2cc1b9e1ee24";
 
 var locationService = Get.put(LocationService());
 var selectedLocation = Get.put(SelectedLocation());
-var authController = Get.put(AuthController());
-var userProfileController = Get.put(UserProfileController());
-var categoryController = Get.put(CategoryController());
-var businessServiceController = Get.put(BusinessServiceController());
 
 final demoCategories = [
   {

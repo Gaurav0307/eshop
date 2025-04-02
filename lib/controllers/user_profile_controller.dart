@@ -113,6 +113,14 @@ class UserProfileController extends GetxController with BaseController {
                 title: apiError["message"],
                 description: apiError["errors"]["email"][0]);
           }
+        } else if (error is UnAuthorizedException) {
+          var apiError = json.decode(error.message!);
+          if (apiError["message"] != null) {
+            DialogHelper.showErrorSnackBar(
+              title: "Error",
+              description: apiError["message"],
+            );
+          }
         } else {
           handleError(error);
         }

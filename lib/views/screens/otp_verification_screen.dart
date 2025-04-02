@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 
 import '../../common/constants/color_constants.dart';
 import '../../common/constants/string_constants.dart';
-import '../../common/global/global.dart';
+import '../../controllers/auth_controller.dart';
 import '../widgets/border_button.dart';
 import '../widgets/otp_field.dart';
 
@@ -61,6 +61,8 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
     _timer.cancel();
     super.dispose();
   }
+
+  var authController = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {

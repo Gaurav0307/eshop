@@ -1,4 +1,5 @@
 import 'package:eshop/common/global/global.dart';
+import 'package:eshop/controllers/auth_controller.dart';
 import 'package:eshop/views/screens/otp_verification_screen.dart';
 import 'package:eshop/views/screens/register_screen.dart';
 import 'package:flutter/material.dart';
@@ -147,6 +148,8 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   PhoneNumber number = PhoneNumber(isoCode: 'IN');
+
+  var authController = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {

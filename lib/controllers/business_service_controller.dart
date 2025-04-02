@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 import '../common/constants/api_constants.dart';
+import '../common/global/global.dart';
 import '../common/helper/dialog_helper.dart';
 import '../common/services/app_exceptions.dart';
 import '../common/services/base_client.dart';
@@ -48,7 +49,7 @@ class BusinessServiceController extends GetxController with BaseController {
       var message = jsonDecode(responseJson)["message"];
 
       if (message != null) {
-        showMessage(description: message);
+        // showMessage(description: message);
       }
 
       businessServiceModel.value = businessServiceModelFromJson(responseJson);
@@ -104,7 +105,7 @@ class BusinessServiceController extends GetxController with BaseController {
       var message = jsonDecode(responseJson)["message"];
 
       if (message != null) {
-        showMessage(description: message);
+        // showMessage(description: message);
       }
 
       businessServiceModel.value = businessServiceModelFromJson(responseJson);
@@ -114,6 +115,73 @@ class BusinessServiceController extends GetxController with BaseController {
       businesses.value = businessServiceModel.value.businessesServices!
           .where((e) => e.type == "Business")
           .toList();
+    }
+
+    isLoading.value = false;
+  }
+
+  BusinessesServices? getBusinessServiceById(String id) {
+    return businessServiceModel.value.businessesServices!
+        .firstWhere((element) => element.id == id);
+  }
+
+  Future<void> rateBusinessService(
+      {required String businessServiceId, required double rating}) async {
+    isLoading.value = true;
+
+    var baseUrl = ApiConstants.baseUrl;
+    var endpoint = ApiConstants.rateBusinessService;
+
+    var body = {
+      "businessServiceId": businessServiceId,
+      "rating": rating.toString(),
+    };
+
+    var headers = {
+      "Authorization": "Bearer $token",
+    };
+
+    var responseJson =
+        await BaseClient().post(baseUrl, endpoint, headers, body).catchError(
+      (error) {
+        if (error is BadRequestException) {
+          var apiError = json.decode(error.message!);
+          if (apiError["message"] != null) {
+            DialogHelper.showErrorSnackBar(
+              title: "Error",
+              description: apiError["message"],
+            );
+          }
+        } else if (error is UnAuthorizedException) {
+          var apiError = json.decode(error.message!);
+          if (apiError["message"] != null) {
+            DialogHelper.showErrorSnackBar(
+              title: "Error",
+              description: apiError["message"],
+            );
+          }
+        } else {
+          handleError(error);
+        }
+      },
+    );
+
+    if (kDebugMode) {
+      log("Rating API Response :-> $responseJson");
+    }
+
+    if (responseJson != null) {
+      var message = jsonDecode(responseJson)["message"];
+
+      if (message != null) {
+        showMessage(description: message);
+      }
+
+      await getNearByBusinessService(
+        country: selectedLocation.country.value,
+        state: selectedLocation.state.value,
+        city: selectedLocation.city.value,
+      );
     }
 
     isLoading.value = false;

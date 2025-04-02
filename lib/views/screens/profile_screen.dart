@@ -161,7 +161,7 @@ class _ProfileFormState extends State<ProfileForm> {
     );
   }
 
-  var userProfileController = Get.find<UserProfileController>();
+  var userProfileController = Get.put(UserProfileController());
 
   @override
   void initState() {

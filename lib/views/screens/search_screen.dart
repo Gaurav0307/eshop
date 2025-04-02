@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import '../../common/constants/asset_constants.dart';
 import '../../common/constants/string_constants.dart';
 import '../../common/utils/utility_methods.dart';
+import '../../controllers/business_service_controller.dart';
 import '../widgets/service_business_item.dart';
 import 'business_service_details_screen.dart';
 import 'map_screen.dart';
@@ -13,8 +14,10 @@ import 'map_screen.dart';
 class SearchScreen extends SearchDelegate {
   final List<String> listExample;
 
-  List<BusinessesServices> allData =
-      businessServiceController.businessServiceModel.value.businessesServices!;
+  List<BusinessesServices> allData = Get.put(BusinessServiceController())
+      .businessServiceModel
+      .value
+      .businessesServices!;
 
   SearchScreen(this.listExample);
 

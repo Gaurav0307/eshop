@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eshop/common/constants/asset_constants.dart';
 import 'package:eshop/models/BusinessServiceModel.dart';
@@ -11,6 +13,7 @@ import '../../common/constants/color_constants.dart';
 import '../../common/constants/string_constants.dart';
 import '../../common/global/global.dart';
 import '../../common/utils/utility_methods.dart';
+import '../../controllers/business_service_controller.dart';
 import '../widgets/border_button.dart';
 import 'map_screen.dart';
 
@@ -33,6 +36,7 @@ class _BusinessServiceDetailsScreenState
   late ScrollController _scrollController;
   bool isCollapsed = false;
   late BitmapDescriptor customMarkerIcon;
+  var data = BusinessesServices().obs;
 
   // Load Custom Marker from Assets
   Future<void> _loadCustomMarker() async {
@@ -60,6 +64,8 @@ class _BusinessServiceDetailsScreenState
     });
 
     _loadCustomMarker();
+
+    data.value = widget.data;
   }
 
   @override
@@ -67,6 +73,8 @@ class _BusinessServiceDetailsScreenState
     _scrollController.dispose();
     super.dispose();
   }
+
+  var businessServiceController = Get.put(BusinessServiceController());
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +100,7 @@ class _BusinessServiceDetailsScreenState
                 centerTitle: true,
                 title: isCollapsed
                     ? Text(
-                        widget.data.name!,
+                        data.value.name!,
                         style: TextStyle(
                           fontSize: 18.0,
                           fontWeight: FontWeight.w600,
@@ -116,7 +124,7 @@ class _BusinessServiceDetailsScreenState
                         width: double.infinity,
                         fit: BoxFit.cover,
                         imageUrl:
-                            UtilityMethods.getProperFileUrl(widget.data.image!),
+                            UtilityMethods.getProperFileUrl(data.value.image!),
                       ),
                     ),
                     Positioned(
@@ -132,7 +140,7 @@ class _BusinessServiceDetailsScreenState
                         child: Column(
                           children: [
                             Text(
-                              widget.data.name!,
+                              data.value.name!,
                               style: TextStyle(
                                 fontSize: 18.0,
                                 color: ColorConstants.white,
@@ -141,7 +149,7 @@ class _BusinessServiceDetailsScreenState
                               textAlign: TextAlign.center,
                             ),
                             Text(
-                              "(${widget.data.category})",
+                              "(${data.value.category})",
                               style: TextStyle(
                                 fontFamily: AssetConstants.robotoFont,
                                 fontSize: 14.0,
@@ -175,7 +183,7 @@ class _BusinessServiceDetailsScreenState
                           width: MediaQuery.of(context).size.width * 0.8,
                           margin: const EdgeInsets.only(left: 10.0),
                           child: Text(
-                            "${widget.data.openTime} - ${widget.data.closeTime}",
+                            "${data.value.openTime} - ${data.value.closeTime}",
                             style: const TextStyle(
                               fontFamily: AssetConstants.robotoFont,
                               fontSize: 16.0,
@@ -198,7 +206,7 @@ class _BusinessServiceDetailsScreenState
                           width: MediaQuery.of(context).size.width * 0.8,
                           margin: const EdgeInsets.only(left: 10.0),
                           child: Text(
-                            widget.data.productsServices!.join(", "),
+                            data.value.productsServices!.join(", "),
                             style: const TextStyle(
                               fontFamily: AssetConstants.robotoFont,
                               fontSize: 16.0,
@@ -221,7 +229,7 @@ class _BusinessServiceDetailsScreenState
                           width: MediaQuery.of(context).size.width * 0.8,
                           margin: const EdgeInsets.only(left: 10.0),
                           child: Text(
-                            "${widget.data.address}, ${widget.data.city} (${widget.data.state})",
+                            "${data.value.address}, ${data.value.city} (${data.value.state})",
                             style: const TextStyle(
                               fontFamily: AssetConstants.robotoFont,
                               fontSize: 16.0,
@@ -252,9 +260,9 @@ class _BusinessServiceDetailsScreenState
                                       startLongitude:
                                           locationService.longitude.value,
                                       endLatitude:
-                                          widget.data.location!.lat!.toDouble(),
+                                          data.value.location!.lat!.toDouble(),
                                       endLongitude:
-                                          widget.data.location!.lon!.toDouble(),
+                                          data.value.location!.lon!.toDouble(),
                                     ) / 1000.0).toPrecision(1)} KM (${StringConstants.fromYourCurrentLocation})",
                                 style: const TextStyle(
                                   fontFamily: AssetConstants.robotoFont,
@@ -287,22 +295,22 @@ class _BusinessServiceDetailsScreenState
                                 mapToolbarEnabled: false,
                                 initialCameraPosition: CameraPosition(
                                   target: LatLng(
-                                    widget.data.location!.lat!.toDouble(),
-                                    widget.data.location!.lon!.toDouble(),
+                                    data.value.location!.lat!.toDouble(),
+                                    data.value.location!.lon!.toDouble(),
                                   ),
                                   zoom: 14,
                                 ),
                                 markers: {
                                   Marker(
                                     markerId: MarkerId(
-                                      "${widget.data.location!.lat!.toDouble()}, ${widget.data.location!.lon!.toDouble()}",
+                                      "${data.value.location!.lat!.toDouble()}, ${data.value.location!.lon!.toDouble()}",
                                     ),
                                     position: LatLng(
-                                      widget.data.location!.lat!.toDouble(),
-                                      widget.data.location!.lon!.toDouble(),
+                                      data.value.location!.lat!.toDouble(),
+                                      data.value.location!.lon!.toDouble(),
                                     ),
                                     infoWindow:
-                                        InfoWindow(title: widget.data.name),
+                                        InfoWindow(title: data.value.name),
                                     icon: customMarkerIcon,
                                   ),
                                 },
@@ -346,16 +354,19 @@ class _BusinessServiceDetailsScreenState
                           Icons.star_border,
                           size: 24.0,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Text(
-                            "${widget.data.rating!.toDouble().toPrecision(1)}/5.0 (${UtilityMethods.formatNumberToKMB(widget.data.ratedBy!.toDouble())})",
-                            style: const TextStyle(
-                              fontFamily: AssetConstants.robotoFont,
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.w400,
+                        Obx(
+                          () => Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 10.0),
+                            child: Text(
+                              "${data.value.rating!.toDouble().toPrecision(1)}/5.0 (${UtilityMethods.formatNumberToKMB(data.value.ratedBy!.toDouble())})",
+                              style: const TextStyle(
+                                fontFamily: AssetConstants.robotoFont,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.w400,
+                              ),
+                              textAlign: TextAlign.start,
                             ),
-                            textAlign: TextAlign.start,
                           ),
                         ),
                         BorderButton(
@@ -410,9 +421,9 @@ class _BusinessServiceDetailsScreenState
               onPressed: () {
                 Get.to(
                   () => MapScreen(
-                    lat: widget.data.location!.lat!.toDouble(),
-                    lon: widget.data.location!.lon!.toDouble(),
-                    title: widget.data.name!,
+                    lat: data.value.location!.lat!.toDouble(),
+                    lon: data.value.location!.lon!.toDouble(),
+                    title: data.value.name!,
                   ),
                 );
               },
@@ -513,7 +524,7 @@ class _BusinessServiceDetailsScreenState
           ),
           iconPadding: const EdgeInsets.all(5.0),
           title: Text(
-            widget.data.name!,
+            data.value.name!,
             style: TextStyle(
               fontWeight: FontWeight.w500,
               color: ColorConstants.black,
@@ -547,25 +558,37 @@ class _BusinessServiceDetailsScreenState
                 },
               ),
               const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 60.0),
-                child: GradientButton(
-                  padding: const EdgeInsets.all(6.0),
-                  child: Text(
-                    StringConstants.submit,
-                    style: TextStyle(
-                      fontFamily: AssetConstants.robotoFont,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                      color: ColorConstants.white,
+              Obx(
+                () => Visibility(
+                  visible: !businessServiceController.isLoading.value,
+                  replacement: Center(
+                    child: CircularProgressIndicator(
+                      color: ColorConstants.indigo,
+                      strokeWidth: 3.0,
                     ),
-                    textAlign: TextAlign.center,
                   ),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 60.0),
+                    child: GradientButton(
+                      padding: const EdgeInsets.all(6.0),
+                      child: Text(
+                        StringConstants.submit,
+                        style: TextStyle(
+                          fontFamily: AssetConstants.robotoFont,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          color: ColorConstants.white,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      onPressed: () async {
+                        await submitRating(data.value.id!, rating);
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ),
                 ),
-              )
+              ),
             ],
           ),
         );
@@ -573,8 +596,11 @@ class _BusinessServiceDetailsScreenState
     );
   }
 
-  static void _submitRating(double rating) {
-    // Handle rating submission (e.g., send to API)
-    print("Submitted Rating: $rating");
+  Future<void> submitRating(String businessServiceId, double rating) async {
+    log("Submitted Rating: $rating");
+    await businessServiceController.rateBusinessService(
+        businessServiceId: businessServiceId, rating: rating);
+    data.value =
+        businessServiceController.getBusinessServiceById(businessServiceId)!;
   }
 }

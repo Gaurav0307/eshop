@@ -4,6 +4,7 @@ class AssetConstants {
   static const String search = "assets/images/search.png";
   static const String store = "assets/images/store.png";
   static const String user = "assets/images/user.png";
+  static const String noInternet = "assets/images/no-internet.png";
 
   ///Icons
   static const String mapPointer1 = "assets/icons/map-pointer-1.png";

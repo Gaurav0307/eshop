@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../../common/constants/string_constants.dart';
 import '../../common/global/global.dart';
 import '../../common/utils/utility_methods.dart';
+import '../../controllers/business_service_controller.dart';
 import '../widgets/SearchTextField.dart';
 import '../widgets/no_data.dart';
 import '../widgets/service_business_item.dart';
@@ -24,8 +25,10 @@ class _SelectedCategoryBusinessServiceScreenState
     extends State<SelectedCategoryBusinessServiceScreen> {
   TextEditingController searchTEC = TextEditingController();
 
-  final allData =
-      businessServiceController.businessServiceModel.value.businessesServices;
+  final allData = Get.put(BusinessServiceController())
+      .businessServiceModel
+      .value
+      .businessesServices;
 
   @override
   Widget build(BuildContext context) {

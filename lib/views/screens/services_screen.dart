@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../../common/constants/string_constants.dart';
 import '../../common/global/global.dart';
 import '../../common/utils/utility_methods.dart';
+import '../../controllers/business_service_controller.dart';
 import '../widgets/SearchTextField.dart';
 import '../widgets/no_data.dart';
 import '../widgets/service_business_item.dart';
@@ -19,6 +20,8 @@ class ServicesScreen extends StatefulWidget {
 
 class _ServicesScreenState extends State<ServicesScreen> {
   TextEditingController searchTEC = TextEditingController();
+
+  var businessServiceController = Get.put(BusinessServiceController());
 
   @override
   Widget build(BuildContext context) {

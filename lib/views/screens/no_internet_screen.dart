@@ -27,6 +27,13 @@ class _NoInternetScreenState extends State<NoInternetScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Container(
+                margin: const EdgeInsets.only(bottom: 10.0),
+                height: 180,
+                width: 180,
+                decoration: const BoxDecoration(),
+                child: Image.asset(AssetConstants.noInternet),
+              ),
               const Text(
                 StringConstants.noInternet,
                 style: TextStyle(
