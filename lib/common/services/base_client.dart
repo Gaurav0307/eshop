@@ -2,8 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+
 import 'app_exceptions.dart';
 
 class BaseClient {
@@ -541,6 +543,7 @@ class BaseClient {
         return responseJson;
       case 400:
       case 422:
+      case 409:
         throw BadRequestException(
             utf8.decode(response.bodyBytes), response.request!.url.toString());
       case 401:

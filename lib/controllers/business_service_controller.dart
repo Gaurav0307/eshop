@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:eshop/controllers/base_controller.dart';
 import 'package:flutter/foundation.dart';
@@ -17,6 +18,7 @@ class BusinessServiceController extends GetxController with BaseController {
   var businessServiceModel = BusinessServiceModel().obs;
   var services = <BusinessesServices>[].obs;
   var businesses = <BusinessesServices>[].obs;
+  var userBusinessServiceModel = BusinessServiceModel().obs;
 
   Future<void> getAllBusinessService() async {
     isLoading.value = true;
@@ -65,10 +67,11 @@ class BusinessServiceController extends GetxController with BaseController {
     isLoading.value = false;
   }
 
-  Future<void> getNearByBusinessService(
-      {required String country,
-      required String state,
-      required String city}) async {
+  Future<void> getNearByBusinessService({
+    required String country,
+    required String state,
+    required String city,
+  }) async {
     isLoading.value = true;
 
     var baseUrl = ApiConstants.baseUrl;
@@ -125,8 +128,15 @@ class BusinessServiceController extends GetxController with BaseController {
         .firstWhere((element) => element.id == id);
   }
 
-  Future<void> rateBusinessService(
-      {required String businessServiceId, required double rating}) async {
+  BusinessesServices? getUserBusinessServiceById(String id) {
+    return userBusinessServiceModel.value.businessesServices!
+        .firstWhere((element) => element.id == id);
+  }
+
+  Future<void> rateBusinessService({
+    required String businessServiceId,
+    required double rating,
+  }) async {
     isLoading.value = true;
 
     var baseUrl = ApiConstants.baseUrl;
@@ -177,11 +187,316 @@ class BusinessServiceController extends GetxController with BaseController {
         showMessage(description: message);
       }
 
-      await getNearByBusinessService(
-        country: selectedLocation.country.value,
-        state: selectedLocation.state.value,
-        city: selectedLocation.city.value,
-      );
+      await Future.wait([
+        getNearByBusinessService(
+          country: selectedLocation.country.value,
+          state: selectedLocation.state.value,
+          city: selectedLocation.city.value,
+        ),
+        if (token.isNotEmpty && userId.isNotEmpty && userMobile.isNotEmpty) ...{
+          getUserBusinessService(mobile: userMobile),
+        },
+      ]);
+    }
+
+    isLoading.value = false;
+  }
+
+  Future<void> getUserBusinessService({required String mobile}) async {
+    isLoading.value = true;
+
+    var baseUrl = ApiConstants.baseUrl;
+    var endpoint = ApiConstants.userBusinessService;
+
+    var body = {
+      "mobile": mobile,
+    };
+
+    var headers = {
+      "Authorization": "Bearer $token",
+    };
+
+    var responseJson =
+        await BaseClient().post(baseUrl, endpoint, headers, body).catchError(
+      (error) {
+        if (error is BadRequestException) {
+          var apiError = json.decode(error.message!);
+          if (apiError["message"] != null) {
+            DialogHelper.showErrorSnackBar(
+              title: "Error",
+              description: apiError["message"],
+            );
+          }
+        } else if (error is UnAuthorizedException) {
+          var apiError = json.decode(error.message!);
+          if (apiError["message"] != null) {
+            DialogHelper.showErrorSnackBar(
+              title: "Error",
+              description: apiError["message"],
+            );
+          }
+        } else {
+          handleError(error);
+        }
+      },
+    );
+
+    if (kDebugMode) {
+      log("User Business/Services API Response :-> $responseJson");
+    }
+
+    if (responseJson != null) {
+      var message = jsonDecode(responseJson)["message"];
+
+      if (message != null) {
+        // showMessage(description: message);
+      }
+
+      userBusinessServiceModel.value =
+          businessServiceModelFromJson(responseJson);
+    }
+
+    isLoading.value = false;
+  }
+
+  Future<void> addUserBusinessService({
+    required String name,
+    required String type,
+    required String category,
+    required String openTime,
+    required String closeTime,
+    required List<String> productsServices,
+    required String address,
+    required String city,
+    required String state,
+    required String country,
+    required String mobile,
+    required double lat,
+    required double lon,
+    required File businessImage,
+    required bool callEnabled,
+    required bool messageEnabled,
+    required bool isActive,
+  }) async {
+    isLoading.value = true;
+
+    var baseUrl = ApiConstants.baseUrl;
+    var endpoint = ApiConstants.createBusinessService;
+
+    var body = {
+      "name": name,
+      "type": type,
+      "category": category,
+      "openTime": openTime,
+      "closeTime": closeTime,
+      "productsServices[]": jsonEncode(productsServices),
+      "address": address,
+      "city": city,
+      "state": state,
+      "country": country,
+      "mobile": mobile,
+      "lat": lat.toString(),
+      "lon": lon.toString(),
+      "callEnabled": callEnabled.toString(),
+      "messageEnabled": messageEnabled.toString(),
+      "isActive": isActive.toString(),
+      "deviceId": deviceId,
+    };
+
+    var files = {
+      "business_image": businessImage,
+    };
+
+    var headers = {
+      "Authorization": "Bearer $token",
+    };
+
+    var responseJson = await BaseClient()
+        .postMultipart(baseUrl, endpoint, headers, body, files)
+        .catchError((error) {
+      if (error is BadRequestException) {
+        var apiError = json.decode(error.message!);
+        if (apiError["message"] != null) {
+          DialogHelper.showErrorSnackBar(
+            title: "Error",
+            description: apiError["message"],
+          );
+        }
+      } else if (error is UnAuthorizedException) {
+        var apiError = json.decode(error.message!);
+        if (apiError["message"] != null) {
+          DialogHelper.showErrorSnackBar(
+            title: "Error",
+            description: apiError["message"],
+          );
+        }
+      } else {
+        handleError(error);
+      }
+    });
+
+    if (kDebugMode) {
+      log("Create User Business/Services API Response :-> $responseJson");
+    }
+
+    if (responseJson != null) {
+      var message = jsonDecode(responseJson)["message"];
+
+      if (message != null) {
+        showMessage(description: message);
+      }
+
+      await getUserBusinessService(mobile: userMobile);
+    }
+
+    isLoading.value = false;
+  }
+
+  Future<void> updateUserBusinessService({
+    required String businessServiceId,
+    required String name,
+    required String type,
+    required String category,
+    required String openTime,
+    required String closeTime,
+    required List<String> productsServices,
+    required String address,
+    required String city,
+    required String state,
+    required String country,
+    required String mobile,
+    required double lat,
+    required double lon,
+    required File? businessImage,
+    required bool callEnabled,
+    required bool messageEnabled,
+    required bool isActive,
+  }) async {
+    isLoading.value = true;
+
+    var baseUrl = ApiConstants.baseUrl;
+    var endpoint = ApiConstants.updateBusinessService;
+
+    var body = {
+      "businessServiceId": businessServiceId,
+      "name": name,
+      "type": type,
+      "category": category,
+      "openTime": openTime,
+      "closeTime": closeTime,
+      "productsServices[]": jsonEncode(productsServices),
+      "address": address,
+      "city": city,
+      "state": state,
+      "country": country,
+      "mobile": mobile,
+      "lat": lat.toString(),
+      "lon": lon.toString(),
+      "callEnabled": callEnabled.toString(),
+      "messageEnabled": messageEnabled.toString(),
+      "isActive": isActive.toString(),
+      "deviceId": deviceId,
+    };
+
+    var files = businessImage != null
+        ? {
+            "business_image": businessImage,
+          }
+        : null;
+
+    var headers = {
+      "Authorization": "Bearer $token",
+    };
+
+    var responseJson = await BaseClient()
+        .putMultipart(baseUrl, endpoint, headers, body, files)
+        .catchError((error) {
+      if (error is BadRequestException) {
+        var apiError = json.decode(error.message!);
+        if (apiError["message"] != null) {
+          DialogHelper.showErrorSnackBar(
+            title: "Error",
+            description: apiError["message"],
+          );
+        }
+      } else if (error is UnAuthorizedException) {
+        var apiError = json.decode(error.message!);
+        if (apiError["message"] != null) {
+          DialogHelper.showErrorSnackBar(
+            title: "Error",
+            description: apiError["message"],
+          );
+        }
+      } else {
+        handleError(error);
+      }
+    });
+
+    if (kDebugMode) {
+      log("Update User Business/Services API Response :-> $responseJson");
+    }
+
+    if (responseJson != null) {
+      var message = jsonDecode(responseJson)["message"];
+
+      if (message != null) {
+        showMessage(description: message);
+      }
+
+      await getUserBusinessService(mobile: userMobile);
+    }
+
+    isLoading.value = false;
+  }
+
+  Future<void> deleteUserBusinessService({
+    required String businessServiceId,
+  }) async {
+    isLoading.value = true;
+
+    var baseUrl = ApiConstants.baseUrl;
+    var endpoint = ApiConstants.deleteBusinessService + businessServiceId;
+
+    var headers = {
+      "Authorization": "Bearer $token",
+    };
+
+    var responseJson = await BaseClient()
+        .delete(baseUrl, endpoint, headers, null)
+        .catchError((error) {
+      if (error is BadRequestException) {
+        var apiError = json.decode(error.message!);
+        if (apiError["message"] != null) {
+          DialogHelper.showErrorSnackBar(
+            title: "Error",
+            description: apiError["message"],
+          );
+        }
+      } else if (error is UnAuthorizedException) {
+        var apiError = json.decode(error.message!);
+        if (apiError["message"] != null) {
+          DialogHelper.showErrorSnackBar(
+            title: "Error",
+            description: apiError["message"],
+          );
+        }
+      } else {
+        handleError(error);
+      }
+    });
+
+    if (kDebugMode) {
+      log("Delete User Business/Services API Response :-> $responseJson");
+    }
+
+    if (responseJson != null) {
+      var message = jsonDecode(responseJson)["message"];
+
+      if (message != null) {
+        showMessage(description: message);
+      }
+
+      await getUserBusinessService(mobile: userMobile);
     }
 
     isLoading.value = false;

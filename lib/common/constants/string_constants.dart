@@ -80,6 +80,10 @@ class StringConstants {
   static const String noInternet = "No Internet";
   static const String thereIsNoInternetConnectivity =
       "There is no internet connectivity.";
+  static const String doYouWantToDeleteBusinessService =
+      "Do you want to delete this Business/Service?";
+  static const String active = "Active";
+  static const String editBusinessService = "Edit Business/Service";
 
   /// Validation
   static const String fullNameIsRequired = "Full Name is required.";

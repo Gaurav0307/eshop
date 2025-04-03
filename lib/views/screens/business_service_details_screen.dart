@@ -20,10 +20,12 @@ import 'map_screen.dart';
 class BusinessServiceDetailsScreen extends StatefulWidget {
   final Object heroTag;
   final BusinessesServices data;
+  final bool isUserBusinessService;
   const BusinessServiceDetailsScreen({
     super.key,
     required this.heroTag,
     required this.data,
+    this.isUserBusinessService = false,
   });
 
   @override
@@ -583,7 +585,7 @@ class _BusinessServiceDetailsScreenState
                       ),
                       onPressed: () async {
                         await submitRating(data.value.id!, rating);
-                        Navigator.of(context).pop();
+                        Navigator.pop(context);
                       },
                     ),
                   ),
@@ -600,7 +602,9 @@ class _BusinessServiceDetailsScreenState
     log("Submitted Rating: $rating");
     await businessServiceController.rateBusinessService(
         businessServiceId: businessServiceId, rating: rating);
-    data.value =
-        businessServiceController.getBusinessServiceById(businessServiceId)!;
+    data.value = widget.isUserBusinessService
+        ? businessServiceController
+            .getUserBusinessServiceById(businessServiceId)!
+        : businessServiceController.getBusinessServiceById(businessServiceId)!;
   }
 }

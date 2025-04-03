@@ -12,7 +12,7 @@ late String token;
 late String userId;
 late String userMobile;
 
-String deviceId = "";
+String deviceId = "123456";
 
 // const String apiBaseUrl = "https://rest-apis-chat-app.onrender.com";
 const String apiBaseUrl = "https://unduly-enhanced-sole.ngrok-free.app";

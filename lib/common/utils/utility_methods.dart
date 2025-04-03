@@ -32,20 +32,20 @@ class UtilityMethods {
     var businessServiceController = Get.put(BusinessServiceController());
 
     await Future.wait([
-      if (token.isNotEmpty && userId.isNotEmpty) ...{
+      if (token.isNotEmpty && userId.isNotEmpty && userMobile.isNotEmpty) ...{
         userProfileController.getUserProfile(),
+        businessServiceController.getUserBusinessService(mobile: userMobile),
       },
       categoryController.getCategory(),
       businessServiceController.getAllBusinessService(),
+      if (selectedLocation.city.value.isNotEmpty) ...{
+        businessServiceController.getNearByBusinessService(
+          country: selectedLocation.country.value,
+          state: selectedLocation.state.value,
+          city: selectedLocation.city.value,
+        ),
+      },
     ]);
-
-    if (selectedLocation.city.value.isNotEmpty) {
-      businessServiceController.getNearByBusinessService(
-        country: selectedLocation.country.value,
-        state: selectedLocation.state.value,
-        city: selectedLocation.city.value,
-      );
-    }
 
     connectSocket();
   }

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:eshop/models/BusinessServiceModel.dart';
 import 'package:eshop/views/screens/my_business_service/location_picker_screen.dart';
 import 'package:eshop/views/widgets/border_button.dart';
 import 'package:eshop/views/widgets/gradient_button.dart';
@@ -21,21 +22,25 @@ import '../../../common/utils/utility_methods.dart';
 import '../../../controllers/business_service_controller.dart';
 import '../../widgets/my_country_state_city_picker.dart';
 
-class AddBusinessServiceScreen extends StatefulWidget {
-  const AddBusinessServiceScreen({super.key});
+class EditBusinessServiceScreen extends StatefulWidget {
+  final BusinessesServices businessService;
+  const EditBusinessServiceScreen({
+    super.key,
+    required this.businessService,
+  });
 
   @override
-  State<AddBusinessServiceScreen> createState() =>
-      _AddBusinessServiceScreenState();
+  State<EditBusinessServiceScreen> createState() =>
+      _EditBusinessServiceScreenState();
 }
 
-class _AddBusinessServiceScreenState extends State<AddBusinessServiceScreen> {
+class _EditBusinessServiceScreenState extends State<EditBusinessServiceScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          StringConstants.addBusinessService,
+          StringConstants.editBusinessService,
           style: TextStyle(
             fontWeight: FontWeight.w500,
           ),
@@ -43,10 +48,10 @@ class _AddBusinessServiceScreenState extends State<AddBusinessServiceScreen> {
       ),
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 15.0),
-        children: const [
-          SizedBox(height: 20.0),
-          AddBusinessServiceForm(),
-          SizedBox(height: 50.0),
+        children: [
+          const SizedBox(height: 20.0),
+          AddBusinessServiceForm(businessService: widget.businessService),
+          const SizedBox(height: 50.0),
         ],
       ),
     );
@@ -54,7 +59,12 @@ class _AddBusinessServiceScreenState extends State<AddBusinessServiceScreen> {
 }
 
 class AddBusinessServiceForm extends StatefulWidget {
-  const AddBusinessServiceForm({super.key});
+  final BusinessesServices businessService;
+
+  const AddBusinessServiceForm({
+    super.key,
+    required this.businessService,
+  });
 
   @override
   State<AddBusinessServiceForm> createState() => _AddBusinessServiceFormState();
@@ -119,6 +129,12 @@ class _AddBusinessServiceFormState extends State<AddBusinessServiceForm> {
     }
     return null;
   }
+
+  TimeOfDay parseTimeOfDay(String time) {
+    final DateFormat format = DateFormat("hh:mm a");
+    final DateTime dateTime = format.parse(time);
+    return TimeOfDay(hour: dateTime.hour, minute: dateTime.minute);
+  }
   //
 
   String address = '';
@@ -127,6 +143,7 @@ class _AddBusinessServiceFormState extends State<AddBusinessServiceForm> {
   TextEditingController stateTEC = TextEditingController();
   TextEditingController cityTEC = TextEditingController();
   String mobile = '';
+  TextEditingController mobileTEC = TextEditingController();
 
   bool callEnabled = true;
   bool messageEnabled = true;
@@ -361,18 +378,34 @@ class _AddBusinessServiceFormState extends State<AddBusinessServiceForm> {
 
   @override
   void initState() {
-    type = types.first;
-    countryTEC.text = locationService.country.value;
-    stateTEC.text = locationService.state.value;
-    cityTEC.text = locationService.city.value;
-    loadCurrentLocation();
-    super.initState();
-  }
+    imageUrl = UtilityMethods.getProperFileUrl(widget.businessService.image!);
+    nameTEC.text = widget.businessService.name!;
+    name = widget.businessService.name!;
+    type = widget.businessService.type!;
+    category = widget.businessService.category!;
+    _openTimeController.text = widget.businessService.openTime!;
+    _selectedOpenTime = parseTimeOfDay(widget.businessService.openTime!);
+    _closeTimeController.text = widget.businessService.closeTime!;
+    _selectedCloseTime = parseTimeOfDay(widget.businessService.closeTime!);
+    productsServicesList.addAll(widget.businessService.productsServices!);
+    addressTEC.text = widget.businessService.address!;
+    address = widget.businessService.address!;
+    countryTEC.text = widget.businessService.country!;
+    stateTEC.text = widget.businessService.state!;
+    cityTEC.text = widget.businessService.city!;
+    mobile = widget.businessService.mobile!;
+    mobileTEC.text =
+        mobile.isNotEmpty ? UtilityMethods.separateIsoCode(mobile).last : '';
+    selectedLocation.latitude.value =
+        widget.businessService.location!.lat!.toDouble();
+    selectedLocation.longitude.value =
+        widget.businessService.location!.lon!.toDouble();
+    selectedLocation.locationTitle.value = widget.businessService.name!;
+    callEnabled = widget.businessService.callEnabled!;
+    messageEnabled = widget.businessService.messageEnabled!;
+    isActive = widget.businessService.isActive!;
 
-  void loadCurrentLocation() {
-    selectedLocation.latitude.value = locationService.latitude.value;
-    selectedLocation.longitude.value = locationService.longitude.value;
-    selectedLocation.locationTitle.value = StringConstants.currentLocation;
+    super.initState();
   }
 
   GoogleMapController? googleMapController;
@@ -830,6 +863,7 @@ class _AddBusinessServiceFormState extends State<AddBusinessServiceForm> {
           ),
           const SizedBox(height: 24.0),
           InternationalPhoneNumberInput(
+            isEnabled: false,
             onInputChanged: (PhoneNumber number) {
               mobile = number.phoneNumber!;
             },
@@ -841,7 +875,7 @@ class _AddBusinessServiceFormState extends State<AddBusinessServiceForm> {
             autoValidateMode: AutovalidateMode.disabled,
             selectorTextStyle: const TextStyle(color: Colors.black),
             initialValue: number,
-            // textFieldController: mobileTEC,
+            textFieldController: mobileTEC,
             formatInput: false,
             keyboardType: const TextInputType.numberWithOptions(
               signed: true,
@@ -1057,7 +1091,8 @@ class _AddBusinessServiceFormState extends State<AddBusinessServiceForm> {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
                     FocusScope.of(context).unfocus();
-                    await businessServiceController.addUserBusinessService(
+                    await businessServiceController.updateUserBusinessService(
+                      businessServiceId: widget.businessService.id!,
                       name: name,
                       type: type,
                       category: category,
@@ -1071,7 +1106,7 @@ class _AddBusinessServiceFormState extends State<AddBusinessServiceForm> {
                       mobile: mobile,
                       lat: selectedLocation.latitude.value,
                       lon: selectedLocation.longitude.value,
-                      businessImage: _imageFile!,
+                      businessImage: _imageFile,
                       callEnabled: callEnabled,
                       messageEnabled: messageEnabled,
                       isActive: isActive,
