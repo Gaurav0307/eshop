@@ -39,6 +39,14 @@ class UtilityMethods {
       businessServiceController.getAllBusinessService(),
     ]);
 
+    if (selectedLocation.city.value.isNotEmpty) {
+      businessServiceController.getNearByBusinessService(
+        country: selectedLocation.country.value,
+        state: selectedLocation.state.value,
+        city: selectedLocation.city.value,
+      );
+    }
+
     connectSocket();
   }
 

@@ -15,8 +15,7 @@ late String userMobile;
 String deviceId = "";
 
 // const String apiBaseUrl = "https://rest-apis-chat-app.onrender.com";
-const String apiBaseUrl =
-    "https://d25c-2401-4900-8836-cf4f-6d7c-f34b-162e-ce4f.ngrok-free.app";
+const String apiBaseUrl = "https://unduly-enhanced-sole.ngrok-free.app";
 
 /// One Signal
 const String oneSignalAppId = "a1583783-9e3f-4045-9953-2cc1b9e1ee24";
