@@ -38,14 +38,15 @@ class UtilityMethods {
       },
       categoryController.getCategory(),
       businessServiceController.getAllBusinessService(),
-      if (selectedLocation.city.value.isNotEmpty) ...{
-        businessServiceController.getNearByBusinessService(
-          country: selectedLocation.country.value,
-          state: selectedLocation.state.value,
-          city: selectedLocation.city.value,
-        ),
-      },
     ]);
+
+    if (selectedLocation.city.value.isNotEmpty) {
+      await businessServiceController.getNearByBusinessService(
+        country: selectedLocation.country.value,
+        state: selectedLocation.state.value,
+        city: selectedLocation.city.value,
+      );
+    }
 
     connectSocket();
   }

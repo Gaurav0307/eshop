@@ -501,4 +501,167 @@ class BusinessServiceController extends GetxController with BaseController {
 
     isLoading.value = false;
   }
+
+  Future<bool> userRegister(String fullName, String mobile) async {
+    isLoading.value = true;
+
+    var baseUrl = ApiConstants.baseUrl;
+    var endpoint = ApiConstants.userRegister;
+
+    var body = {
+      "fullname": fullName,
+      "mobile": mobile,
+    };
+
+    var responseJson =
+        await BaseClient().post(baseUrl, endpoint, null, body).catchError(
+      (error) {
+        if (error is BadRequestException) {
+          var apiError = json.decode(error.message!);
+          if (apiError["message"] != null) {
+            DialogHelper.showErrorSnackBar(
+              title: "Error",
+              description: apiError["message"],
+            );
+          }
+        } else {
+          handleError(error);
+        }
+      },
+    );
+
+    if (kDebugMode) {
+      log("User Register API Response :-> $responseJson");
+    }
+
+    if (responseJson.toString() == 'null') {
+      isLoading.value = false;
+
+      return false;
+    } else {
+      isLoading.value = false;
+
+      var message = jsonDecode(responseJson)["message"];
+
+      if (message.toString() != 'null') {
+        showMessage(description: message.toString());
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+
+  Future<bool> sendOTP(String mobile) async {
+    isLoading.value = true;
+
+    var baseUrl = ApiConstants.baseUrl;
+    var endpoint = ApiConstants.sendOTP;
+
+    var body = {
+      "mobile": mobile,
+    };
+
+    var responseJson =
+        await BaseClient().post(baseUrl, endpoint, null, body).catchError(
+      (error) {
+        if (error is BadRequestException) {
+          var apiError = json.decode(error.message!);
+
+          if (apiError["message"] != null) {
+            DialogHelper.showErrorSnackBar(
+              title: "Error",
+              description: apiError["message"],
+            );
+          }
+        } else {
+          handleError(error);
+        }
+      },
+    );
+
+    if (kDebugMode) {
+      log("Send OTP API Response :-> $responseJson");
+    }
+
+    if (responseJson == null) {
+      isLoading.value = false;
+
+      return false;
+    } else {
+      var message = jsonDecode(responseJson)["message"];
+      var otp = jsonDecode(responseJson)["otp"].toString();
+
+      if (message != null) {
+        if (otp != 'null') {
+          showMessage(description: message + "\nOTP : $otp");
+        } else {
+          showMessage(description: message);
+        }
+      }
+
+      isLoading.value = false;
+
+      if (otp != 'null') {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+
+  Future<bool> verifyOTP(String mobile, String otp) async {
+    isLoading.value = true;
+
+    var baseUrl = ApiConstants.baseUrl;
+    var endpoint = ApiConstants.verifyTheOTP;
+
+    var body = {
+      "mobile": mobile,
+      "otp": otp,
+    };
+
+    var responseJson =
+        await BaseClient().post(baseUrl, endpoint, null, body).catchError(
+      (error) {
+        if (error is BadRequestException) {
+          var apiError = json.decode(error.message!);
+
+          if (apiError["message"] != null) {
+            DialogHelper.showErrorSnackBar(
+              title: "Error",
+              description: apiError["message"],
+            );
+          }
+        } else {
+          handleError(error);
+        }
+      },
+    );
+
+    if (kDebugMode) {
+      log("Verify OTP API Response :-> $responseJson");
+    }
+
+    if (responseJson == null) {
+      isLoading.value = false;
+
+      return false;
+    } else {
+      var message = jsonDecode(responseJson)["message"];
+      var isVerified = jsonDecode(responseJson)["isVerified"].toString();
+
+      if (message != null) {
+        showMessage(description: message);
+      }
+
+      isLoading.value = false;
+
+      if (isVerified != 'null' && isVerified == 'true') {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
 }

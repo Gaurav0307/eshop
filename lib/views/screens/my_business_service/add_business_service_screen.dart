@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:eshop/views/screens/my_business_service/business_service_otp_verification_screen.dart';
 import 'package:eshop/views/screens/my_business_service/location_picker_screen.dart';
 import 'package:eshop/views/widgets/border_button.dart';
 import 'package:eshop/views/widgets/gradient_button.dart';
@@ -1057,26 +1058,59 @@ class _AddBusinessServiceFormState extends State<AddBusinessServiceForm> {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
                     FocusScope.of(context).unfocus();
-                    await businessServiceController.addUserBusinessService(
-                      name: name,
-                      type: type,
-                      category: category,
-                      openTime: _openTimeController.text,
-                      closeTime: _closeTimeController.text,
-                      productsServices: productsServicesList,
-                      address: address,
-                      city: cityTEC.text,
-                      state: stateTEC.text,
-                      country: countryTEC.text,
-                      mobile: mobile,
-                      lat: selectedLocation.latitude.value,
-                      lon: selectedLocation.longitude.value,
-                      businessImage: _imageFile!,
-                      callEnabled: callEnabled,
-                      messageEnabled: messageEnabled,
-                      isActive: isActive,
-                    );
-                    Navigator.pop(context);
+                    if (mobile == userMobile) {
+                      await businessServiceController.addUserBusinessService(
+                        name: name,
+                        type: type,
+                        category: category,
+                        openTime: _openTimeController.text,
+                        closeTime: _closeTimeController.text,
+                        productsServices: productsServicesList,
+                        address: address,
+                        city: cityTEC.text,
+                        state: stateTEC.text,
+                        country: countryTEC.text,
+                        mobile: mobile,
+                        lat: selectedLocation.latitude.value,
+                        lon: selectedLocation.longitude.value,
+                        businessImage: _imageFile!,
+                        callEnabled: callEnabled,
+                        messageEnabled: messageEnabled,
+                        isActive: isActive,
+                      );
+                      Navigator.pop(context);
+                    } else {
+                      if (await businessServiceController.sendOTP(mobile)) {
+                        Get.to(
+                          () => BusinessServiceOTPVerificationScreen(
+                            fullName: name,
+                            mobile: mobile,
+                            futureCallBack: () async {
+                              await businessServiceController
+                                  .addUserBusinessService(
+                                name: name,
+                                type: type,
+                                category: category,
+                                openTime: _openTimeController.text,
+                                closeTime: _closeTimeController.text,
+                                productsServices: productsServicesList,
+                                address: address,
+                                city: cityTEC.text,
+                                state: stateTEC.text,
+                                country: countryTEC.text,
+                                mobile: mobile,
+                                lat: selectedLocation.latitude.value,
+                                lon: selectedLocation.longitude.value,
+                                businessImage: _imageFile!,
+                                callEnabled: callEnabled,
+                                messageEnabled: messageEnabled,
+                                isActive: isActive,
+                              );
+                            },
+                          ),
+                        );
+                      }
+                    }
                   }
                 },
                 child: Text(

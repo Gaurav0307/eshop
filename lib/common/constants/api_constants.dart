@@ -36,6 +36,9 @@ class ApiConstants {
   static const String updateBusinessService = "/business/update"; // PUT
   static const String deleteBusinessService =
       "/business/delete?businessServiceId="; // DELETE
+  static const String sendOTP = "/business/send-otp"; // POST
+  static const String verifyTheOTP = "/business/verify-otp"; // POST
+  static const String userRegister = "/business/user-register"; // POST
 
   /// Chat
   static const String chats = "/chat/getMessages"; // POST
