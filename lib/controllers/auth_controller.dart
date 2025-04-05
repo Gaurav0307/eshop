@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:eshop/controllers/base_controller.dart';
+import 'package:eshop/controllers/business_service_controller.dart';
+import 'package:eshop/controllers/user_profile_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
@@ -12,6 +14,9 @@ import '../common/helper/dialog_helper.dart';
 import '../common/services/app_exceptions.dart';
 import '../common/services/base_client.dart';
 import '../common/utils/utility_methods.dart';
+import '../models/BusinessServiceModel.dart';
+import '../models/UserProfileModel.dart';
+import '../views/screens/splash_screen.dart';
 
 class AuthController extends GetxController with BaseController {
   var isLoading = false.obs;
@@ -247,12 +252,12 @@ class AuthController extends GetxController with BaseController {
         showMessage(description: message);
       }
 
-      token = jsonDecode(responseJson)["token"].toString();
+      token.value = jsonDecode(responseJson)["token"].toString();
       userId = jsonDecode(responseJson)["userId"].toString();
       userMobile = jsonDecode(responseJson)["mobile"].toString();
 
-      if (token != 'null') {
-        sharedPreferences?.setString(StorageConstants.token, token);
+      if (token.value != 'null') {
+        sharedPreferences?.setString(StorageConstants.token, token.value);
         sharedPreferences?.setString(StorageConstants.userId, userId);
         sharedPreferences?.setString(StorageConstants.userMobile, userMobile);
 
@@ -333,5 +338,22 @@ class AuthController extends GetxController with BaseController {
         return false;
       }
     }
+  }
+
+  Future<void> logout() async {
+    await sharedPreferences?.remove(StorageConstants.token);
+    await sharedPreferences?.remove(StorageConstants.userId);
+    await sharedPreferences?.remove(StorageConstants.userMobile);
+
+    token.value = "";
+    userId = "";
+    userMobile = "";
+
+    Get.put(UserProfileController()).userProfileModel.value =
+        UserProfileModel();
+    Get.put(BusinessServiceController()).userBusinessServiceModel.value =
+        BusinessServiceModel();
+
+    Get.to(() => const SplashScreen());
   }
 }

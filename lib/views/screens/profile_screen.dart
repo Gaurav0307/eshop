@@ -10,9 +10,11 @@ import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import '../../common/constants/asset_constants.dart';
 import '../../common/constants/color_constants.dart';
 import '../../common/constants/string_constants.dart';
+import '../../common/global/global.dart';
 import '../../common/utils/utility_methods.dart';
 import '../../controllers/user_profile_controller.dart';
 import '../widgets/gradient_button.dart';
+import '../widgets/title_content_dialog.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -388,6 +390,13 @@ class _ProfileFormState extends State<ProfileForm> {
               ),
               child: GradientButton(
                 onPressed: () async {
+                  if (token.value.isEmpty) {
+                    await showTitleContentDialog(
+                        context,
+                        StringConstants.loginRequired,
+                        StringConstants.pleaseLoginToUseThisFeature);
+                    return;
+                  }
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
                     FocusScope.of(context).unfocus();

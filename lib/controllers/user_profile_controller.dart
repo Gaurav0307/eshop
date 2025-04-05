@@ -63,7 +63,7 @@ class UserProfileController extends GetxController with BaseController {
       if (sharedPreferences!.containsKey(StorageConstants.token)) {
         await sharedPreferences!.clear();
 
-        token = "";
+        token.value = "";
         userId = "";
         userMobile = "";
       }
@@ -136,7 +136,7 @@ class UserProfileController extends GetxController with BaseController {
     if (responseJson == null || responseJson.toString().contains("jwt")) {
       if (sharedPreferences!.containsKey(StorageConstants.token)) {
         await sharedPreferences!.clear();
-        token = "";
+        token.value = "";
         userId = "";
         userMobile = "";
       }

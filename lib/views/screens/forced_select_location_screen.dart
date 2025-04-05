@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import '../../common/constants/color_constants.dart';
 import '../../common/constants/string_constants.dart';
 import '../../common/global/global.dart';
-import '../../common/helper/dialog_helper.dart';
 import '../../common/utils/utility_methods.dart';
 import '../widgets/gradient_button.dart';
 import '../widgets/my_country_state_city_picker.dart';
+import '../widgets/title_content_dialog.dart';
 
 class ForcedSelectLocationScreen extends StatefulWidget {
   const ForcedSelectLocationScreen({super.key});
@@ -50,10 +50,8 @@ class _ForcedSelectLocationScreenState
   }
 
   _onBackPressed() {
-    DialogHelper.showErrorDialog(
-      title: StringConstants.important,
-      description: StringConstants.appDoesNotHaveLocationPermission,
-    );
+    showTitleContentDialog(context, StringConstants.important,
+        StringConstants.appDoesNotHaveLocationPermission);
   }
 }
 

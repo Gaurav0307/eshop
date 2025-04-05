@@ -23,6 +23,7 @@ import 'package:get/get.dart';
 import '../../common/constants/color_constants.dart';
 import '../../common/constants/string_constants.dart';
 import '../../common/services/internet_connectivity.dart';
+import '../../controllers/auth_controller.dart';
 import '../../controllers/user_profile_controller.dart';
 import '../widgets/SearchTextField.dart';
 import '../widgets/border_button.dart';
@@ -91,19 +92,23 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           actions: [
-            TextButton(
-              onPressed: () {
-                Get.to(() => const LoginScreen());
-              },
-              child: Text(
-                StringConstants.login,
-                style: TextStyle(
-                  color: ColorConstants.black,
-                  fontFamily: AssetConstants.poppinsFont,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
+            Obx(
+              () => token.value.isEmpty
+                  ? TextButton(
+                      onPressed: () {
+                        Get.to(() => const LoginScreen());
+                      },
+                      child: Text(
+                        StringConstants.login,
+                        style: TextStyle(
+                          color: ColorConstants.black,
+                          fontFamily: AssetConstants.poppinsFont,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    )
+                  : const SizedBox.shrink(),
             ),
             const SizedBox(width: 10.0),
           ],
@@ -737,21 +742,64 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
             const Spacer(),
-            ListTile(
-              leading: const Icon(Icons.logout),
-              title: const Text(
-                StringConstants.logout,
-                style: TextStyle(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.red,
-                ),
-              ),
-              onTap: () {},
+            Obx(
+              () => token.value.isNotEmpty
+                  ? ListTile(
+                      leading: const Icon(Icons.logout),
+                      title: const Text(
+                        StringConstants.logout,
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.red,
+                        ),
+                      ),
+                      onTap: () {
+                        logoutDialog();
+                      },
+                    )
+                  : const SizedBox.shrink(),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> logoutDialog() async {
+    await showAdaptiveDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text(
+            StringConstants.confirm,
+            style: TextStyle(
+              color: Colors.red,
+            ),
+          ),
+          content: const Text(StringConstants.doYouWantToLogout),
+          actions: <Widget>[
+            TextButton(
+              child: const Text(
+                StringConstants.no,
+                style: TextStyle(color: Colors.blue),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text(
+                StringConstants.yes,
+                style: TextStyle(color: Colors.red),
+              ),
+              onPressed: () {
+                AuthController().logout();
+              },
+            )
+          ],
+        );
+      },
     );
   }
 }

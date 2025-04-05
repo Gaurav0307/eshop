@@ -15,6 +15,7 @@ import '../../common/global/global.dart';
 import '../../common/utils/utility_methods.dart';
 import '../../controllers/business_service_controller.dart';
 import '../widgets/border_button.dart';
+import '../widgets/title_content_dialog.dart';
 import 'map_screen.dart';
 
 class BusinessServiceDetailsScreen extends StatefulWidget {
@@ -377,7 +378,14 @@ class _BusinessServiceDetailsScreenState
                             vertical: 2.0,
                             horizontal: 0.0,
                           ),
-                          onPressed: () {
+                          onPressed: () async {
+                            if (token.value.isEmpty) {
+                              await showTitleContentDialog(
+                                  context,
+                                  StringConstants.loginRequired,
+                                  StringConstants.pleaseLoginToUseThisFeature);
+                              return;
+                            }
                             showRatingDialog(context);
                           },
                           child: Text(

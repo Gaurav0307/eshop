@@ -8,7 +8,7 @@ import '../services/location.dart';
 SharedPreferences? sharedPreferences;
 late IO.Socket socket;
 
-late String token;
+var token = "".obs;
 late String userId;
 late String userMobile;
 

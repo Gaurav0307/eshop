@@ -84,6 +84,11 @@ class StringConstants {
       "Do you want to delete this Business/Service?";
   static const String active = "Active";
   static const String editBusinessService = "Edit Business/Service";
+  static const String okay = "Okay";
+  static const String loginRequired = "Login Required";
+  static const String pleaseLoginToUseThisFeature =
+      "Please login to use this feature.";
+  static const String doYouWantToLogout = "Do you want to logout?";
 
   /// Validation
   static const String fullNameIsRequired = "Full Name is required.";

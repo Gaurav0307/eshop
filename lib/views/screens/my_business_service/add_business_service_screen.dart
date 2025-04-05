@@ -5,6 +5,7 @@ import 'package:eshop/views/screens/my_business_service/business_service_otp_ver
 import 'package:eshop/views/screens/my_business_service/location_picker_screen.dart';
 import 'package:eshop/views/widgets/border_button.dart';
 import 'package:eshop/views/widgets/gradient_button.dart';
+import 'package:eshop/views/widgets/title_content_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -1052,6 +1053,13 @@ class _AddBusinessServiceFormState extends State<AddBusinessServiceForm> {
               ),
               child: GradientButton(
                 onPressed: () async {
+                  if (token.value.isEmpty) {
+                    await showTitleContentDialog(
+                        context,
+                        StringConstants.loginRequired,
+                        StringConstants.pleaseLoginToUseThisFeature);
+                    return;
+                  }
                   if (!validateImage()) {
                     return;
                   }

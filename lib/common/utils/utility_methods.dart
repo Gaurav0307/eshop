@@ -22,7 +22,7 @@ class UtilityMethods {
   static Future<void> loadInitialData() async {
     sharedPreferences = await SharedPreferences.getInstance();
 
-    token = sharedPreferences!.getString(StorageConstants.token) ?? "";
+    token.value = sharedPreferences!.getString(StorageConstants.token) ?? "";
     userId = sharedPreferences!.getString(StorageConstants.userId) ?? "";
     userMobile =
         sharedPreferences!.getString(StorageConstants.userMobile) ?? "";
@@ -32,7 +32,9 @@ class UtilityMethods {
     var businessServiceController = Get.put(BusinessServiceController());
 
     await Future.wait([
-      if (token.isNotEmpty && userId.isNotEmpty && userMobile.isNotEmpty) ...{
+      if (token.value.isNotEmpty &&
+          userId.isNotEmpty &&
+          userMobile.isNotEmpty) ...{
         userProfileController.getUserProfile(),
         businessServiceController.getUserBusinessService(mobile: userMobile),
       },

@@ -193,7 +193,9 @@ class BusinessServiceController extends GetxController with BaseController {
           state: selectedLocation.state.value,
           city: selectedLocation.city.value,
         ),
-        if (token.isNotEmpty && userId.isNotEmpty && userMobile.isNotEmpty) ...{
+        if (token.value.isNotEmpty &&
+            userId.isNotEmpty &&
+            userMobile.isNotEmpty) ...{
           getUserBusinessService(mobile: userMobile),
         },
       ]);
